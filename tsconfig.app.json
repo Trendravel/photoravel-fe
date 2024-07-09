@@ -16,6 +16,8 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "types": ["@emotion/react/types/css-prop"],
 
     /* Linting */
     "strict": true,
@@ -23,6 +25,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "svg.d.ts"],
-  "exclude": ["./node_modules"]
+  "include": ["src", "emotion.d.ts", "svg.d.ts"],
+  "exclude": ["./node_modules"],
+  "files": ["emotion.d.ts"]
 }
