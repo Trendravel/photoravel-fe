@@ -1,5 +1,7 @@
+import Home from "./pages/Home.page";
+
 function App() {
-  return <>Photoravel</>;
+  return <Home/>;
 }
 
 export default App;
