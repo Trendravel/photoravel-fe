@@ -4,74 +4,74 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 const GuideBookEdit = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [image, setImage] = useState<File | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [image, setImage] = useState<File | null>(null);
 
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
 
-    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setContent(e.target.value);
-    };
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0]);
-        }
-    };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        if (image) {
-            formData.append('image', image);
-        }
-        try {
-            await axios.post('/api/guidebook', formData);
-            navigate('/guidebook');
-        } catch (error) {
-            console.error('Error uploading guidebook:', error);
-        }
-    };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    if (image) {
+      formData.append('image', image);
+    }
+    try {
+      await axios.patch('/guidebooks/{guidebookId}/update', formData);
+      navigate('/guidebook');
+    } catch (error) {
+      console.error('Error uploading guidebook:', error);
+    }
+  };
 
-    const handleCancel = () => {
-        navigate(location.state?.from || '/guidebook');
-    };
+  const handleCancel = () => {
+    navigate(location.state?.from || '/guidebook');
+  };
 
-    return (
-        <GuidebookCreateContainer>
-            <GuidebookCreateForm onSubmit={handleSubmit}>
-                <GuidebookCreateHeader>
-                    <GuidebookCreateCancelButton onClick={handleCancel}>✕</GuidebookCreateCancelButton>
-                    <GuidebookHeaderText>글쓰기</GuidebookHeaderText>
-                    <GuidebookCreateSubmitButton type="submit">완료</GuidebookCreateSubmitButton>
-                </GuidebookCreateHeader>
-                <GuidebookCreateTitle
-                    type="text"
-                    placeholder="제목"
-                    value={title}
-                    onChange={handleTitleChange}
-                />
-                <GuidebookCreateContent
-                    placeholder="내용을 입력하세요"
-                    value={content}
-                    onChange={handleContentChange}
-                />
-                <input type="file" onChange={handleImageChange} />
-                {image && (
-                    <GuidebookCreateImagePreview>
-                        <img src={URL.createObjectURL(image)} alt="Preview" />
-                    </GuidebookCreateImagePreview>
-                )}
-            </GuidebookCreateForm>
-        </GuidebookCreateContainer>
-    );
+  return (
+    <GuidebookCreateContainer>
+      <GuidebookCreateForm onSubmit={handleSubmit}>
+        <GuidebookCreateHeader>
+          <GuidebookCreateCancelButton onClick={handleCancel}>✕</GuidebookCreateCancelButton>
+          <GuidebookHeaderText>글쓰기</GuidebookHeaderText>
+          <GuidebookCreateSubmitButton type="submit">완료</GuidebookCreateSubmitButton>
+        </GuidebookCreateHeader>
+        <GuidebookCreateTitle
+          type="text"
+          placeholder="제목"
+          value={title}
+          onChange={handleTitleChange}
+        />
+        <GuidebookCreateContent
+          placeholder="내용을 입력하세요"
+          value={content}
+          onChange={handleContentChange}
+        />
+        <input type="file" onChange={handleImageChange} />
+        {image && (
+          <GuidebookCreateImagePreview>
+            <img src={URL.createObjectURL(image)} alt="Preview" />
+          </GuidebookCreateImagePreview>
+        )}
+      </GuidebookCreateForm>
+    </GuidebookCreateContainer>
+  );
 };
 
 export default GuideBookEdit;
