@@ -33,7 +33,7 @@ const GuideBookWrite = () => {
       formData.append('image', image);
     }
     try {
-      await axios.post('/api/guidebook', formData);
+      await axios.post('/guidebooks/create', formData);
       navigate('/guidebook');
     } catch (error) {
       console.error('Error uploading guidebook:', error);
