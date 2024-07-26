@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 
 import LocationInfo from './LocationInfo';
+import LocationInfo_Type from '../api/datatype/LocationInfo_Type';
+import LocationInfoData from '../api/testdata/LocationInfo.json';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 20;
@@ -84,6 +86,7 @@ const CategoryButton = styled.button<{color:string}>`
 
 
 const BottomSheetUI = () => {
+    const locationData = LocationInfoData;
     const [position, setPostion] = useState(window.innerHeight-75);
     const isDragging = useRef(false);
     const startYPos = useRef(0);
@@ -166,7 +169,14 @@ const BottomSheetUI = () => {
             </CategoryButton>
         </CategoryContainer>
         <LocationListContainer>
-            <LocationInfo/>
+            {
+                locationData.map((data) => 
+                    <LocationInfo 
+                        key={data.id}
+                        data={data}
+                    />
+                )
+            }
         </LocationListContainer>
     </BottomSheet>
   );

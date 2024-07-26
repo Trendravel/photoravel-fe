@@ -55,9 +55,9 @@ const Address = styled.p`
     color: #94A3B8;
 `;
 
-const LocationInfo = () => {
+const LocationInfo = (props: { data: LocationInfo_Type }) => {
     const [rating] = useState(5);
-    const location_data: LocationInfo_Type = data;
+    const location_data = props.data;
     const descriptionLimit = 50;
     let simplifiedDescription = "";
 
