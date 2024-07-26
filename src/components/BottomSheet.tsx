@@ -67,6 +67,8 @@ const LocationListContainer = styled.div`
 const CategoryContainer = styled.div`
     display: flex;
     overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     width: 90%;
     padding: 0.25em 0 0.25em 0;
     margin: auto;
