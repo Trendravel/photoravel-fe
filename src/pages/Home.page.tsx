@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
+import BottomSheet from "../components/BottomSheet";
 import Map from "../components/Map";
-import PlaceList from "../components/PlaceList";
 import UpperMenu from "../components/UpperMenu";
 
 const Home = () => {
@@ -9,7 +9,7 @@ const Home = () => {
         <HomeContainer>
             <Map/>
             <UpperMenu/>
-            <PlaceList/>
+            <BottomSheet/>
         </HomeContainer>
     )
 }

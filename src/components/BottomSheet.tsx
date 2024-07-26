@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 
+import LocationInfo from './LocationInfo';
+
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 20;
   position: absolute;
@@ -27,11 +29,12 @@ const Handle = styled.div`
 const Header = styled.div`
     display: flex;
     justify-content: space-between;
-    padding: 1.5em 2em 2em 1.5em;
+    padding: 1.5em 2em 0.75em 1.5em;
+    align-items: center;
 `;
 
 const Title = styled.p`
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
 `;
 
@@ -52,6 +55,33 @@ const SearchIcon = styled.img`
     padding: 0;
     margin: 0;
 `;
+
+const LocationListContainer = styled.div`
+    padding: 0.5em 1.5em 0.5em 1.5em;
+    overflow-y: scroll;
+    height: 75vh;
+`;
+
+const CategoryContainer = styled.div`
+    display: flex;
+    overflow-x: scroll;
+    width: 90%;
+    padding: 0.25em 0 0.25em 0;
+    margin: auto;
+    height: 2em;
+    white-space: nowrap;
+`;
+
+const CategoryButton = styled.button<{color:string}>`
+    margin: 0 0.5em 0 0;
+    font-weight: 600;
+    padding: 0.25em 1em 0.25em 1em;
+    border-radius: 2em;
+    background-color: ${(props) => props.color};
+    color: white;
+    box-shadow: 0.1em 0.1em 0.2em #BBBBBB;
+`;
+
 
 const BottomSheetUI = () => {
     const [position, setPostion] = useState(window.innerHeight-75);
@@ -91,7 +121,6 @@ const BottomSheetUI = () => {
         } else {
             isAnimated.current = false;
         }
-        console.log("touch end")
     };
 
     useEffect(() => {
@@ -106,7 +135,7 @@ const BottomSheetUI = () => {
   return (
     <BottomSheet
         onTouchStart={handleHover}
-        height="90%" // BottomSheet의 높이를 90%로 설정
+        height="90vh" // BottomSheet의 높이를 90%로 설정
         top={position}
         isAnimated={isAnimated.current}
     >
@@ -121,8 +150,24 @@ const BottomSheetUI = () => {
                     src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"
                 />
             </SearchTab>
-            
         </Header>
+        <CategoryContainer>
+            <CategoryButton color={"#ff808a"}>
+                🔥 8월의 인기장소
+            </CategoryButton>
+            <CategoryButton color={"#87debe"}>
+                ⛱️ 여유로운 여행지
+            </CategoryButton>
+            <CategoryButton color={"#a3aedc"}>
+                🌊 액티비티 여행지
+            </CategoryButton>
+            <CategoryButton color={"#fcae69"}>
+                📱 인스타 속 그 장소!
+            </CategoryButton>
+        </CategoryContainer>
+        <LocationListContainer>
+            <LocationInfo/>
+        </LocationListContainer>
     </BottomSheet>
   );
 };
