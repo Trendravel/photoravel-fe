@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 
 import LocationInfo_Type from "../api/datatype/LocationInfo_Type";
-import data from "../api/testdata/LocationInfo.json";
 
 const LocationInfoContainer = styled.div`
     display: flex;

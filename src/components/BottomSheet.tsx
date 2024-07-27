@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 
 import LocationInfo from './LocationInfo';
-import LocationInfo_Type from '../api/datatype/LocationInfo_Type';
 import LocationInfoData from '../api/testdata/LocationInfo.json';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
