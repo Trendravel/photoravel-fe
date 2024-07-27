@@ -11,5 +11,57 @@
     ],
     "user_id": 1,
     "distance": 12.3
+    },
+    {
+        "id": 2,
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "address": "충남 아산시 실옥로 222",
+        "description": "장영실 과학관은 조선시대 과학자 장영실의 업적을 기리며 과학 전시와 체험 프로그램을 운영하는 교육 공간입니다.",
+        "name": "장영실과학관",
+        "images": [
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg"
+        ],
+        "user_id": 1,
+        "distance": 12.3
+    },
+    {
+        "id": 3,
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "address": "충남 아산시 실옥로 222",
+        "description": "장영실 과학관은 조선시대 과학자 장영실의 업적을 기리며 과학 전시와 체험 프로그램을 운영하는 교육 공간입니다.",
+        "name": "장영실과학관",
+        "images": [
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg"
+        ],
+        "user_id": 1,
+        "distance": 12.3
+    },
+    {
+        "id": 4,
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "address": "충남 아산시 실옥로 222",
+        "description": "장영실 과학관은 조선시대 과학자 장영실의 업적을 기리며 과학 전시와 체험 프로그램을 운영하는 교육 공간입니다.",
+        "name": "장영실과학관",
+        "images": [
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg"
+        ],
+        "user_id": 1,
+        "distance": 12.3
+    },
+    {
+        "id": 5,
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "address": "충남 아산시 실옥로 222",
+        "description": "장영실 과학관은 조선시대 과학자 장영실의 업적을 기리며 과학 전시와 체험 프로그램을 운영하는 교육 공간입니다.",
+        "name": "장영실과학관",
+        "images": [
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg"
+        ],
+        "user_id": 1,
+        "distance": 12.3
     }
 ]

@@ -8,8 +8,8 @@ const LocationInfoContainer = styled.div`
     display: flex;
     border-radius: 0.5em;
     padding: 0.5em;
-    background-color: #FBFBFB;
-    box-shadow: 0.1em 0.1em 0.2em #BBBBBB;
+    box-shadow: 0em 0.1em 0.5em #BBBBBB;
+    margin-bottom: 0.5em;
 `;
 
 const LocationImage = styled.img`

@@ -58,9 +58,10 @@ const SearchIcon = styled.img`
 `;
 
 const LocationListContainer = styled.div`
+    margin-top: 0.5em;
     padding: 0.5em 1.5em 0.5em 1.5em;
     overflow-y: scroll;
-    height: 75vh;
+    height: 72vh;
 `;
 
 const CategoryContainer = styled.div`
