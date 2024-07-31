@@ -1,8 +1,11 @@
-import { Map } from "react-kakao-maps-sdk";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 import useKakaoLoader from "../api/useKakaoLoader"
+import LocationInfo_Type from "../api/datatype/LocationInfo_Type";
 
-const KakaoMap = () => {
+const KakaoMap = (props: { data: LocationInfo_Type[] }) => {
+    const locationData = props.data;
+
     useKakaoLoader()
 
     return (
@@ -19,6 +22,15 @@ const KakaoMap = () => {
         }}
         level={5} // 지도의 확대 레벨
         >
+            {
+            locationData.map((data:LocationInfo_Type) =>
+                <MapMarker
+                position={{
+                    lat: data.latitude,
+                    lng: data.longitude,
+                }}/>
+            )
+            }
         </Map>
     )
 }

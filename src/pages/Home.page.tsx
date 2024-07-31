@@ -1,15 +1,18 @@
 import styled from "@emotion/styled";
 
+import LocationInfoData from '../api/testdata/LocationInfo.json';
 import BottomSheet from "../components/BottomSheet";
 import Map from "../components/Map";
 import UpperMenu from "../components/UpperMenu";
 
 const Home = () => {
+    const locationData = LocationInfoData;
+
     return (
         <HomeContainer>
-            <Map/>
+            <Map data={locationData}/>
             <UpperMenu/>
-            <BottomSheet/>
+            <BottomSheet data={locationData}/>
         </HomeContainer>
     )
 }
