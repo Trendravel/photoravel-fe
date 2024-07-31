@@ -66,15 +66,21 @@ const LocationListContainer = styled.div`
 
 const CategoryContainer = styled.div`
     display: flex;
-    overflow-x: scroll;
+    overflow-x: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    width: 90%;
-    padding: 0.25em 0 0.25em 0;
+    width: 90vw;
+    padding: 0.25em 0;
     margin: auto;
     height: 2em;
     white-space: nowrap;
+
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
+
 
 const CategoryButton = styled.button<{color:string}>`
     margin: 0 0.5em 0 0;
@@ -128,6 +134,10 @@ const BottomSheetUI = (props: { data: LocationInfo_Type[] }) => {
         }
     };
 
+    const handleContainerTouch = (e: React.TouchEvent) => {
+        e.stopPropagation(); // 상위 이벤트 전파 방지
+    };
+
     useEffect(() => {
         window.addEventListener('touchmove', handleMove);
         window.addEventListener('touchend', handleTouchEnd);
@@ -156,7 +166,9 @@ const BottomSheetUI = (props: { data: LocationInfo_Type[] }) => {
                 />
             </SearchTab>
         </Header>
-        <CategoryContainer>
+        <CategoryContainer
+            onTouchStart={handleContainerTouch}
+        >
             <CategoryButton color={"#ff808a"}>
                 🔥 8월의 인기장소
             </CategoryButton>

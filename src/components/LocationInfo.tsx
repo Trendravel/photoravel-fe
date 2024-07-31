@@ -26,7 +26,8 @@ const Title = styled.p`
     font-size: 14pt;
     font-weight: 500;
     text-align: left;
-    margin-left: 0.15em;
+    margin-left: 0.1em;
+    margin-bottom: 0.1em;
 `;
 
 const RatingArea = styled.div`

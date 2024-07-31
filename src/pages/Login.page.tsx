@@ -71,7 +71,7 @@ const Title = styled.p`
     padding: 0 0 0 0.75em;
     text-align: left;
     font-weight: 600;
-    font-size: 17pt;
+    font-size: 16pt;
 `;
 
 const LoginButton = styled.img`
