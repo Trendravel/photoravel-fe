@@ -1,16 +1,17 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+
+import SideMenu from "./SideMenu";
 
 const UpperMenu = () => {
+    
     const [isOpen, setIsOpen] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [username, setUsername] = useState("User");
 
     const toggleMenu = () => {
-        setIsOpen(!isOpen);
+        setIsOpen((prev) => {
+            console.log("현재 상태:", prev); // 현재 상태 로그
+            return !prev; // 상태 토글
+        });
     };
 
     return (
@@ -20,26 +21,7 @@ const UpperMenu = () => {
                 <HamburgerMenuBar isOpen={isOpen}/>
                 <HamburgerMenuBar isOpen={isOpen}/>
             </HamburgerMenu>
-            <Menu isOpen={isOpen}>
-                <Option>장소 등록</Option>
-                <Option>가이드북</Option>
-                <Option>가이드 찾기</Option>
-                {
-                    isLoggedIn?
-                    <Option>반가워요, {username} 님!</Option>:
-                    <Option>
-                        <Link
-                        to="/login"
-                        style={{
-                            color: "black",
-                            textDecoration: "none !important",
-                            textDecorationLine: "none"
-                        }}>
-                            로그인 / 회원가입
-                        </Link>
-                    </Option>
-                }
-            </Menu>
+            <SideMenu isOpen={isOpen} toggleMenu={toggleMenu}/>
         </Container>
     )
 }
@@ -61,26 +43,6 @@ const HamburgerMenu = styled.button`
 `;
 
 const Container = styled.div`
-`;
-
-const Menu = styled.div<{isOpen: boolean}>`
-    transition: all 0.3s ease;
-    opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-    transform: ${({ isOpen }) => (isOpen ? 'translateY(0.5em) translateX(-0.5em)' : '')};
-    position: absolute;
-    z-index: 9;
-    top: 1em;
-    right: 0.5px;
-    padding: 3.5em 1.5em 1em 1.5em;
-    background-color: white;
-    border-radius: 1em;
-`;
-
-const Option = styled.a`
-    display: block;
-    margin: 0.5em 0 0.5em 0;
-    font-size: 12pt;
-    font-weight: 500;
 `;
 
 const HamburgerMenuBar = styled.span<{isOpen: boolean}>`

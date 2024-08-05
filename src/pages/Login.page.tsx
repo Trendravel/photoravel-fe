@@ -50,7 +50,7 @@ const Background = styled.div`
 const LoginContainer = styled.div`
     position: absolute;
     width: 70%;
-    height: 50%;
+    height: 30%;
     padding: 1em;
     background-color: white;
     box-shadow: 0 0 0.5em #F5F5F5;
