@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 
 import SideMenu from "./SideMenu";
+import LogoImage from "../assets/Photoravel_Logo(Demo).png";
 
 const UpperMenu = () => {
     
@@ -15,26 +16,27 @@ const UpperMenu = () => {
     };
 
     return (
+        <>
         <Container>
+            <Logo src={LogoImage}/>
             <HamburgerMenu onClick={toggleMenu}>
                 <HamburgerMenuBar isOpen={isOpen}/>
                 <HamburgerMenuBar isOpen={isOpen}/>
                 <HamburgerMenuBar isOpen={isOpen}/>
             </HamburgerMenu>
-            <SideMenu isOpen={isOpen} toggleMenu={toggleMenu}/>
+            
         </Container>
+        <SideMenu isOpen={isOpen} toggleMenu={toggleMenu}/>
+        </>
     )
 }
 
 const HamburgerMenu = styled.button`
-    position: absolute;
-    z-index: 10;
-    top: 2em;
-    right: 1em;
+    position: relative;
+    margin-right: 1em;
     padding: 1em;
     border-radius: 0.5em;
-    background-color: #ff808a;
-    box-shadow: 3px 4px 1px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     display: grid;
     justify-items: center;
     gap: 0.5em;
@@ -43,13 +45,29 @@ const HamburgerMenu = styled.button`
 `;
 
 const Container = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 9vh;
+    z-index: 10;
+    top: 0;
+    background-color: white;
 `;
+
+const Logo = styled.img`
+    width: 3.5em;
+    height: 3.5em;
+    margin-left: 0.75em;
+`;
+
 
 const HamburgerMenuBar = styled.span<{isOpen: boolean}>`
     height: 0.3em;
     width: 2.25em;
     border-radius: 2em;
-    background-color: white;
+    background-color: black;
 
     transition: all 0.3s ease;
 

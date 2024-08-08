@@ -8,8 +8,8 @@ interface SidebarProps {
   }
 
 const Background = styled.div<{ isOpen: boolean }>`
-    position: ${(props) => (props.isOpen ? 'absolute':'relative')};
-    z-index: 30;
+    position: ${(props) => (props.isOpen ? 'absolute':'none')};
+    z-index: 15;
     top: 0;
     width: 100%;
     height: 100%;
@@ -21,7 +21,7 @@ const Container = styled.div<{ isOpen: boolean }>`
     transform: translateX(${(props) => (props.isOpen ? '0' : '100%')});
     transition: transform 0.5s ease;
     position: absolute;
-    z-index: 40;
+    z-index: 25;
     top: 0;
     right: 0;
     width: 65vw;
@@ -40,7 +40,7 @@ const CancelButton = styled.button`
     position: absolute;
     top: 0;
     right: 0;
-    padding: 1em;
+    padding: 0.75em;
     border-radius: 0.5em;
     font-size: 1.5em;
 `;
@@ -48,7 +48,7 @@ const CancelButton = styled.button`
 
 const UserContainer = styled.div`
     display: flex;
-    margin: 2em 0 1em 0;
+    margin: 3.5em 0 1em 0;
     justify-content: center;
     align-items: center;
 `;
@@ -75,14 +75,13 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
                 X
             </CancelButton>
             <UserContainer>
-            {
-                isLoggedIn?
-                <>
                 <UserImage
                     src="https://friconix.com/png/fi-cnsuxl-user-circle.png"
                 />
-                <Option>반가워요, {username} 님!</Option>
-                </>:
+
+            {
+                isLoggedIn?
+                <Option>반가워요, {username} 님!</Option>:
                 <Option>
                     <Link
                     to="/login"
@@ -91,7 +90,7 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
                         textDecoration: "none !important",
                         textDecorationLine: "none"
                     }}>
-                        로그인 / 회원가입
+                        로그인하기 &gt;
                     </Link>
                 </Option>
             }
@@ -101,7 +100,7 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
             <Option>가이드 찾기</Option>
             
         </Container>
-        <Background isOpen={isOpen}/>
+        <Background isOpen={isOpen} onClick={toggleMenu}/>
         </>
     )
 }

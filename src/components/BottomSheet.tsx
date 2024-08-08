@@ -5,7 +5,7 @@ import LocationInfo from './LocationInfo';
 import LocationInfo_Type from '../api/datatype/LocationInfo_Type';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
-  z-index: 20;
+  z-index: 10;
   position: absolute;
   left: 0;
   right: 0;

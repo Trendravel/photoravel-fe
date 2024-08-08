@@ -25,7 +25,6 @@ const HomeContainer = styled.div`
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #f0f0f0;
 `;
 
 export default Home;
