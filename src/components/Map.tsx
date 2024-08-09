@@ -1,22 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 import LocationInfo_Type from "../api/datatype/LocationInfo_Type";
+import PanPosition from "../api/datatype/PanPosition_Type";
 import useKakaoLoader from "../api/useKakaoLoader"
 
-const KakaoMap = (props: { data: LocationInfo_Type[] }) => {
+const KakaoMap = (props: { data: LocationInfo_Type[], pos: PanPosition}) => {
     const locationData = props.data;
-    const [state, setState] = useState({
-        // 지도의 초기 위치
-        center: { lat: 36.769989, lng: 126.931633 },
-      })
-    
-    if (navigator.geolocation) { 
-        navigator.geolocation.getCurrentPosition((pos) => {
-            setState({center: {lat: pos.coords.latitude, lng: pos.coords.longitude}})
-        })
-    }
+    const [state, setState] = useState(props.pos)
 
+    useEffect(() => {
+        setState(props.pos)
+    });
+    
     useKakaoLoader()
 
     return (
