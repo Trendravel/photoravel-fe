@@ -1,9 +1,12 @@
 import { ReactNode } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+import AddPlace from "./pages/AddPlace.page";
 import Home from "./pages/Home.page"
 import Login from "./pages/Login.page";
 import NotFound from "./pages/NotFound.page";
+import RedirectPage from "./pages/Redirect.page";
+import SignUp from "./pages/SignUp.page";
 
 
 interface RouteElement {
@@ -21,6 +24,21 @@ const routes: RouteElement[] = [
     {
         path: '/login',
         element: <Login/>,
+        errorElement: <NotFound/>
+    },
+    {
+        path: '/addplace',
+        element: <AddPlace/>,
+        errorElement: <NotFound/>
+    },
+    {
+        path: '/redirect',
+        element: <RedirectPage/>,
+        errorElement: <NotFound/>
+    },
+    {
+        path: '/signup',
+        element: <SignUp/>,
         errorElement: <NotFound/>
     },
 ];

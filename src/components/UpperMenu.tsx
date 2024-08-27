@@ -1,24 +1,26 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import SideMenu from "./SideMenu";
-import LogoImage from "../assets/Photoravel_Logo(Demo).png";
+import LogoImage from "../assets/c78932b8e701f058.png";
+
 
 const UpperMenu = () => {
-    
+    const navigate = useNavigate();
+
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => {
         setIsOpen((prev) => {
-            console.log("현재 상태:", prev); // 현재 상태 로그
-            return !prev; // 상태 토글
+            return !prev;
         });
     };
 
     return (
         <>
         <Container>
-            <Logo src={LogoImage}/>
+            <Logo src={LogoImage} onClick={() => { navigate('/') }}/>
             <HamburgerMenu onClick={toggleMenu}>
                 <HamburgerMenuBar isOpen={isOpen}/>
                 <HamburgerMenuBar isOpen={isOpen}/>
@@ -50,15 +52,17 @@ const Container = styled.div`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 9vh;
+    height: 5em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 0.5em 0.5em;
     z-index: 10;
     top: 0;
     background-color: white;
 `;
 
 const Logo = styled.img`
-    width: 3.5em;
-    height: 3.5em;
+    width: auto;
+    height: 2.5em;
     margin-left: 0.75em;
 `;
 

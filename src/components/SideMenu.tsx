@@ -29,12 +29,23 @@ const Container = styled.div<{ isOpen: boolean }>`
     background-color: white;
 `;
 
-const Option = styled.a`
+const Option = styled(Link)`
     display: block;
+    color: black;
+    margin: 1em 0 1em 0;
+    font-size: 12pt;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    text-decoration-line: none;
+`;
+
+const Text = styled.p`
     margin: 1em 0 1em 0;
     font-size: 12pt;
     font-weight: 500;
 `;
+
 
 const CancelButton = styled.button`
     position: absolute;
@@ -81,23 +92,21 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
 
             {
                 isLoggedIn?
-                <Option>반가워요, {username} 님!</Option>:
-                <Option>
-                    <Link
-                    to="/login"
-                    style={{
-                        color: "black",
-                        textDecoration: "none !important",
-                        textDecorationLine: "none"
-                    }}>
-                        로그인하기 &gt;
-                    </Link>
+                <Text>반가워요, {username} 님!</Text>:
+                <Option
+                to="/login"
+                style={{
+                    color: "black",
+                    textDecoration: "none !important",
+                    textDecorationLine: "none"
+                }}>
+                    로그인하기 &gt;
                 </Option>
             }
             </UserContainer>
-            <Option>장소 등록</Option>
-            <Option>가이드북</Option>
-            <Option>가이드 찾기</Option>
+            <Option to="/addplace">장소 등록</Option>
+            <Option to="/guidebook">가이드북</Option>
+            <Option to="/findguide">가이드 찾기</Option>
             
         </Container>
         <Background isOpen={isOpen} onClick={toggleMenu}/>

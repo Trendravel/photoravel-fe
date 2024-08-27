@@ -8,7 +8,7 @@ function App() {
   return (
     <>
     <Global styles={globalStyles}/>
-      <RouterProvider router={Router}/>
+        <RouterProvider router={Router}/>
     </>
   );
 }

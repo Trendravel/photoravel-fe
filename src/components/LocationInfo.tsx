@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 
-import LocationInfo_Type from "../api/datatype/LocationInfo_Type";
+import { Location } from "../types/Location";
 
 const LocationInfoContainer = styled.div`
     display: flex;
@@ -55,7 +55,7 @@ const Address = styled.p`
     color: #94A3B8;
 `;
 
-const LocationInfo = (props: { data: LocationInfo_Type }) => {
+const LocationInfo = (props: { data: Location }) => {
     const [rating] = useState(5);
     const location_data = props.data;
     const descriptionLimit = 50;

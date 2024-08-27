@@ -7,6 +7,8 @@ import BackgroundImage from "../assets/nature-6799071_1920.jpg";
 const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
 
     const navigate = useNavigate();
+    const REST_API_KEY = import.meta.env.VITE_KAKAO_OAUTH_RESTAPI_KEY;
+    const REDIRECT_URI = import.meta.env.VITE_KAKAO_OAUTH_REDIRECT_URI;
 
     return (
         <Background>
@@ -23,7 +25,9 @@ const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
                 </Title>
                 <Center>
                     <div>
-                        <LoginButton src={kakaoLoginImage}/>
+                        <LoginButton src={kakaoLoginImage}
+                            onClick={() => {window.open(`https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`)}}
+                        />
                         <p
                         style={{
                             fontSize: "10pt",

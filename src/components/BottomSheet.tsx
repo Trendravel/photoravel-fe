@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 
 import LocationInfo from './LocationInfo';
-import LocationInfo_Type from '../api/datatype/LocationInfo_Type';
+import { Location } from '../types/Location';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 10;
@@ -93,9 +93,14 @@ const CategoryButton = styled.button<{color:string}>`
 `;
 
 
-const BottomSheetUI = (props: { data: LocationInfo_Type[] }) => {
+const BottomSheetUI = (props: { data: Location[] }) => {
     const locationData = props.data;
     const [position, setPostion] = useState(window.innerHeight-75);
+
+    useEffect(() => {
+        setPostion(window.innerHeight - 75); // 초기 위치 설정
+    }, []);
+    
     const isDragging = useRef(false);
     const startYPos = useRef(0);
     const isAnimated = useRef(false);
@@ -111,7 +116,7 @@ const BottomSheetUI = (props: { data: LocationInfo_Type[] }) => {
             const newPosition = e.touches[0].clientY - startYPos.current;
 
             // 상한과 하한을 설정합니다.
-            const minPosition = 75; // 최소 위치값 (상한)
+            const minPosition = 100; // 최소 위치값 (상한)
             const maxPosition = window.innerHeight - 75; // 최대 위치값 (하한), 100은 컴포넌트의 높이
 
             // 위치값을 제한합니다.
@@ -125,7 +130,7 @@ const BottomSheetUI = (props: { data: LocationInfo_Type[] }) => {
         isDragging.current = false;
         if (position < window.innerHeight/2) {
             isAnimated.current = true;
-            setPostion(75);
+            setPostion(100);
             setTimeout(()=>{
                 isAnimated.current = false;
             }, 200);
@@ -147,53 +152,55 @@ const BottomSheetUI = (props: { data: LocationInfo_Type[] }) => {
         window.removeEventListener('touchend', handleTouchEnd);
         }
     }, [position])
-  return (
-    <BottomSheet
-        onTouchStart={handleHover}
-        height="90vh" // BottomSheet의 높이를 90%로 설정
-        top={position}
-        isAnimated={isAnimated.current}
-    >
-        <Handle />
-        <Header>
-            <Title>장소 찾기</Title>
-            <SearchTab>
-                <SearchInput
-                placeholder="여행지를 입력하세요"
-                />
-                <SearchIcon
-                    src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"
-                />
-            </SearchTab>
-        </Header>
-        <CategoryContainer
-            onTouchStart={handleContainerTouch}
+
+
+    return (
+        <BottomSheet
+            onTouchStart={handleHover}
+            height="88vh" // BottomSheet의 높이를 90%로 설정
+            top={position}
+            isAnimated={isAnimated.current}
         >
-            <CategoryButton color={"#ff808a"}>
-                🔥 8월의 인기장소
-            </CategoryButton>
-            <CategoryButton color={"#87debe"}>
-                ⛱️ 여유로운 여행지
-            </CategoryButton>
-            <CategoryButton color={"#a3aedc"}>
-                🌊 액티비티 여행지
-            </CategoryButton>
-            <CategoryButton color={"#fcae69"}>
-                📱 인스타 속 그 장소!
-            </CategoryButton>
-        </CategoryContainer>
-        <LocationListContainer>
-            {
-                locationData.map((data) => 
-                    <LocationInfo 
-                        key={data.id}
-                        data={data}
+            <Handle />
+            <Header>
+                <Title>장소 찾기</Title>
+                <SearchTab>
+                    <SearchInput
+                    placeholder="여행지를 입력하세요"
                     />
-                )
-            }
-        </LocationListContainer>
-    </BottomSheet>
-  );
+                    <SearchIcon
+                        src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"
+                    />
+                </SearchTab>
+            </Header>
+            <CategoryContainer
+                onTouchStart={handleContainerTouch}
+            >
+                <CategoryButton color={"#ff808a"}>
+                    🔥 8월의 인기장소
+                </CategoryButton>
+                <CategoryButton color={"#87debe"}>
+                    ⛱️ 여유로운 여행지
+                </CategoryButton>
+                <CategoryButton color={"#a3aedc"}>
+                    🌊 액티비티 여행지
+                </CategoryButton>
+                <CategoryButton color={"#fcae69"}>
+                    📱 인스타 속 그 장소!
+                </CategoryButton>
+            </CategoryContainer>
+            <LocationListContainer>
+                {
+                    locationData.map((data) => 
+                        <LocationInfo
+                            key={data.id}
+                            data={data}
+                        />
+                    )
+                }
+            </LocationListContainer>
+        </BottomSheet>
+    );
 };
 
 export default BottomSheetUI;

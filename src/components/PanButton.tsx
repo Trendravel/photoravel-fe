@@ -1,17 +1,17 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import PanPosition from "../api/datatype/PanPosition_Type";
 import CrossHairLogo from "../assets/crosshair.png"
+import { MapInfo } from "../types/Position";
 
-const PanButton = (props: { setPos: (center: PanPosition) => void }) => {
+const PanButton = (props: { setPos: (mapInfo: MapInfo) => void }) => {
     const [isClicked, setIsClicked] = useState(false);
 
     const setPosition = async () => {
         setIsClicked(true);
 
         const getCurrentPosition = () => {
-            return new Promise((resolve, reject) => {
+            return new Promise<GeolocationPosition>((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(resolve, reject);
             });
         };
@@ -23,6 +23,7 @@ const PanButton = (props: { setPos: (center: PanPosition) => void }) => {
                     lat: pos.coords.latitude,
                     lng: pos.coords.longitude,
                 },
+                level: 5
             });
         } catch (error) {
             alert("현재 위치를 불러올 수 없는 기기입니다.");
@@ -48,6 +49,7 @@ const CrossHairImage = styled.img`
     margin: 0.6em 0.5em 0.75em 0.5em;
     width: 2.75em;
     height: 2.75em;
+    filter: opacity(0.8) drop-shadow(1px 1px 3px #ffffff);
 `;
 
 const RoundButton = styled.button<{clicked: boolean}>`
