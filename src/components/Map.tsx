@@ -28,8 +28,26 @@ const KakaoMap = (props: { data: Location[], pos: MapInfo, onMapStateChange: (ne
     };
 
     useEffect(() => {
-        setState(props.pos);
+        if (id === null)
+            setState(props.pos);
     }, [props.pos]);
+
+    useEffect(() => { // 장소 상세페이지 이동 시, 지도 이동 로직
+        if (id) {
+            const targetPlace = props.data.find((item) => item.locationId === Number(id))
+                if (targetPlace) {
+                    setState({
+                        center: {
+                            lat: targetPlace.latitude,
+                            lng: targetPlace.longitude
+                        },
+                        level: 6
+                    })
+                } else {
+                    alert("해당 장소 정보를 불러올 수 없습니다!")
+                }
+        }
+    }, [props.data, id]);
 
     useKakaoLoader();
 
@@ -42,10 +60,11 @@ const KakaoMap = (props: { data: Location[], pos: MapInfo, onMapStateChange: (ne
             level: map.getLevel(),
         };
         
-        setState(newState);
-        props.onMapStateChange(newState);
+        if (!id) {
+            setState(newState);
+            props.onMapStateChange(newState);
+        }
     }, 300), [props]);
-
 
     return (
         <Map
