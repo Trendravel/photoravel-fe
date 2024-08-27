@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating';
 
 import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
@@ -137,6 +137,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
     const [position, setPostion] = useState(window.innerHeight-75);
 
     // 라우팅 처리를 위한 정의
+    const navigate = useNavigate();
     const location = useLocation();
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
@@ -315,7 +316,13 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                             { simplifiedDescription }
                         </Description>
                         <ButtonContainer>
-                            <NavigateButton>길안내</NavigateButton>
+                            <NavigateButton
+                                onClick={() => {
+                                    window.location.href = `https://map.kakao.com/link/to/${specificLocation.name},${specificLocation.latitude},${specificLocation.longitude}`;
+                                }}
+                            >
+                                길안내
+                            </NavigateButton>
                         </ButtonContainer>
                     </InfoContainer>
                 </LocationContainer>
