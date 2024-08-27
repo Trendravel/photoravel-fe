@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Rating } from 'react-simple-star-rating';
 
-import LocationInfo, { LocationImage } from './LocationInfo';
+import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
 import { Location } from '../types/Location';
+
 
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
@@ -68,8 +70,9 @@ const LocationListContainer = styled.div`
 
 const LocationContainer = styled.div`
     display: flex;
+    align-items: center;
     margin-top: 0.5em;
-    padding: 0.5em 1.5em 0.5em 1.5em;
+    padding: 0.25em 1.5em 0.5em 1.5em;
 `;
 
 const CategoryContainer = styled.div`
@@ -90,13 +93,16 @@ const CategoryContainer = styled.div`
 `;
 
 const PlaceName = styled.p`
+    text-align: left;
     font-weight: 500;
-    font-size: 14pt;
+    font-size: 13pt;
+    margin-bottom: 0.1em;
     color: #0000EE;
 `;
 
 const InfoContainer = styled.div`
     display: block;
+    text-align: left;
     padding: 0.1em 0.5em 0.1em 0.75em;
 `;
 
@@ -110,17 +116,42 @@ const CategoryButton = styled.button<{color:string}>`
     box-shadow: 0.1em 0.1em 0.2em #BBBBBB;
 `;
 
+const NavigateButton = styled.button`
+    margin-top: 0.5em;
+    font-weight: 600;
+    padding: 0.25em 1em 0.25em 1em;
+    border-radius: 2em;
+    background-color: #A3AEDC;
+    color: white;
+    box-shadow: 0.1em 0.1em 0.2em #BBBBBB;
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+`;
 
 const BottomSheetUI = (props: { data: Location[] }) => {
+    // 기본 정의
     const locationData = props.data;
     const [position, setPostion] = useState(window.innerHeight-75);
+
+    // 라우팅 처리를 위한 정의
     const location = useLocation();
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
     const [isFullyOpened, setIsFullyOpened] = useState(false);
 
-    const specificLocation = locationData.find((item:Location) => item.locationId === Number(id));
+    const descriptionLimit = 50;
+    let simplifiedDescription = "";
 
+    const specificLocation = locationData.find((item:Location) => item.locationId === Number(id));
+    if (specificLocation && specificLocation.description.length >= descriptionLimit) {
+        simplifiedDescription = specificLocation.description.slice(0, descriptionLimit+1);
+        simplifiedDescription += " ...";
+    } else if (specificLocation) {
+        simplifiedDescription = specificLocation.description;
+    }
 
     useEffect(() => {
         setPostion(window.innerHeight - 75); // 초기 위치 설정
@@ -151,8 +182,10 @@ const BottomSheetUI = (props: { data: Location[] }) => {
             const minPosition = 100; // 최소 위치값 (상한)
             const maxPosition = window.innerHeight - 75; // 최대 위치값 (하한), 100은 컴포넌트의 높이
 
+            const maxPosition2 = window.innerHeight - 175
+
             // 위치값을 제한합니다.
-            const limitedPosition = Math.max(minPosition, Math.min(newPosition, maxPosition));
+            const limitedPosition = Math.max(minPosition, Math.min(newPosition, id? maxPosition2: maxPosition));
             setPostion(limitedPosition);
         }
 
@@ -169,7 +202,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                 setTimeout(()=>{
                     isAnimated.current = false;
                 }, 200);
-            } else {
+            } else if (startYPos.current != position) {
                 setIsFullyOpened(true);
                 isAnimated.current = true;
                 setPostion(100);
@@ -223,7 +256,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
             isAnimated={isAnimated.current}
         >
             <Handle />
-            {
+            { // 장소 찾기
                 !id && <>
                     <Header>
                     <Title>장소 찾기</Title>
@@ -264,14 +297,33 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                     </LocationListContainer>
                 </>
             }
-            {
-                id && specificLocation && 
+            { // 특정 장소 조회
+                id && specificLocation && (position === window.innerHeight - 175) && // 간략 보기
                 <LocationContainer>
                     <LocationImage src={specificLocation.images[0]}/>
                     <InfoContainer>
                         <PlaceName>{specificLocation.name}</PlaceName>
+                        <RatingArea>
+                            <Rating
+                                initialValue={specificLocation.ratingAvg}
+                                readonly={true}
+                                size={20}
+                            />
+                            <Rate>{specificLocation.ratingAvg}(99+)</Rate>
+                        </RatingArea>
+                        <Description>
+                            { simplifiedDescription }
+                        </Description>
+                        <ButtonContainer>
+                            <NavigateButton>길안내</NavigateButton>
+                        </ButtonContainer>
                     </InfoContainer>
-                    
+                </LocationContainer>
+            }
+            {
+                id && specificLocation && (position < window.innerHeight - 175) &&
+                <LocationContainer>
+                    장소 상세보기
                 </LocationContainer>
             }
                 

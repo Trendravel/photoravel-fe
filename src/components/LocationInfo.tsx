@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Rating } from "react-simple-star-rating";
 
 import { Location } from "../types/Location";
+import { useNavigate } from "react-router-dom";
 
 const LocationInfoContainer = styled.div`
     display: flex;
@@ -29,17 +30,17 @@ const Title = styled.p`
     margin-bottom: 0.1em;
 `;
 
-const RatingArea = styled.div`
+export const RatingArea = styled.div`
     display: flex;
     align-items: center;
 `;
 
-const Rate = styled.p`
+export const Rate = styled.p`
     font-size: 11pt;
     margin-left: 0.2em;
 `;
 
-const Description = styled.p`
+export const Description = styled.p`
     text-align: left;
     padding-top: 0.1em;
     font-size: 11pt;
@@ -55,6 +56,7 @@ const Address = styled.p`
 `;
 
 const LocationInfo = (props: { data: Location }) => {
+    const navigate = useNavigate();
     const location_data = props.data;
     const descriptionLimit = 50;
     let simplifiedDescription = "";
@@ -67,7 +69,7 @@ const LocationInfo = (props: { data: Location }) => {
     }
 
     return (
-        <LocationInfoContainer>
+        <LocationInfoContainer onClick={() => { navigate(`/place?id=${props.data.locationId}`)}}>
             <LocationImage
                 src={location_data.images.length >= 1 ? location_data.images[0] :
                     "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"}
