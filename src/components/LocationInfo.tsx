@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 
 import { Location } from "../types/Location";
@@ -12,7 +11,7 @@ const LocationInfoContainer = styled.div`
     margin-bottom: 0.5em;
 `;
 
-const LocationImage = styled.img`
+export const LocationImage = styled.img`
     width: 7em;
     height: 7em;
     border-radius: 0.375em;
@@ -56,7 +55,6 @@ const Address = styled.p`
 `;
 
 const LocationInfo = (props: { data: Location }) => {
-    const [rating] = useState(5);
     const location_data = props.data;
     const descriptionLimit = 50;
     let simplifiedDescription = "";
@@ -64,6 +62,8 @@ const LocationInfo = (props: { data: Location }) => {
     if (location_data.description.length >= descriptionLimit) {
         simplifiedDescription = location_data.description.slice(0, descriptionLimit+1);
         simplifiedDescription += " ...";
+    } else {
+        simplifiedDescription = location_data.description;
     }
 
     return (
@@ -76,11 +76,11 @@ const LocationInfo = (props: { data: Location }) => {
                 <Title>{location_data.name}</Title>
                 <RatingArea>
                     <Rating
-                        initialValue={rating}
+                        initialValue={location_data.ratingAvg}
                         readonly={true}
                         size={20}
                     />
-                    <Rate>5.0(999+)</Rate>
+                    <Rate>{location_data.ratingAvg}(999+)</Rate>
                 </RatingArea>
                 <Description>
                     {simplifiedDescription}

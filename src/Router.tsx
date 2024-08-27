@@ -22,6 +22,11 @@ const routes: RouteElement[] = [
         errorElement: <NotFound/>,
     },
     {
+        path: '/place',
+        element: <Home/>,
+        errorElement: <NotFound/>,
+    },
+    {
         path: '/login',
         element: <Login/>,
         errorElement: <NotFound/>

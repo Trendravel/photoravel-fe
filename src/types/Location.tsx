@@ -1,13 +1,15 @@
 export interface Location {
-    id: number;
+    locationId: number;
     latitude: number;
     longitude: number;
     address: string;
     description: string;
     name: string;
     images: Array<string>;
-    user_id: number;
-    distance: number;
+    views: number;
+    ratingAvg: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface UploadingLocation {

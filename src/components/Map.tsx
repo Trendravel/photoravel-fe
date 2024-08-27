@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useEffect, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { Map, MapMarker, CustomOverlayMap, MarkerClusterer } from "react-kakao-maps-sdk";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import useKakaoLoader from "../api/useKakaoLoader";
+import MarkerImage from "../assets/pin.png";
 import { Location } from "../types/Location";
 import { MapInfo } from "../types/Position";
 
@@ -10,6 +12,10 @@ const KakaoMap = (props: { data: Location[], pos: MapInfo, onMapStateChange: (ne
     const locationData = props.data;
     const [state, setState] = useState(props.pos);
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParam = new URLSearchParams(location.search);
+    const id = queryParam.get("id");
 
     const debounce = (func: (map:kakao.maps.Map) => void, delay: number) => {
         let timeout: number;
@@ -53,17 +59,46 @@ const KakaoMap = (props: { data: Location[], pos: MapInfo, onMapStateChange: (ne
             }}
             level={state.level} // 지도의 확대 레벨
             onCenterChanged={handleCenterChanged} // 중심 좌표 변경 시 핸들러 추가
+            onClick={() => {
+                if (id) {
+                    navigate('/')
+                }
+            }}
         >
+            <MarkerClusterer
+                minLevel={8}
+            >
             {
-                locationData.map((data: Location) =>
-                    <MapMarker
-                        key={data.id}
-                        position={{
-                            lat: data.latitude,
-                            lng: data.longitude,
-                        }} />
-                )
+                locationData.map((data: Location) => (
+                    <div key={data.locationId}>
+                        <MapMarker
+                            key={data.locationId}
+                            image={{
+                                src: MarkerImage.toString(),
+                                size: { width: 25, height: 25 }
+                            }}
+                            position={{
+                                lat: data.latitude,
+                                lng: data.longitude,
+                            }}
+                            onClick={() => { navigate(`/place?id=${data.locationId}`) }}
+                        />
+                        <CustomOverlayMap
+                        position={{ lat: data.latitude, lng: data.longitude }}
+                        yAnchor={1}>
+                            <p
+                            style={{
+                                transform: 'translateY(20px)',
+                                fontSize: '10pt'
+                            }}>
+                                {data.name}
+                            </p>
+                        </CustomOverlayMap>
+                    </div>
+                ))
             }
+            </MarkerClusterer>
+            
         </Map>
     );
 }

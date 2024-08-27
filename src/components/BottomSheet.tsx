@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import LocationInfo from './LocationInfo';
+import LocationInfo, { LocationImage } from './LocationInfo';
 import { Location } from '../types/Location';
+
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 10;
@@ -64,6 +66,12 @@ const LocationListContainer = styled.div`
     height: 72vh;
 `;
 
+const LocationContainer = styled.div`
+    display: flex;
+    margin-top: 0.5em;
+    padding: 0.5em 1.5em 0.5em 1.5em;
+`;
+
 const CategoryContainer = styled.div`
     display: flex;
     overflow-x: auto;
@@ -81,6 +89,16 @@ const CategoryContainer = styled.div`
     }
 `;
 
+const PlaceName = styled.p`
+    font-weight: 500;
+    font-size: 14pt;
+    color: #0000EE;
+`;
+
+const InfoContainer = styled.div`
+    display: block;
+    padding: 0.1em 0.5em 0.1em 0.75em;
+`;
 
 const CategoryButton = styled.button<{color:string}>`
     margin: 0 0.5em 0 0;
@@ -96,10 +114,25 @@ const CategoryButton = styled.button<{color:string}>`
 const BottomSheetUI = (props: { data: Location[] }) => {
     const locationData = props.data;
     const [position, setPostion] = useState(window.innerHeight-75);
+    const location = useLocation();
+    const queryParam = new URLSearchParams(location.search);
+    const id = queryParam.get("id");
+    const [isFullyOpened, setIsFullyOpened] = useState(false);
+
+    const specificLocation = locationData.find((item:Location) => item.locationId === Number(id));
+
 
     useEffect(() => {
         setPostion(window.innerHeight - 75); // 초기 위치 설정
     }, []);
+
+    useEffect(() => {
+        if (id) {
+            setPostion(window.innerHeight - 175);
+        } else {
+            setPostion(window.innerHeight - 75);
+        }
+    }, [id])
     
     const isDragging = useRef(false);
     const startYPos = useRef(0);
@@ -108,7 +141,6 @@ const BottomSheetUI = (props: { data: Location[] }) => {
     const handleHover = (e: React.TouchEvent<HTMLDivElement>) => {
         isDragging.current = true;
         startYPos.current = e.touches[0].clientY - position;
-
     }
 
     const handleMove = (e: TouchEvent) => {
@@ -128,15 +160,44 @@ const BottomSheetUI = (props: { data: Location[] }) => {
 
     const handleTouchEnd = () => {
         isDragging.current = false;
-        if (position < window.innerHeight/2) {
-            isAnimated.current = true;
-            setPostion(100);
-            setTimeout(()=>{
-                isAnimated.current = false;
-            }, 200);
+
+        if (position < window.innerHeight/2 && !id) { // 장소찾기 바텀시트 이벤트
+            if (isFullyOpened) {
+                setIsFullyOpened(false);
+                isAnimated.current = true;
+                setPostion(window.innerHeight - 75);
+                setTimeout(()=>{
+                    isAnimated.current = false;
+                }, 200);
+            } else {
+                setIsFullyOpened(true);
+                isAnimated.current = true;
+                setPostion(100);
+                setTimeout(()=>{
+                    isAnimated.current = false;
+                }, 200);
+            }
         } else {
             isAnimated.current = false;
         }
+
+        if (position < window.innerHeight - 175 && id) { // 상세정보 바텀시트 이벤트
+            if (isFullyOpened) {
+                isAnimated.current = true;
+                setPostion(window.innerHeight - 175);
+                setTimeout(()=>{
+                    isAnimated.current = false;
+                }, 200);
+                setIsFullyOpened(false);
+            } else {
+                setIsFullyOpened(true);
+                isAnimated.current = true;
+                setPostion(100);
+                setTimeout(()=>{
+                    isAnimated.current = false;
+                }, 200);
+            }
+        } 
     };
 
     const handleContainerTouch = (e: React.TouchEvent) => {
@@ -162,43 +223,58 @@ const BottomSheetUI = (props: { data: Location[] }) => {
             isAnimated={isAnimated.current}
         >
             <Handle />
-            <Header>
-                <Title>장소 찾기</Title>
-                <SearchTab>
-                    <SearchInput
-                    placeholder="여행지를 입력하세요"
-                    />
-                    <SearchIcon
-                        src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"
-                    />
-                </SearchTab>
-            </Header>
-            <CategoryContainer
-                onTouchStart={handleContainerTouch}
-            >
-                <CategoryButton color={"#ff808a"}>
-                    🔥 8월의 인기장소
-                </CategoryButton>
-                <CategoryButton color={"#87debe"}>
-                    ⛱️ 여유로운 여행지
-                </CategoryButton>
-                <CategoryButton color={"#a3aedc"}>
-                    🌊 액티비티 여행지
-                </CategoryButton>
-                <CategoryButton color={"#fcae69"}>
-                    📱 인스타 속 그 장소!
-                </CategoryButton>
-            </CategoryContainer>
-            <LocationListContainer>
-                {
-                    locationData.map((data) => 
-                        <LocationInfo
-                            key={data.id}
-                            data={data}
+            {
+                !id && <>
+                    <Header>
+                    <Title>장소 찾기</Title>
+                    <SearchTab>
+                        <SearchInput
+                        placeholder="여행지를 입력하세요"
                         />
-                    )
-                }
-            </LocationListContainer>
+                        <SearchIcon
+                            src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"
+                        />
+                    </SearchTab>
+                    </Header>
+                    <CategoryContainer
+                        onTouchStart={handleContainerTouch}
+                    >
+                        <CategoryButton color={"#ff808a"}>
+                            🔥 8월의 인기장소
+                        </CategoryButton>
+                        <CategoryButton color={"#87debe"}>
+                            ⛱️ 여유로운 여행지
+                        </CategoryButton>
+                        <CategoryButton color={"#a3aedc"}>
+                            🌊 액티비티 여행지
+                        </CategoryButton>
+                        <CategoryButton color={"#fcae69"}>
+                            📱 인스타 속 그 장소!
+                        </CategoryButton>
+                    </CategoryContainer>
+                    <LocationListContainer>
+                        {
+                            locationData.map((data) => 
+                                <LocationInfo
+                                    key={data.locationId}
+                                    data={data}
+                                />
+                            )
+                        }
+                    </LocationListContainer>
+                </>
+            }
+            {
+                id && specificLocation && 
+                <LocationContainer>
+                    <LocationImage src={specificLocation.images[0]}/>
+                    <InfoContainer>
+                        <PlaceName>{specificLocation.name}</PlaceName>
+                    </InfoContainer>
+                    
+                </LocationContainer>
+            }
+                
         </BottomSheet>
     );
 };
