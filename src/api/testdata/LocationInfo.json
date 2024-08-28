@@ -11,6 +11,7 @@
         ],
         "views": 0,
         "ratingAvg": 4.5,
+        "reviewCounts": 99,
         "createdAt": "2024-08-27T12:00:00Z",
         "updatedAt": "2024-08-27T12:00:00Z"
     },
@@ -26,6 +27,7 @@
         ],
         "views": 0,
         "ratingAvg": 4.5,
+        "reviewCounts": 47,
         "createdAt": "2024-08-27T12:00:00Z",
         "updatedAt": "2024-08-27T12:00:00Z"
     },
@@ -41,6 +43,7 @@
         ],
         "views": 0,
         "ratingAvg": 4.5,
+        "reviewCounts": 12,
         "createdAt": "2024-08-27T12:00:00Z",
         "updatedAt": "2024-08-27T12:00:00Z"
     },
@@ -56,6 +59,7 @@
         ],
         "views": 0,
         "ratingAvg": 4.5,
+        "reviewCounts": 2,
         "createdAt": "2024-08-27T12:00:00Z",
         "updatedAt": "2024-08-27T12:00:00Z"
     },
@@ -71,6 +75,7 @@
         ],
         "views": 0,
         "ratingAvg": 4.5,
+        "reviewCounts": 75,
         "createdAt": "2024-08-27T12:00:00Z",
         "updatedAt": "2024-08-27T12:00:00Z"
     }

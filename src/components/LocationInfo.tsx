@@ -82,7 +82,10 @@ const LocationInfo = (props: { data: Location }) => {
                         readonly={true}
                         size={20}
                     />
-                    <Rate>{location_data.ratingAvg}(999+)</Rate>
+                    <Rate>
+                        {location_data.ratingAvg}
+                        ({location_data.reviewCounts === 99? "99+":location_data.reviewCounts})
+                    </Rate>
                 </RatingArea>
                 <Description>
                     {simplifiedDescription}

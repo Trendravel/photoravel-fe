@@ -8,6 +8,7 @@ export interface Location {
     images: Array<string>;
     views: number;
     ratingAvg: number;
+    reviewCounts: number;
     createdAt: string;
     updatedAt: string;
 }

@@ -310,7 +310,10 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                                 readonly={true}
                                 size={20}
                             />
-                            <Rate>{specificLocation.ratingAvg}(99+)</Rate>
+                            <Rate>
+                                {specificLocation.ratingAvg}
+                                ({specificLocation.reviewCounts === 99? "99+":specificLocation.reviewCounts})
+                            </Rate>
                         </RatingArea>
                         <Description>
                             { simplifiedDescription }
