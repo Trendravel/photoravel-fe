@@ -148,8 +148,25 @@ const BottomSheetUI = (props: { data: Location[] }) => {
     const location = useLocation();
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
+    const keyword = queryParam.get("keyword");
     const [isFullyOpened, setIsFullyOpened] = useState(false);
 
+    // 검색 처리를 위한 정의
+    const [searchKeyword, setSearchKeyword] = useState("");
+    
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchKeyword(event.target.value)
+    }
+
+    const doSearch = () => {
+        if (searchKeyword != "")
+            navigate(`/search?keyword=${searchKeyword}`);
+        else 
+            navigate('/');
+    }
+
+
+    // 설명 간략화 메소드
     const descriptionLimit = 50;
     let simplifiedDescription = "";
 
@@ -161,6 +178,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
         simplifiedDescription = specificLocation.description;
     }
 
+    // 바텀시트 터치 이벤트 메소드
     useEffect(() => {
         setPostion(window.innerHeight - 75); // 초기 위치 설정
     }, []);
@@ -270,10 +288,13 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                     <Title>장소 찾기</Title>
                     <SearchTab>
                         <SearchInput
-                        placeholder="여행지를 입력하세요"
+                            placeholder="여행지를 입력하세요"
+                            value={searchKeyword}
+                            onChange={handleInputChange}
                         />
                         <SearchIcon
                             src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"
+                            onClick={() => doSearch()}
                         />
                     </SearchTab>
                     </Header>
@@ -295,11 +316,23 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                     </CategoryContainer>
                     <LocationListContainer>
                         {
+                            location.pathname === "/" &&
                             locationData.map((data) => 
                                 <LocationInfo
                                     key={data.locationId}
                                     data={data}
                                 />
+                            )
+                        }
+                        {
+                            location.pathname === "/search" &&
+                            locationData.map((data) =>
+                                (data.name.includes(keyword!))?
+                                    <LocationInfo
+                                        key={data.locationId}
+                                        data={data}
+                                    />:
+                                    <></>
                             )
                         }
                     </LocationListContainer>

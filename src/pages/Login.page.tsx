@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 
 import kakaoLoginImage from "../assets/kakao_login_medium_narrow.png"
-import BackgroundImage from "../assets/nature-6799071_1920.jpg";
+import LogoImage from "../assets/Photoravel_LoginPage_Logo.png";
 
 const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
 
@@ -11,74 +11,50 @@ const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
     const REDIRECT_URI = import.meta.env.VITE_KAKAO_OAUTH_REDIRECT_URI;
 
     return (
-        <Background>
+        <Container>
             <ReturnButton
-            onClick={() => {navigate('/')}}
+                onClick={() => {navigate('/')}}
             >
                 &lt; 홈으로 돌아가기
             </ReturnButton>
-            <LoginContainer>
-                <Title>
-                    <Icon src="https://cdn-icons-png.flaticon.com/512/3669/3669973.png"/>
-                    카카오 로그인으로<br/>
-                    간편하게 포토래블 이용하기!
-                </Title>
-                <Center>
-                    <div>
-                        <LoginButton src={kakaoLoginImage}
-                            onClick={() => {window.open(`https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`)}}
-                        />
-                        <p
-                        style={{
-                            fontSize: "10pt",
-                            color: "#999999"
-                        }}
-                        >
-                            * 신규회원도 로그인 시 회원가입으로 이동합니다
-                        </p>
-                    </div>
-                </Center>
-            </LoginContainer>
-        </Background>
+            <Center>
+                <LogoImageContainer src={LogoImage}/>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center"
+                }}>
+                    <LoginButton
+                        src={kakaoLoginImage}
+                        onClick={() => {window.open(`https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`)}}
+                    />
+                    <p
+                    style={{
+                        fontSize: "10pt",
+                        color: "#999999"
+                    }}
+                    >
+                        * 신규회원도 로그인 시 회원가입으로 이동합니다
+                    </p>
+                </div>
+            </Center>
+        </Container>
     )
 }
 
-const Background = styled.div`
-    position: absolute;
-    background-image: url(${BackgroundImage});
-    background-position: right 35% top 10%;
+const Container = styled.div`
+    position: fixed;
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 `;
 
-const LoginContainer = styled.div`
-    position: absolute;
-    width: 70%;
-    height: 30%;
-    padding: 1em;
-    background-color: white;
-    box-shadow: 0 0 0.5em #F5F5F5;
-    text-align: center;
-    border-radius: 0.5em;
-    margin: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-`;
+const LogoImageContainer = styled.img`
 
-const Icon = styled.img`
-    padding: 0 0.25em 0 0;
-    width: 1em;
-`;
-
-const Title = styled.p`
-    padding: 0 0 0 0.75em;
-    text-align: left;
-    font-weight: 600;
-    font-size: 16pt;
 `;
 
 const LoginButton = styled.img`
+    height: 3em;
     margin-bottom: 0.5em;
     filter: drop-shadow(0.1em 0.1em 0.2em #BBBBBB);
 `;
@@ -86,9 +62,10 @@ const LoginButton = styled.img`
 const Center = styled.div`
     display: grid;
     align-items: center;
-    justify-content: center;
+    grid-auto-flow: row;
+    justify-content: space-evenly;
     position: relative;
-    height: 80%;
+    height: 100%;
 `;
 
 const ReturnButton = styled.button`
@@ -97,10 +74,12 @@ const ReturnButton = styled.button`
     color: white;
     font-weight: 600;
     font-size: 12pt;
-    top: 4em;
+    top: 3em;
     left: 1em;
+    z-index: 1;
     padding: 0.5em 1em 0.5em 1em;
-    background-color: #87debe;
+    background-color: #FF808A;
+    filter: drop-shadow(0.1em 0.1em 0.2em #BBBBBB);
 `;
 
 export default Login;
