@@ -5,6 +5,7 @@ import { Rating } from 'react-simple-star-rating';
 
 import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
 import { Location } from '../types/Location';
+import MultipleImageViewer from './MultipleImageViewer';
 
 
 
@@ -71,6 +72,12 @@ const LocationListContainer = styled.div`
 const LocationContainer = styled.div`
     display: flex;
     align-items: center;
+    margin-top: 0.5em;
+    padding: 0.25em 1.5em 0.5em 1.5em;
+`;
+
+const LocationDetailContainer = styled.div`
+    display: block;
     margin-top: 0.5em;
     padding: 0.25em 1.5em 0.5em 1.5em;
 `;
@@ -332,9 +339,9 @@ const BottomSheetUI = (props: { data: Location[] }) => {
             }
             {
                 id && specificLocation && (position < window.innerHeight - 175) &&
-                <LocationContainer>
-                    장소 상세보기
-                </LocationContainer>
+                <LocationDetailContainer>
+                    <MultipleImageViewer height="20vh" src={specificLocation.images}/>
+                </LocationDetailContainer>
             }
                 
         </BottomSheet>
