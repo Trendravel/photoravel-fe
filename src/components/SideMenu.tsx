@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getCookie } from "../api/useCookie";
+import { doLogout } from "../api/Login";
 
 interface SidebarProps {
     isOpen: boolean;
@@ -70,12 +72,32 @@ const UserImage = styled.img`
     margin: 0 0.5em 0 0.5em;
 `;
 
+const BottomRightText = styled.p`
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    color: #d0d0d0;
+    font-size: 11pt;
+`;
+
 const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [username, setUsername] = useState("User");
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        const nickname = getCookie("nickname")
+        if (nickname) {
+            setIsLoggedIn(true);
+            setUsername(nickname);
+        } else {
+            setIsLoggedIn(false);
+            setUsername("");
+        }
+        
+    }, [isOpen, isLoggedIn])
 
     return (
         <>
@@ -107,6 +129,17 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
             <Option to="/addplace">장소 등록</Option>
             <Option to="/guidebook">가이드북</Option>
             <Option to="/findguide">가이드 찾기</Option>
+            {
+                isLoggedIn &&
+                <BottomRightText
+                    onClick={() => {
+                        doLogout()
+                        setIsLoggedIn(false)
+                    }}
+                >
+                    로그아웃
+                </BottomRightText>
+            }
             
         </Container>
         <Background isOpen={isOpen} onClick={toggleMenu}/>

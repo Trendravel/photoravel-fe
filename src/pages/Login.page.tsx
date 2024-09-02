@@ -26,7 +26,9 @@ const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
                 }}>
                     <LoginButton
                         src={kakaoLoginImage}
-                        onClick={() => {window.open(`https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`)}}
+                        onClick={() => {
+                            window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
+                        }}
                     />
                     <p
                     style={{

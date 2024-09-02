@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 import { Rating } from "react-simple-star-rating";
 
-import { Location } from "../types/Location";
-import { useNavigate } from "react-router-dom";
+import { MultipleLocation } from "../types/Location";
 
 const LocationInfoContainer = styled.div`
     display: flex;
@@ -55,7 +55,7 @@ const Address = styled.p`
     color: #94A3B8;
 `;
 
-const LocationInfo = (props: { data: Location }) => {
+const LocationInfo = (props: { data: MultipleLocation }) => {
     const navigate = useNavigate();
     const location_data = props.data;
     const descriptionLimit = 50;

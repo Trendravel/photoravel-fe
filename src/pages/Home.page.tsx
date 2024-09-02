@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+import { doLogin, doLogout } from "../api/Login";
 import LocationInfoData from '../api/testdata/LocationInfo.json';
 import BottomSheet from "../components/BottomSheet";
 import Map from "../components/Map";
@@ -27,6 +28,10 @@ const Home = () => {
             .catch((e) => { console.log(e); })
         */
     , [mapState]})
+
+    useEffect(() => {
+        //
+    }, [])
 
     return (
         <HomeContainer>

@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating';
 
+import LocationDetail from './LocationDetail';
+import SpecificLocationInfo from '../api/testdata/SpecificLocationInfo.json'
 import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
-import { Location } from '../types/Location';
-import MultipleImageViewer from './MultipleImageViewer';
+import ReviewDetail from './ReviewDetail';
+import { MultipleLocation } from '../types/Location';
 
 
 
@@ -76,12 +78,6 @@ const LocationContainer = styled.div`
     padding: 0.25em 1.5em 0.5em 1.5em;
 `;
 
-const LocationDetailContainer = styled.div`
-    display: block;
-    margin-top: 0.5em;
-    padding: 0.25em 1.5em 0.5em 1.5em;
-`;
-
 const CategoryContainer = styled.div`
     display: flex;
     overflow-x: auto;
@@ -138,9 +134,10 @@ const ButtonContainer = styled.div`
     flex-direction: row-reverse;
 `;
 
-const BottomSheetUI = (props: { data: Location[] }) => {
+const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
     // 기본 정의
     const locationData = props.data;
+    const specificData = SpecificLocationInfo;
     const [position, setPostion] = useState(window.innerHeight-75);
 
     // 라우팅 처리를 위한 정의
@@ -149,6 +146,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
     const keyword = queryParam.get("keyword");
+    const review = queryParam.get('reviewfor')
     const [isFullyOpened, setIsFullyOpened] = useState(false);
 
     // 검색 처리를 위한 정의
@@ -170,7 +168,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
     const descriptionLimit = 50;
     let simplifiedDescription = "";
 
-    const specificLocation = locationData.find((item:Location) => item.locationId === Number(id));
+    const specificLocation = specificData.find((item:MultipleLocation) => item.locationId === Number(id));
     if (specificLocation && specificLocation.description.length >= descriptionLimit) {
         simplifiedDescription = specificLocation.description.slice(0, descriptionLimit+1);
         simplifiedDescription += " ...";
@@ -183,7 +181,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
         setPostion(window.innerHeight - 75); // 초기 위치 설정
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { // 경우에 따른 위치 초기설정
         if (id) {
             setPostion(window.innerHeight - 175);
         } else {
@@ -228,7 +226,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                 setTimeout(()=>{
                     isAnimated.current = false;
                 }, 200);
-            } else if (startYPos.current != position) {
+            } else if (startYPos.current != position && position != 100) {
                 setIsFullyOpened(true);
                 isAnimated.current = true;
                 setPostion(100);
@@ -283,7 +281,7 @@ const BottomSheetUI = (props: { data: Location[] }) => {
         >
             <Handle />
             { // 장소 찾기
-                !id && <>
+                (!id && !review) && <>
                     <Header>
                     <Title>장소 찾기</Title>
                     <SearchTab>
@@ -338,8 +336,8 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                     </LocationListContainer>
                 </>
             }
-            { // 특정 장소 조회
-                id && specificLocation && (position === window.innerHeight - 175) && // 간략 보기
+            { // 특정 장소 조회 (간략 보기)
+                id && specificLocation && (position === window.innerHeight - 175) &&
                 <LocationContainer>
                     <LocationImage src={specificLocation.images[0]}/>
                     <InfoContainer>
@@ -370,11 +368,15 @@ const BottomSheetUI = (props: { data: Location[] }) => {
                     </InfoContainer>
                 </LocationContainer>
             }
-            {
+            { // 특정 장소 조회 (상세 보기)
                 id && specificLocation && (position < window.innerHeight - 175) &&
-                <LocationDetailContainer>
-                    <MultipleImageViewer height="20vh" src={specificLocation.images}/>
-                </LocationDetailContainer>
+                <LocationDetail
+                    data={specificLocation}
+                />
+            }
+            {
+                review &&
+                <ReviewDetail/>
             }
                 
         </BottomSheet>
