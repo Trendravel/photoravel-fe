@@ -121,8 +121,10 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                 </RatingArea>
                 <ReviewContainer>
                     {
-                        props.data.recentReviewDtos.map((review) => 
-                            <ReviewBox>
+                        props.data.recentReviewDtos.map((review, i) => 
+                            <ReviewBox
+                                key={i}
+                            >
                                 <SingleRate>
                                     ⭐️ {review.rating}
                                 </SingleRate>
