@@ -5,10 +5,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import useKakaoLoader from "../api/useKakaoLoader";
 import MarkerImage from "../assets/pin.png";
-import { Location } from "../types/Location";
+import { MultipleLocation } from "../types/Location";
 import { MapInfo } from "../types/Position";
 
-const KakaoMap = (props: { data: Location[], pos: MapInfo, onMapStateChange: (newState: MapInfo) => void}) => {
+const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateChange: (newState: MapInfo) => void}) => {
     const locationData = props.data;
     const [state, setState] = useState(props.pos);
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
@@ -88,7 +88,7 @@ const KakaoMap = (props: { data: Location[], pos: MapInfo, onMapStateChange: (ne
                 minLevel={8}
             >
             {
-                locationData.map((data: Location) => (
+                locationData.map((data: MultipleLocation) => (
                     <div key={data.locationId}>
                         <MapMarker
                             key={data.locationId}

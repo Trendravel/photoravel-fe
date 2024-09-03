@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
+import { Rate } from "./LocationInfo";
 import MultipleImageViewer from "./MultipleImageViewer";
 import { SingleLocation } from "../types/Location";
-import { Rate } from "./LocationInfo";
-import { useNavigate } from "react-router-dom";
+
 
 export const BottomSheetContentContainer = styled.div`
     display: block;
@@ -97,7 +98,9 @@ const LocationDetail = (props: {data: SingleLocation}) => {
             onTouchStart={(e) => { e.stopPropagation(); }}
         >
             <MultipleImageViewer height="20vh" src={props.data.images}/>
-            <MainInfoContainer>
+            <MainInfoContainer
+                onTouchStart={(e) => { e.stopPropagation(); }}
+            >
                 <PlaceName>{props.data.name}</PlaceName>
                 <Address>📍 {props.data.address}</Address>
                 <Description>

@@ -4,9 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating';
 
 import LocationDetail from './LocationDetail';
-import SpecificLocationInfo from '../api/testdata/SpecificLocationInfo.json'
 import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
 import ReviewDetail from './ReviewDetail';
+import SpecificLocationInfo from '../api/testdata/SpecificLocationInfo.json'
 import { MultipleLocation } from '../types/Location';
 
 
@@ -184,9 +184,11 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
     useEffect(() => { // 경우에 따른 위치 초기설정
         if (id) {
             setPostion(window.innerHeight - 175);
+        } else if (review) {
+            setPostion(100);
         } else {
             setPostion(window.innerHeight - 75);
-        }
+        } 
     }, [id])
     
     const isDragging = useRef(false);
@@ -289,6 +291,10 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                             placeholder="여행지를 입력하세요"
                             value={searchKeyword}
                             onChange={handleInputChange}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter")
+                                    doSearch()
+                            }}
                         />
                         <SearchIcon
                             src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"

@@ -14,7 +14,7 @@ const Review = styled.div`
 
 `;
 
-const ReviewDetail = () => {
+const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
     
 
     return (
