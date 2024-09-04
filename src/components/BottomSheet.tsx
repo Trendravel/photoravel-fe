@@ -109,7 +109,7 @@ const InfoContainer = styled.div`
     padding: 0.1em 0.5em 0.1em 0.75em;
 `;
 
-const CategoryButton = styled.button<{color:string}>`
+export const CategoryButton = styled.button<{color:string}>`
     margin: 0 0.5em 0 0;
     font-weight: 600;
     padding: 0.25em 1em 0.25em 1em;
@@ -193,11 +193,13 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
     
     const isDragging = useRef(false);
     const startYPos = useRef(0);
+    const touchYPos = useRef(0);
     const isAnimated = useRef(false);
 
     const handleHover = (e: React.TouchEvent<HTMLDivElement>) => {
         isDragging.current = true;
         startYPos.current = e.touches[0].clientY - position;
+        touchYPos.current = e.touches[0].clientY;
     }
 
     const handleMove = (e: TouchEvent) => {
@@ -219,6 +221,12 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
 
     const handleTouchEnd = () => {
         isDragging.current = false;
+        const currentYPos = position;
+        const isSamePosition = Math.abs(currentYPos - touchYPos.current) < 10; // 터치 시 이동 좌표 차이를 비교
+
+        if (isSamePosition) {
+            return; // 위치가 동일할 경우 처리하지 않음
+        }
 
         if (position < window.innerHeight/2 && !id) { // 장소찾기 바텀시트 이벤트
             if (isFullyOpened) {
@@ -304,6 +312,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                     </Header>
                     <CategoryContainer
                         onTouchStart={handleContainerTouch}
+                        onTouchEnd={handleContainerTouch}
                     >
                         <CategoryButton color={"#ff808a"}>
                             🔥 8월의 인기장소
@@ -318,7 +327,10 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                             📱 인스타 속 그 장소!
                         </CategoryButton>
                     </CategoryContainer>
-                    <LocationListContainer>
+                    <LocationListContainer
+                    onTouchStart={handleContainerTouch}
+                    onTouchEnd={handleContainerTouch}
+                    >
                         {
                             location.pathname === "/" &&
                             locationData.map((data) => 
@@ -344,7 +356,10 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
             }
             { // 특정 장소 조회 (간략 보기)
                 id && specificLocation && (position === window.innerHeight - 175) &&
-                <LocationContainer>
+                <LocationContainer
+                    onTouchStart={handleContainerTouch}
+                    onTouchEnd={handleContainerTouch}
+                >
                     <LocationImage src={specificLocation.images[0]}/>
                     <InfoContainer>
                         <PlaceName>{specificLocation.name}</PlaceName>

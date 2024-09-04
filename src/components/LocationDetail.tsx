@@ -94,13 +94,9 @@ const LocationDetail = (props: {data: SingleLocation}) => {
     const navigate = useNavigate();
 
     return (
-        <BottomSheetContentContainer
-            onTouchStart={(e) => { e.stopPropagation(); }}
-        >
+        <BottomSheetContentContainer>
             <MultipleImageViewer height="20vh" src={props.data.images}/>
-            <MainInfoContainer
-                onTouchStart={(e) => { e.stopPropagation(); }}
-            >
+            <MainInfoContainer>
                 <PlaceName>{props.data.name}</PlaceName>
                 <Address>📍 {props.data.address}</Address>
                 <Description>
@@ -124,6 +120,7 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                         props.data.recentReviewDtos.map((review, i) => 
                             <ReviewBox
                                 key={i}
+                                onClick={() => navigate(`/place?reviewfor=${props.data.locationId}`) }
                             >
                                 <SingleRate>
                                     ⭐️ {review.rating}
