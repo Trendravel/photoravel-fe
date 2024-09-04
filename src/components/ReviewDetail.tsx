@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
 import { CategoryButton } from "./BottomSheet";
+import FullMultipleImageViewer from "./FullMultipleImageViewer";
 import { BottomSheetContentContainer } from "./LocationDetail";
 import ReviewData from "../api/testdata/Review.json"
 import MultipleImageIconFile from "../assets/gallery.png";
@@ -70,6 +71,8 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
     const reviews:SingleReview[] = ReviewData;
     const reviewCount = reviews.length;
     const [rateAverage, setRateAverage] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
+    const [images, setImages] = useState([""]);
     
     useEffect(() => {
         let totalRate = 0;
@@ -80,10 +83,17 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
 
         setRateAverage(totalRate / reviewCount || 0);
     }, [])
-    
+
+    const changeIsOpen = () => {
+        if (isOpen)
+            setIsOpen(false);
+        else
+            setIsOpen(true)
+    }
 
     return (
         <BottomSheetContentContainer>
+            
             <SimplifiedInfoContainer>
                 <div>
                 <InfoText color="">
@@ -110,7 +120,12 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                             >
                             {
                                 review.images[0]?
-                                <ReviewImageContainer>
+                                <ReviewImageContainer
+                                    onClick={() => {
+                                        setImages(review.images);
+                                        changeIsOpen();
+                                    }}
+                                >
                                     {
                                         review.images[1]?
                                         <MultipleImageIcon
@@ -133,8 +148,12 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                         </Review>
                     )
                 }
-                
             </ReviewContainer>
+            <FullMultipleImageViewer
+                images={images}
+                changeIsOpen={changeIsOpen}
+                isOpen={isOpen}
+            />
         </BottomSheetContentContainer>
     )
     

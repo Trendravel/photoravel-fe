@@ -68,7 +68,7 @@ const LocationListContainer = styled.div`
     margin-top: 0.5em;
     padding: 0.5em 1.5em 0.5em 1.5em;
     overflow-y: scroll;
-    height: 72vh;
+    height: 70vh;
 `;
 
 const LocationContainer = styled.div`

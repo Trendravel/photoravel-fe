@@ -68,6 +68,7 @@ const ReviewContainer = styled.div`
     height: 6.5em;
     padding: 0.25em;
     overflow-x: scroll;
+    overflow-y: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
 `
@@ -108,14 +109,18 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                                                     "99" :props.data.reviewCounts })
                     </Rate>
                     <p style={{fontWeight: "400", fontSize: "9pt"}}
-                        onClick={() => {
+                        onTouchStart={(e) => {
+                            e.stopPropagation()
                             navigate(`/place?reviewfor=${props.data.locationId}`) 
                         }}
                     >
                         전체보기 &gt;
                     </p>
                 </RatingArea>
-                <ReviewContainer>
+                <ReviewContainer
+                    onTouchStart={(e) => e.stopPropagation()}
+                    onTouchEnd={(e) => e.stopPropagation()}
+                >
                     {
                         props.data.recentReviewDtos.map((review, i) => 
                             <ReviewBox
