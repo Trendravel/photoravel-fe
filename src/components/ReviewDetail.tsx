@@ -8,7 +8,6 @@ import ReviewData from "../api/testdata/Review.json"
 import MultipleImageIconFile from "../assets/gallery.png";
 import { SingleReview } from "../types/Review";
 
-
 // 별점 평균, 갯수 등의 간략한 정보
 const SimplifiedInfoContainer = styled.div`
     display: flex;
@@ -111,7 +110,10 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                 {
                     reviews.map((review) =>
                         <Review key={review.reviewId}>
-                            <p style={{marginBottom: "0.75em"}}>
+                            <p style={{
+                                fontWeight: "500",
+                                marginBottom: "0.75em"
+                            }}>
                                 ⭐️ {review.rating}
                             </p>
                             <p>{review.content}</p>

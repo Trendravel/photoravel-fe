@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Rate } from "./LocationInfo";
 import MultipleImageViewer from "./MultipleImageViewer";
+import SpotCard from "./SpotCard";
 import { SingleLocation } from "../types/Location";
 
 
@@ -91,6 +92,27 @@ const Description = styled.div`
     white-space: pre-line;
 `;
 
+const SpotCardContainer = styled.div`
+    display: flex;
+    width: 100%;
+    height: 13em;
+    gap: 1em;
+    overflow-x: scroll;
+    overflow-y: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    margin-top: 0.5em;
+`;
+
+const SpotContainer = styled.div`
+    margin-top: 1em;
+    text-align: left;
+`;
+
+const SpotText = styled.p`
+    font-weight: 500;
+`;
+
 const LocationDetail = (props: {data: SingleLocation}) => {
     const navigate = useNavigate();
 
@@ -141,7 +163,19 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                     }
                     
                 </ReviewContainer>
-                
+                <SpotContainer>
+                    <SpotText>
+                        이 장소의 포토스팟 📸
+                    </SpotText>
+                    <SpotCardContainer
+                    onTouchStart={(e) => e.stopPropagation()}
+                    onTouchEnd={(e) => e.stopPropagation()}
+                    >
+                        <SpotCard/>
+                        <SpotCard/>
+                        <SpotCard/>
+                    </SpotCardContainer>
+                </SpotContainer>
             </MainInfoContainer>
         </BottomSheetContentContainer>
     )

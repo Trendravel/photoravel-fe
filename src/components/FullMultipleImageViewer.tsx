@@ -28,7 +28,9 @@ const MoveButton = styled.button<{left: string, right: string}>`
     width: 2em;
     height: 2em;
     padding: 1em;
-    background-color: white;
+    color: white;
+    font-size: 20pt;
+    font-weight: 600;
     z-index: 60;
 `;
 
@@ -77,13 +79,13 @@ const FullMultipleImageViewer = (props: {images: string[], changeIsOpen: () => v
                 left="0" right=""
                 onClick={() => moveImage(-1)}
                 >
-                    -
+                    &lt;
                 </MoveButton>
                 <MoveButton
                 left="" right="0"
                 onClick={() => moveImage(1)}
                 >
-                    +
+                    &gt;
                 </MoveButton>
             </div>
             

@@ -303,6 +303,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                                 if (e.key === "Enter")
                                     doSearch()
                             }}
+                            onTouchStart={(e) => e.stopPropagation()}
                         />
                         <SearchIcon
                             src="https://cdn-icons-png.freepik.com/256/141/141944.png?semt=ais_hybrid"
