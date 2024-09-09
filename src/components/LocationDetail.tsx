@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Rate } from "./LocationInfo";
 import MultipleImageViewer from "./MultipleImageViewer";
 import SpotCard from "./SpotCard";
+import SpotInfo from "../api/testdata/spotMultiRead.json";
 import { SingleLocation } from "../types/Location";
+import { MultiSpot } from "../types/Spot";
 
 
 export const BottomSheetContentContainer = styled.div`
@@ -115,6 +117,7 @@ const SpotText = styled.p`
 
 const LocationDetail = (props: {data: SingleLocation}) => {
     const navigate = useNavigate();
+    const spotData:MultiSpot[] = SpotInfo;
 
     return (
         <BottomSheetContentContainer>
@@ -171,9 +174,11 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                     onTouchStart={(e) => e.stopPropagation()}
                     onTouchEnd={(e) => e.stopPropagation()}
                     >
-                        <SpotCard/>
-                        <SpotCard/>
-                        <SpotCard/>
+                        {
+                            spotData.map((spot) =>
+                                <SpotCard data={spot}/>
+                            )
+                        }
                     </SpotCardContainer>
                 </SpotContainer>
             </MainInfoContainer>

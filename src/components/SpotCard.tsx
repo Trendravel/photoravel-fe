@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
 
-import NoImage from "../assets/—Pngtree—no image vector illustration isolated_4979075.png";
+import { MultiSpot } from "../types/Spot";
 
 const SpotContainer = styled.div`
     padding: 0.5em 0.25em 0.5em 0.25em;
     box-shadow: 0 1px 1px 1px #f0f0f0;
+    width: 10em;
+    height: 12em;
     border-radius: 0.5em;
     border: 1pt solid #cccccc;
     height: 11em;
@@ -12,8 +14,8 @@ const SpotContainer = styled.div`
 
 const ImageContainer = styled.div`
     position: relative;
-    width: 10em;
-    height: 10em;
+    width: 8em;
+    height: 8em;
 `;
 
 const SpotImage = styled.img`
@@ -34,15 +36,15 @@ const SpotTitle = styled.p`
     font-weight: 500;
 `;
 
-const SpotCard = () => {
+const SpotCard = (props: {data: MultiSpot}) => {
     return (
         <SpotContainer>
             <ImageContainer>
-                <SpotImage src={NoImage}/>
+                <SpotImage src={props.data.images[0]}/>
             </ImageContainer>
             <ContentContainer>
                 <SpotTitle>
-                    스팟 이름
+                    {props.data.title}
                 </SpotTitle>
             </ContentContainer>
         </SpotContainer>

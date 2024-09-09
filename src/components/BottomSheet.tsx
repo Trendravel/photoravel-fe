@@ -6,7 +6,7 @@ import { Rating } from 'react-simple-star-rating';
 import LocationDetail from './LocationDetail';
 import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
 import ReviewDetail from './ReviewDetail';
-import SpecificLocationInfo from '../api/testdata/SpecificLocationInfo.json'
+import SpecificLocationInfo from '../api/testdata/locationSingleRead.json'
 import { MultipleLocation } from '../types/Location';
 
 

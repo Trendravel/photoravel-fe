@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CategoryButton } from "./BottomSheet";
 import FullMultipleImageViewer from "./FullMultipleImageViewer";
 import { BottomSheetContentContainer } from "./LocationDetail";
-import ReviewData from "../api/testdata/Review.json"
+import ReviewData from "../api/testdata/readLocationReviews.json"
 import MultipleImageIconFile from "../assets/gallery.png";
 import { SingleReview } from "../types/Review";
 
