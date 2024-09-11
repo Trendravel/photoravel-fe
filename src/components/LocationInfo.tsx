@@ -36,6 +36,7 @@ export const RatingArea = styled.div`
 `;
 
 export const Rate = styled.p`
+    font-weight: 600;
     font-size: 11pt;
     margin-left: 0.2em;
 `;

@@ -9,14 +9,14 @@ import MultipleImageIconFile from "../assets/gallery.png";
 import { SingleReview } from "../types/Review";
 
 // 별점 평균, 갯수 등의 간략한 정보
-const SimplifiedInfoContainer = styled.div`
+export const SimplifiedInfoContainer = styled.div`
     display: flex;
     justify-content: space-between;
     text-align: left;
     margin: 1em 0.5em 1em 0.5em;
 `;
 
-const InfoText = styled.p<{color: string}>`
+export const InfoText = styled.p<{color: string}>`
     color: ${(props) => props.color};
     font-weight: 500;
     font-size: 14pt;

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Rate } from "./LocationInfo";
 import MultipleImageViewer from "./MultipleImageViewer";
-import SpotCard from "./SpotCard";
+import SmallSpotCard from "./SmallSpotCard";
 import SpotInfo from "../api/testdata/spotMultiRead.json";
 import { SingleLocation } from "../types/Location";
 import { MultiSpot } from "../types/Spot";
@@ -15,11 +15,11 @@ export const BottomSheetContentContainer = styled.div`
     padding: 0.25em 1.5em 0.5em 1.5em;
 `;
 
-const MainInfoContainer = styled.div`
+export const MainInfoContainer = styled.div`
     margin: 1em 0em 1em 0em;
 `;
 
-const PlaceName = styled.p`
+export const PlaceName = styled.p`
     font-size: 15pt;
     text-align: left;
     font-weight: 500;
@@ -33,28 +33,26 @@ const Address = styled.p`
     font-size: 9pt;
 `;
 
-const RatingArea = styled.div`
+export const RatingArea = styled.div`
     text-align: left;
-    margin: 1.5em 0.25em 1em 0.25em;
-    font-size: 10pt;
-    font-weight: 600;
+    margin: 1.5em 0.25em 0.5em 0.25em;
     display: flex;
     justify-content: space-between;
 `
-const SingleRate = styled.p`
+export const SingleRate = styled.p`
     text-align: left;
     font-weight: 500;
     font-size: 10pt;
     margin-left: 0.5em;
 `;
 
-const ReviewContent = styled.div`
+export const ReviewContent = styled.div`
     display: flex;
     padding: 0.5em 0 0.5em 0;
     font-size: 11pt
 `;
 
-const ReviewBox = styled.div`
+export const ReviewBox = styled.div`
     width: 70vw;
     height: 6em;
     padding: 0.5em;
@@ -62,7 +60,7 @@ const ReviewBox = styled.div`
     border: 1px solid #d0d0d0;
 `;
 
-const ReviewContainer = styled.div`
+export const ReviewContainer = styled.div`
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -76,13 +74,13 @@ const ReviewContainer = styled.div`
     scrollbar-width: none;
 `
 
-const ReviewImage = styled.img`
+export const ReviewImage = styled.img`
     width: 4em;
     height: 4em;
     padding: 0.1em;
 `;
 
-const Description = styled.div`
+export const Description = styled.div`
     overflow-y: scroll;
     max-height: 5em;
     margin-top: 0.5em;
@@ -96,23 +94,28 @@ const Description = styled.div`
 
 const SpotCardContainer = styled.div`
     display: flex;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
-    height: 13em;
+    height: 12.5em;
     gap: 1em;
     overflow-x: scroll;
     overflow-y: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    margin-top: 0.5em;
 `;
 
 const SpotContainer = styled.div`
-    margin-top: 1em;
     text-align: left;
 `;
 
 const SpotText = styled.p`
     font-weight: 500;
+`;
+
+export const SeeMoreText = styled.p`
+    font-size: 9pt;
+    font-weight: 400;
 `;
 
 const LocationDetail = (props: {data: SingleLocation}) => {
@@ -133,14 +136,14 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                         ⭐ {props.data.ratingAvg} ({props.data.reviewCounts >= 99?
                                                     "99" :props.data.reviewCounts })
                     </Rate>
-                    <p style={{fontWeight: "400", fontSize: "9pt"}}
+                    <SeeMoreText
                         onTouchStart={(e) => {
                             e.stopPropagation()
                             navigate(`/place?reviewfor=${props.data.locationId}`) 
                         }}
                     >
                         전체보기 &gt;
-                    </p>
+                    </SeeMoreText>
                 </RatingArea>
                 <ReviewContainer
                     onTouchStart={(e) => e.stopPropagation()}
@@ -167,16 +170,27 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                     
                 </ReviewContainer>
                 <SpotContainer>
-                    <SpotText>
-                        이 장소의 포토스팟 📸
-                    </SpotText>
+                    <RatingArea>
+                        <SpotText>
+                            이 장소의 포토스팟 📸
+                        </SpotText>
+                        <SeeMoreText
+                        onTouchStart={(e) => {
+                            e.stopPropagation()
+                            navigate(`/place?spotfor=${props.data.locationId}`) 
+                        }}
+                        >
+                            전체보기 &gt;
+                        </SeeMoreText>
+                    </RatingArea>
+                    
                     <SpotCardContainer
                     onTouchStart={(e) => e.stopPropagation()}
                     onTouchEnd={(e) => e.stopPropagation()}
                     >
                         {
                             spotData.map((spot) =>
-                                <SpotCard data={spot}/>
+                                <SmallSpotCard data={spot}/>
                             )
                         }
                     </SpotCardContainer>

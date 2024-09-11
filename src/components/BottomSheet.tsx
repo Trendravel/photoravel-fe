@@ -6,10 +6,10 @@ import { Rating } from 'react-simple-star-rating';
 import LocationDetail from './LocationDetail';
 import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
 import ReviewDetail from './ReviewDetail';
+import SingleSpotDetail from './SingleSpotDetail';
+import SpotDetail from './SpotDetail';
 import SpecificLocationInfo from '../api/testdata/locationSingleRead.json'
 import { MultipleLocation } from '../types/Location';
-
-
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 10;
@@ -89,7 +89,6 @@ const CategoryContainer = styled.div`
     height: 2em;
     white-space: nowrap;
 
-
     &::-webkit-scrollbar {
         display: none;
     }
@@ -146,7 +145,8 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
     const keyword = queryParam.get("keyword");
-    const review = queryParam.get('reviewfor')
+    const review = queryParam.get("reviewfor");
+    const spot = queryParam.get("spotfor");
     const [isFullyOpened, setIsFullyOpened] = useState(false);
 
     // 검색 처리를 위한 정의
@@ -182,14 +182,15 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
     }, []);
 
     useEffect(() => { // 경우에 따른 위치 초기설정
-        if (id) {
+        console.log("id: ", id, ", spot: ", spot);
+        if (id && !spot) { // 스팟이 아닌 장소 간략소개
             setPostion(window.innerHeight - 175);
-        } else if (review) {
+        } else if (review || spot) { // 리뷰나 스팟은 최대
             setPostion(100);
-        } else {
+        } else { // 아니면 최소 높이
             setPostion(window.innerHeight - 75);
         } 
-    }, [id])
+    }, [id, spot, review])
     
     const isDragging = useRef(false);
     const startYPos = useRef(0);
@@ -291,7 +292,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
         >
             <Handle />
             { // 장소 찾기
-                (!id && !review) && <>
+                (!id && !review && !spot) && <>
                     <Header>
                     <Title>장소 찾기</Title>
                     <SearchTab>
@@ -356,7 +357,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                 </>
             }
             { // 특정 장소 조회 (간략 보기)
-                id && specificLocation && (position === window.innerHeight - 175) &&
+                (!spot && id) && specificLocation && (position === window.innerHeight - 175) &&
                 <LocationContainer
                     onTouchStart={handleContainerTouch}
                     onTouchEnd={handleContainerTouch}
@@ -391,14 +392,22 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                 </LocationContainer>
             }
             { // 특정 장소 조회 (상세 보기)
-                id && specificLocation && (position < window.innerHeight - 175) &&
+                (!spot && id) && specificLocation && (position < window.innerHeight - 175) &&
                 <LocationDetail
                     data={specificLocation}
                 />
             }
             {
-                review &&
+                (review && !spot) &&
                 <ReviewDetail/>
+            }
+            {
+                (spot && !id) &&
+                <SpotDetail/>
+            }
+            {
+                (spot && id) &&
+                <SingleSpotDetail/>
             }
                 
         </BottomSheet>
