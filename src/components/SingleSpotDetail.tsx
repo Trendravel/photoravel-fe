@@ -7,12 +7,22 @@ import MultipleImageViewer from "./MultipleImageViewer";
 import SpotData from "../api/testdata/spotSingleRead.json"
 import { SingleSpot } from "../types/Spot";
 
-const SingleSpotDetail = () => {
+const SpotTitle = styled.p`
+    text-align: left;
+    font-weight: 600;
+    font-size: 16pt;
+    margin: 0.5em 0 0.5em 0;
+`;
+
+const SingleSpotDetail = () => { // To-do: 스팟 리뷰 연동 구현
     
     const spotData:SingleSpot = SpotData;
     
     return (
         <BottomSheetContentContainer>
+            <SpotTitle>
+                📍 스팟 상세정보
+            </SpotTitle>
             <MultipleImageViewer height="20vh" src={spotData.images}/>
             <MainInfoContainer>
                 <PlaceName>
@@ -58,7 +68,6 @@ const SingleSpotDetail = () => {
                     }
                 </ReviewContainer>
             </MainInfoContainer>
-            
         </BottomSheetContentContainer>
     )
 }

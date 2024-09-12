@@ -8,7 +8,6 @@ import SpotInfo from "../api/testdata/spotMultiRead.json";
 import { SingleLocation } from "../types/Location";
 import { MultiSpot } from "../types/Spot";
 
-
 export const BottomSheetContentContainer = styled.div`
     display: block;
     margin-top: 0.5em;
@@ -160,7 +159,7 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                                 </SingleRate>
                                 <ReviewContent>
                                     {
-                                        review.images[0]? <ReviewImage src={review.images[0]}/>: <></>
+                                        review.images[0]? <ReviewImage src={review.images[0]}/>:<></>
                                     }
                                     {review.content}
                                 </ReviewContent>

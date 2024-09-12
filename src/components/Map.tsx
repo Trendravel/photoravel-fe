@@ -8,7 +8,7 @@ import MarkerImage from "../assets/pin.png";
 import { MultipleLocation } from "../types/Location";
 import { MapInfo } from "../types/Position";
 
-const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateChange: (newState: MapInfo) => void}) => {
+const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateChange: (newState: MapInfo) => void, setIsUpdated: (state: boolean) => void }) => {
     const locationData = props.data;
     const [state, setState] = useState(props.pos);
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
@@ -64,6 +64,8 @@ const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateCha
             setState(newState);
             props.onMapStateChange(newState);
         }
+
+        props.setIsUpdated(false);
     }, 300), [props]);
 
     return (

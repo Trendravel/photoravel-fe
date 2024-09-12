@@ -8,26 +8,28 @@ import LocationInfoData from '../api/testdata/locationMultiRead.json';
 import BottomSheet from "../components/BottomSheet";
 import Map from "../components/Map";
 import PanButton from "../components/PanButton";
+import ReloadButton from "../components/ReloadButton";
 import UpperMenu from "../components/UpperMenu";
 import { MapInfo } from "../types/Position";
 
 const Home = () => {
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
     const [locationData, setLocationData] = useState(LocationInfoData);
+    const [isUpdated, setIsUpdated] = useState(true);
     const [mapState, setMapState] = useState<MapInfo>({ center: { lat: 37.5665, lng: 126.978 }, level: 3 });
     const [currentPos, setCurrentPos] = useState({
         center: { lat: 36.769989, lng: 126.931633 },
         level: 6
     })
 
-    useEffect(() => { // mapState가 변경될 때 새로운 장소 정보 불러오기
-        console.log(mapState)
+    const updateEvent = () => { // mapState 변경 시, 장소를 새로 불러올 클릭 이벤트
         /** 
         axios.get(`${BACKEND_ADDRESS}/nowPosition?latitude=${mapState.center.lat}&longitude=${mapState.center.lng}&range=${mapState.level}`)
             .then((res) => { setLocationData(res); })
             .catch((e) => { console.log(e); })
         */
-    , [mapState]})
+       setIsUpdated(true);
+    }
 
     useEffect(() => {
         //
@@ -35,7 +37,8 @@ const Home = () => {
 
     return (
         <HomeContainer>
-            <Map data={locationData} pos={currentPos} onMapStateChange={setMapState}/>
+            <Map data={locationData} pos={currentPos} onMapStateChange={setMapState} setIsUpdated={setIsUpdated}/>
+            <ReloadButton isOpen={!isUpdated} clickEvent={updateEvent}/>
             <UpperMenu/>
             <BottomSheet data={locationData}/>
             <PanButton setPos={setCurrentPos}/>
