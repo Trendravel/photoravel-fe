@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating';
 
+import AddReview from './AddReview';
 import LocationDetail from './LocationDetail';
 import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './LocationInfo';
 import ReviewDetail from './ReviewDetail';
@@ -145,8 +146,9 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
     const keyword = queryParam.get("keyword");
-    const review = queryParam.get("reviewfor");
-    const spot = queryParam.get("spotfor");
+    const reviewId = queryParam.get("reviewfor");
+    const spotId = queryParam.get("spotfor");
+    const reviewTargetId = queryParam.get("addreviewto");
     const [isFullyOpened, setIsFullyOpened] = useState(false);
 
     // 검색 처리를 위한 정의
@@ -182,15 +184,15 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
     }, []);
 
     useEffect(() => { // 경우에 따른 위치 초기설정
-        console.log("id: ", id, ", spot: ", spot);
-        if (id && !spot) { // 스팟이 아닌 장소 간략소개
+        console.log("id: ", id, ", spot: ", spotId);
+        if (id && !spotId) { // 스팟이 아닌 장소 간략소개
             setPostion(window.innerHeight - 175);
-        } else if (review || spot) { // 리뷰나 스팟은 최대
+        } else if (reviewId || spotId || reviewTargetId) { // 리뷰나 스팟은 최대
             setPostion(100);
         } else { // 아니면 최소 높이
             setPostion(window.innerHeight - 75);
         } 
-    }, [id, spot, review])
+    }, [id, spotId, reviewId, reviewTargetId])
     
     const isDragging = useRef(false);
     const startYPos = useRef(0);
@@ -214,7 +216,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
             const maxPosition2 = window.innerHeight - 175
 
             // 위치값을 제한합니다.
-            const limitedPosition = Math.max(minPosition, Math.min(newPosition, id? maxPosition2: maxPosition));
+            const limitedPosition = Math.max(minPosition, Math.min(newPosition, (id && !spotId)? maxPosition2: maxPosition));
             setPostion(limitedPosition);
         }
 
@@ -292,7 +294,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
         >
             <Handle />
             { // 장소 찾기
-                (!id && !review && !spot) && <>
+                (!id && !reviewId && !spotId && !reviewTargetId) && <>
                     <Header>
                     <Title>장소 찾기</Title>
                     <SearchTab>
@@ -357,7 +359,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                 </>
             }
             { // 특정 장소 조회 (간략 보기)
-                (!spot && id) && specificLocation && (position === window.innerHeight - 175) &&
+                (!spotId && id) && specificLocation && (position === window.innerHeight - 175) &&
                 <LocationContainer
                     onTouchStart={handleContainerTouch}
                     onTouchEnd={handleContainerTouch}
@@ -370,6 +372,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                                 initialValue={specificLocation.ratingAvg}
                                 readonly={true}
                                 size={20}
+                                allowFraction
                             />
                             <Rate>
                                 {specificLocation.ratingAvg}
@@ -392,24 +395,27 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                 </LocationContainer>
             }
             { // 특정 장소 조회 (상세 보기)
-                (!spot && id) && specificLocation && (position < window.innerHeight - 175) &&
+                (!spotId && id) && specificLocation && (position < window.innerHeight - 175) &&
                 <LocationDetail
                     data={specificLocation}
                 />
             }
             {
-                (review && !spot) &&
+                (reviewId && !reviewTargetId) &&
                 <ReviewDetail/>
             }
             {
-                (spot && !id) &&
+                (spotId && !id && !reviewId && !reviewTargetId) &&
                 <SpotDetail/>
             }
             {
-                (spot && id) &&
+                (spotId && id) &&
                 <SingleSpotDetail/>
             }
-                
+            {
+                (reviewTargetId) &&
+                <AddReview/>
+            }   
         </BottomSheet>
     );
 };

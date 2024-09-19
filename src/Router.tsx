@@ -1,10 +1,12 @@
 import { ReactNode } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+import AddInfo from "./pages/AddInfo.page";
 import AddPlace from "./pages/AddPlace.page";
 import Home from "./pages/Home.page"
-import Login from "./pages/Login.page";
+import LocalLogin from "./pages/LocalLogin.page";
 import NotFound from "./pages/NotFound.page";
+import OAuthLogin from "./pages/OAuthLogin.page";
 import RedirectPage from "./pages/Redirect.page";
 import SignUp from "./pages/SignUp.page";
 
@@ -13,6 +15,7 @@ interface RouteElement {
     path: string;
     element: ReactNode;
     errorElement: ReactNode;
+    children?: RouteElement[]
 }
 
 const routes: RouteElement[] = [
@@ -32,8 +35,23 @@ const routes: RouteElement[] = [
         errorElement: <NotFound/>,
     },
     {
-        path: '/login',
-        element: <Login/>,
+        path: '/oauthlogin',
+        element: <OAuthLogin/>,
+        errorElement: <NotFound/>,
+    },
+    {
+        path: '/oauthlogin/addinfo',
+        element: <AddInfo/>,
+        errorElement: <NotFound/>
+    },
+    {
+        path: '/photographer/login',
+        element: <LocalLogin/>,
+        errorElement: <NotFound/>
+    },
+    {
+        path: '/photographer/signup',
+        element: <SignUp/>,
         errorElement: <NotFound/>
     },
     {
@@ -45,12 +63,7 @@ const routes: RouteElement[] = [
         path: '/redirect',
         element: <RedirectPage/>,
         errorElement: <NotFound/>
-    },
-    {
-        path: '/signup',
-        element: <SignUp/>,
-        errorElement: <NotFound/>
-    },
+    },    
 ];
 
 const Router = createBrowserRouter(routes);

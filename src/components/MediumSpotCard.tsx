@@ -80,8 +80,8 @@ const MediumSpotCard = (props: {data: MultiSpot}) => {
             
             <MultipleImageContainer>
                 {
-                    spotData.images.map((img) =>
-                        <SpotImageContainer>
+                    spotData.images.map((img:string, i:number) =>
+                        <SpotImageContainer key={i}>
                             <SpotImage src={img}/>
                         </SpotImageContainer>
                     )

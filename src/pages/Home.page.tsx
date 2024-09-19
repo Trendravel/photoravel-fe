@@ -23,11 +23,11 @@ const Home = () => {
     })
 
     const updateEvent = () => { // mapState 변경 시, 장소를 새로 불러올 클릭 이벤트
-        /** 
+        
         axios.get(`${BACKEND_ADDRESS}/nowPosition?latitude=${mapState.center.lat}&longitude=${mapState.center.lng}&range=${mapState.level}`)
-            .then((res) => { setLocationData(res); })
+            .then((res) => { console.log(res) })
             .catch((e) => { console.log(e); })
-        */
+
        setIsUpdated(true);
     }
 

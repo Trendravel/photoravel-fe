@@ -82,6 +82,7 @@ const LocationInfo = (props: { data: MultipleLocation }) => {
                         initialValue={location_data.ratingAvg}
                         readonly={true}
                         size={20}
+                        allowFraction
                     />
                     <Rate>
                         {location_data.ratingAvg}

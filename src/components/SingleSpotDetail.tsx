@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styled from "@emotion/styled";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { BottomSheetContentContainer, MainInfoContainer, PlaceName, RatingArea, Description, SeeMoreText, ReviewContainer, ReviewBox, SingleRate, ReviewContent, ReviewImage } from "./LocationDetail";
 import { Rate } from "./LocationInfo";
@@ -15,7 +16,12 @@ const SpotTitle = styled.p`
 `;
 
 const SingleSpotDetail = () => { // To-do: 스팟 리뷰 연동 구현
-    
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParam = new URLSearchParams(location.search);
+    const id = queryParam.get("id");
+    const spotId = queryParam.get("spotfor");
+
     const spotData:SingleSpot = SpotData;
     
     return (
@@ -38,7 +44,10 @@ const SingleSpotDetail = () => { // To-do: 스팟 리뷰 연동 구현
                     </Rate>
                     <SeeMoreText
                         onTouchStart={(e) => {
-                            e.stopPropagation()
+                            e.stopPropagation();
+                        }}
+                        onClick={() => {
+                            navigate(`/place?spotfor=${spotId}&reviewfor=${id}`);
                         }}
                     >
                         전체보기 &gt;
@@ -52,7 +61,6 @@ const SingleSpotDetail = () => { // To-do: 스팟 리뷰 연동 구현
                         spotData.recentReviewDtos.map((review, i) => 
                             <ReviewBox
                                 key={i}
-                                onClick={() => {}}
                             >
                                 <SingleRate>
                                     ⭐️ {review.rating}

@@ -22,7 +22,7 @@ const RedirectPage = () => {
 
     useEffect(() => {
         if (KEY)
-            doLogin();
+            doLogin(KEY);
         /* axios.post(`http://localhost:8080/login/oauth2/code/kakao?code=${KEY}`)
             .then((res) => {
                 const result:MemberResponse|NonMemberResponse = res.data

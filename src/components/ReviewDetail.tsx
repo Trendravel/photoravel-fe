@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { CategoryButton } from "./BottomSheet";
 import FullMultipleImageViewer from "./FullMultipleImageViewer";
@@ -31,7 +33,6 @@ const ReviewContainer = styled.div`
 // 리뷰들의 내용 전체를 담는 공간
 const Review = styled.div`
     text-align: left;
-    border-bottom: 1px solid #cccccc;
     border-top: 1px solid #cccccc;
     padding: 1em;
     margin-top: 0.5em;
@@ -67,7 +68,15 @@ const MultipleImageIcon = styled.img`
 
 const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
     
-    const reviews:SingleReview[] = ReviewData;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParam = new URLSearchParams(location.search);
+    const reviewId = queryParam.get("reviewfor");
+    const spotId = queryParam.get("spotfor");
+
+    const reviewType = spotId && reviewId? "SpotReview":"LocationReview";
+
+    const reviews:SingleReview[] = ReviewData; // TODO: 장소/스팟 리뷰 데이터 선택적 핸들링
     const reviewCount = reviews.length;
     const [rateAverage, setRateAverage] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
@@ -81,6 +90,8 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
         })
 
         setRateAverage(totalRate / reviewCount || 0);
+
+        console.log(reviewType);
     }, [])
 
     const changeIsOpen = () => {
@@ -102,7 +113,16 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                     ⭐️ {rateAverage} ({reviewCount})
                 </InfoText>
                 </div>
-                <CategoryButton color="#FF808A">
+                <CategoryButton
+                color="#FF808A"
+                onClick={() => {
+                    if (reviewType === "LocationReview") {
+                        navigate(`/place?addreviewto=${reviewId}`)
+                    } else if (reviewType === "SpotReview") {
+                        navigate(`/place?spotfor=${spotId}&addreviewto=${spotId}`)
+                    }
+                }}
+                >
                     + 리뷰 작성하기
                 </CategoryButton>
             </SimplifiedInfoContainer>

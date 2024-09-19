@@ -21,8 +21,8 @@ const SpotDetail = () => {
                     <InfoText color="">
                         사진 스팟
                     </InfoText>
-                    <InfoText color="#FF808A">
-                        n개
+                    <InfoText color="#FF808A" style={{marginTop:"0.15em"}}>
+                        {spotData.length}개
                     </InfoText>
                 </div>
                 <CategoryButton color="#FF808A">
@@ -32,7 +32,10 @@ const SpotDetail = () => {
             <SpotListContainer>
                 {
                     spotData.map((spot) =>
-                        <MediumSpotCard data={spot}/>
+                        <MediumSpotCard
+                            key={spot.spotId}
+                            data={spot}
+                        />
                     )
                 }
             </SpotListContainer>

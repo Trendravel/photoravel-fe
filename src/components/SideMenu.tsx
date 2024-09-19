@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getCookie } from "../api/useCookie";
+
 import { doLogout } from "../api/Login";
+import { getCookie } from "../api/useCookie";
 
 interface SidebarProps {
     isOpen: boolean;
@@ -116,7 +117,7 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
                 isLoggedIn?
                 <Text>반가워요, {username} 님!</Text>:
                 <Option
-                to="/login"
+                to="/oauthlogin"
                 style={{
                     color: "black",
                     textDecoration: "none !important",

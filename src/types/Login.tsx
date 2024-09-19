@@ -44,3 +44,13 @@ export interface LoggedInfo {
     memberId: string;
     exp: number;
 }
+
+export interface PhotographerRequestDto {
+    id: number;
+    accountId: string;
+    password: string;
+    name: string;
+    region: string;
+    description: string;
+    carrerYear: number;
+}
