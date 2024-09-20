@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 const RedirectPage = () => {
-    
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [param, setParam] = useSearchParams();
     const KEY = param.get("code"); // 파라미터에서 코드를 보내주기 위해 분류
@@ -29,7 +29,6 @@ const RedirectPage = () => {
                 console.log("Login succeed")
             })
             .catch((e) => { console.log(e) }) **/
-        
         navigate('/');
     }, [param])
 

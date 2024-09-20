@@ -97,7 +97,7 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
     const changeIsOpen = () => {
         if (isOpen)
             setIsOpen(false);
-        else
+        else 
             setIsOpen(true)
     }
 
@@ -143,7 +143,9 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                             {
                                 review.images[0]?
                                 <ReviewImageContainer
-                                    onClick={() => {
+                                    onTouchStart={(e) => e.preventDefault()}
+                                    onTouchEnd={(e) => {
+                                        e.preventDefault();
                                         setImages(review.images);
                                         changeIsOpen();
                                     }}

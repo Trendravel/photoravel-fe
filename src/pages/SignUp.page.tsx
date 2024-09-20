@@ -3,8 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 
 import { CenterContainer, FormContainer, SubmitButton, TextInput } from "./AddInfo.page";
-import { DescriptionArea } from "../components/AddReview";
 import { FileLabel, ImageInput, PreviewImage } from "./AddPlace.page";
+import { DescriptionArea } from "../components/AddReview";
 
 const PageContainer = styled.div`
     position: fixed;

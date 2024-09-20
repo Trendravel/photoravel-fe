@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Background = styled.div`
     position: fixed;
@@ -67,6 +67,10 @@ const FullMultipleImageViewer = (props: {images: string[], changeIsOpen: () => v
                 setIndex(prevIndex => prevIndex-1);
         }
     }
+
+    useEffect(() => {
+        setIndex(0);
+    }, [props.isOpen])
 
     return (
         <div
