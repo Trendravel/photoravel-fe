@@ -105,7 +105,7 @@ const PhotographerLogin = () => {
                 </FormContainer>
                 <p
                 style={{color: "#aaaaaa"}}
-                onClick={() => { navigate('/photographer/signup')}}    
+                onClick={() => { navigate('/signup?for=photographer')}}    
                 >
                     사진작가 등록하러 가기 &gt;
                 </p>
