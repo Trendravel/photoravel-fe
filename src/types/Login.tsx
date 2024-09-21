@@ -1,14 +1,6 @@
 export interface MemberResponse {
-    result: Result;
-    data: {
-        accessToken: AccessToken;
-        refreshToken: RefreshToken;
-    };
-}
-
-interface Result {
-    resultCode: number;
-    resultMessage: string;
+    accessToken: AccessToken;
+    refreshToken: RefreshToken;
 }
 
 interface AccessToken {

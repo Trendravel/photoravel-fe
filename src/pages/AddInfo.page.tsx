@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
-import axios from "axios";
 import { useState } from "react";
+
+import { LoginButton } from "./LocalLogin.page";
+import { jsonConnection } from "../api/connectBackend";
 
 const PageContainer = styled.div`
     position: fixed;
@@ -9,7 +11,7 @@ const PageContainer = styled.div`
     overflow: hidden;
 `;
 
-export const CenterContainer = styled.div<{width: string, height: string}>`
+export const CenterContainer = styled.div<{width: string, height: string, shadow?: boolean}>`
     position: absolute;
     top: 50%;
     left: 50%;
@@ -17,15 +19,14 @@ export const CenterContainer = styled.div<{width: string, height: string}>`
     box-sizing: border-box;
     width: ${(props) => props.width};
     height: ${(props) => props.height};
-    padding: 1em;
+    padding: 1em 2em 1em 2em;
     border-radius: 0.5em;
-    box-shadow: 0px 0px 4px #d0d0d0;
+    box-shadow: ${(props) => props.shadow? "0px 0px 4px #d0d0d0":""};
     text-align: center;
 `;
 
 const TitleContainer = styled.div`
     width: fit-content;
-    margin: auto;
 `;
 
 const Title = styled.p`
@@ -36,12 +37,12 @@ const Title = styled.p`
     margin: 0 0 0.25em 0;
 `;
 
-export const FormContainer = styled.div<{margin?: string}>`
+export const FormContainer = styled.form<{margin?: string, width: string}>`
     display: flex;
     flex-direction: column;
     margin: ${(props) => props.margin ? props.margin : ""};
     gap: 1em;
-    width: 90%;
+    width: ${(props) => props.width};
 `;
 
 export const TextInput = styled.input<{fontSize?: string, margin?: string}>`
@@ -78,7 +79,7 @@ const AddInfo = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post(BACKEND_ADDRESS+`/login/addInfo`, {
+            const response = await jsonConnection.post(BACKEND_ADDRESS+`/login/addInfo`, {
                 provider: "kakao",
                 id: id,
                 name: name,
@@ -96,13 +97,13 @@ const AddInfo = () => {
 
     return (
         <PageContainer>
-            <CenterContainer width="80vw" height="20em">
+            <CenterContainer width="90vw" height="20em">
                 <TitleContainer>
                     <Title>📝 거의 다 됐어요,</Title>
                     <Title>추가 정보를 입력해주세요!</Title>
                 </TitleContainer>
                 <form onSubmit={handleSubmit}>
-                    <FormContainer margin="1em auto">
+                    <FormContainer width="100%" margin="1em auto">
                         <TextInput
                             type="text"
                             placeholder="아이디"
@@ -128,9 +129,9 @@ const AddInfo = () => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </FormContainer>
-                    <SubmitButton type="submit">
+                    <LoginButton type="submit">
                         가입하기
-                    </SubmitButton>
+                    </LoginButton>
                 </form>
             </CenterContainer>
         </PageContainer>
