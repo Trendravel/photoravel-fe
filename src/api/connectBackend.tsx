@@ -7,7 +7,8 @@ export const jsonConnection = axios.create({
     baseURL: BACKEND_ADDRESS,
     headers: {
         'Accept': '*/*',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer'
     }
 })
 

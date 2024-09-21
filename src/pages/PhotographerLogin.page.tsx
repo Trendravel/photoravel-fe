@@ -55,7 +55,7 @@ export const LoginButton = styled.button`
     box-shadow: 1px 1px 2px 1px #cccccc;
 `;
 
-const LocalLogin = () => {
+const PhotographerLogin = () => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -114,4 +114,4 @@ const LocalLogin = () => {
     );
 };
 
-export default LocalLogin;
+export default PhotographerLogin;

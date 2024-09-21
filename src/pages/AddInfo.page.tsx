@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import { LoginButton } from "./LocalLogin.page";
+import { LoginButton } from "./PhotographerLogin.page";
 import { jsonConnection } from "../api/connectBackend";
 
 const PageContainer = styled.div`
