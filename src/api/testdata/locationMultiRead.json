@@ -1,0 +1,84 @@
+[
+    {
+        "locationId": 1,
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "address": "충남 아산시 실옥로 222",
+        "description": "장영실 과학관은 조선시대 과학자 장영실의 업적을 기리며 과학 전시와 체험 프로그램을 운영하는 교육 공간입니다. 이후의 설명은 오버플로우 처리가 제대로 되는지 확인하기 위해 입력하는 텍스트입니다. 이후의 내용은 장소와 연관이 없으니 참고해주세요.\n그래도 칸이 조금 남아서 더 입력하도록 하겠습니다",
+        "name": "장영실과학관",
+        "images": [
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg",
+            "https://cdn.prod.website-files.com/5f48b9d9b2ee95a1de3a404e/5f585338be580365ef5531f0_%EC%9E%A5%EC%98%81%EC%8B%A4%EA%B3%BC%ED%95%99%EA%B4%80-%EC%95%84%EC%82%B0%EC%9D%98%EC%A4%91%EC%8B%AC%20%EC%95%BC%EC%99%B8%EC%9E%91%EB%8F%99%EC%A1%B0%ED%98%95%EB%AC%BC.jpg",
+            "https://cdn.chungnamin.co.kr/news/photo/202206/22660_20790_281.jpg"
+        ],
+        "views": 0,
+        "ratingAvg": 4.5,
+        "reviewCounts": 99,
+        "createdAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    },
+    {
+        "locationId": 2,
+        "latitude": 36.633843,
+        "longitude": 127.489427,
+        "address": "충북 청주시 상당구 용담동 1",
+        "description": "청주 고인쇄박물관은 한국의 인쇄 역사와 문화유산을 전시하는 박물관입니다.",
+        "name": "청주 고인쇄박물관",
+        "images": [
+            "https://lh5.googleusercontent.com/p/AF1QipN2AodtRn_CVUQjgStSvpCkWMzN9o6tbjImXTwl=w1080-h864-n-k-no"
+        ],
+        "views": 0,
+        "ratingAvg": 4.5,
+        "reviewCounts": 47,
+        "createdAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    },
+    {
+        "locationId": 3,
+        "latitude": 36.348548,
+        "longitude": 127.379359,
+        "address": "충남 천안시 서북구 성환읍 성환리 1",
+        "description": "천안 삼거리 공원은 역사적인 삼거리와 아름다운 자연을 갖춘 휴식 공간입니다.",
+        "name": "천안 삼거리 공원",
+        "images": [
+            "https://lh5.googleusercontent.com/p/AF1QipNqjXkVn5ZC2Tw_j2w4gPRJTt5-1ulFHI3hITpT=w1080-h720-n-k-no"
+        ],
+        "views": 0,
+        "ratingAvg": 4.5,
+        "reviewCounts": 12,
+        "createdAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    },
+    {
+        "locationId": 4,
+        "latitude": 36.418203,
+        "longitude": 127.364069,
+        "address": "충북 괴산군 괴산읍 괴산리 1",
+        "description": "괴산 연풍농악은 전통 농악 공연으로, 지역의 문화유산을 체험할 수 있는 기회를 제공합니다.",
+        "name": "괴산 연풍농악",
+        "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5ygEYxj27mBKuWUJAv-aDNYD8Y8r2mduwkw&s"
+        ],
+        "views": 0,
+        "ratingAvg": 4.5,
+        "reviewCounts": 2,
+        "createdAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    },
+    {
+        "locationId": 5,
+        "latitude": 36.627956,
+        "longitude": 127.504528,
+        "address": "충북 옥천군 옥천읍 읍내리 1",
+        "description": "옥천의 자연휴양림은 사계절 내내 아름다운 경관을 자랑하며, 힐링을 위한 최적의 장소입니다.",
+        "name": "옥천 자연휴양림",
+        "images": [
+            "https://image.foresttrip.go.kr/bb/201910/868267d1-d471-48ac-9af3-fd38f4df7e73.JPG"
+        ],
+        "views": 0,
+        "ratingAvg": 4.5,
+        "reviewCounts": 75,
+        "createdAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    }
+]

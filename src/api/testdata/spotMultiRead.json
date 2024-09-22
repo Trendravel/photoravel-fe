@@ -1,0 +1,46 @@
+[
+    {
+        "spotId": 1,
+        "title": "장영실과학관 전경",
+        "description": "장영실과학관의 아름다운 외관을 보여주는 스팟입니다. 과학관의 독특한 건축 양식을 감상할 수 있습니다.",
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "images": [
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg",
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg",
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg",
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg",
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg",
+            "https://www.jbnews.com/news/photo/202204/1358970_1162995_194.jpg"
+        ],
+        "views": 10,
+        "createAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    },
+    {
+        "spotId": 2,
+        "title": "과학 체험 프로그램",
+        "description": "장영실과학관에서 진행되는 다양한 과학 체험 프로그램을 소개하는 스팟입니다. 어린이와 가족들에게 인기 있는 활동입니다.",
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "images": [
+            "https://cdn.prod.website-files.com/5f48b9d9b2ee95a1de3a404e/5f585338be580365ef5531f0_%EC%9E%A5%EC%98%81%EC%8B%A4%EA%B3%BC%ED%95%99%EA%B4%80-%EC%95%84%EC%82%B0%EC%9D%98%EC%A4%91%EC%8B%AC%20%EC%95%BC%EC%99%B8%EC%9E%91%EB%8F%99%EC%A1%B0%ED%98%95%EB%AC%BC.jpg"
+        ],
+        "views": 15,
+        "createAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    },
+    {
+        "spotId": 3,
+        "title": "과학 전시관 내부",
+        "description": "장영실과학관 내부의 다양한 전시물과 체험 공간을 소개하는 스팟입니다. 과학에 대한 흥미를 느낄 수 있는 장소입니다.",
+        "latitude": 36.797662,
+        "longitude": 126.977053,
+        "images": [
+            "https://cdn.chungnamin.co.kr/news/photo/202206/22660_20790_281.jpg"
+        ],
+        "views": 5,
+        "createAt": "2024-08-27T12:00:00Z",
+        "updatedAt": "2024-08-27T12:00:00Z"
+    }
+]

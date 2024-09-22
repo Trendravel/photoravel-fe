@@ -41,6 +41,9 @@ module.exports = {
       typescript: {
         directory: './src',
       },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     },
     'import/parsers': { '@typescript-eslint/parser': ['.ts', '.tsx'] },
   },
