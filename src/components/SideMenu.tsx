@@ -117,7 +117,7 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
                 isLoggedIn?
                 <Text>반가워요, {username} 님!</Text>:
                 <Option
-                to="/oauthlogin"
+                to="/login"
                 style={{
                     color: "black",
                     textDecoration: "none !important",

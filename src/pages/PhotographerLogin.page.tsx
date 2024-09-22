@@ -44,8 +44,8 @@ const FullContentContainer = styled.div`
     align-items: center;
 `;
 
-export const LoginButton = styled.button`
-    width: 100%;
+export const LoginButton = styled.button<{width?: string}>`
+    width: ${(props) => props.width? props.width: "100%"};
     height: 2.5em;
     background-color: #FF808A;
     border-radius: 1.25em;

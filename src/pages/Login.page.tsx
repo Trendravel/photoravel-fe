@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FormContainer, TextInput } from "./AddInfo.page";
 import { LoginButton } from "./PhotographerLogin.page";
 import { jsonConnection } from "../api/connectBackend";
-import kakaoLoginImage from "../assets/free-icon-kakao-talk-4494622.png"
+import kakaoLoginImage from "../assets/kakao_login_medium_narrow.png"
 import LogoImage from "../assets/Photoravel_LoginPage_Logo.png";
 import { ApiResponse } from "../types/Common";
 import { MemberResponse } from "../types/Login";
@@ -47,7 +47,7 @@ const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
                 onSubmit={handleSubmit}
                 width="75%"
                 margin="1em auto"
-                >
+                >   
                     <TextInput
                         type="text"
                         placeholder="아이디"
@@ -60,9 +60,6 @@ const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <LoginButton type="submit">
-                        로그인
-                    </LoginButton>
                     <p
                     style={{
                         textAlign: "right",
@@ -73,28 +70,29 @@ const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
                     >
                         회원가입 &gt;
                     </p>
-                </FormContainer>
-                <div style={{
+                    <div style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: "0.25em"
-                }}>
-                    <KakaoButton
-                        src={kakaoLoginImage}
-                        onClick={() => {
-                            window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
-                        }}
-                    />
-                    <p
-                    style={{
-                        fontSize: "10pt",
-                        fontWeight: "500"
-                    }}
-                    >
-                        카카오계정으로 간편로그인
-                    </p>
-                </div>
+                    gap: "0.75em"
+                    }}>
+                        <LoginButton
+                        width="70%"
+                        type="submit"
+                        >
+                            로그인
+                        </LoginButton>
+                        <KakaoButton
+                            src={kakaoLoginImage}
+                            onClick={() => {
+                                window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
+                            }}
+                        />
+                    </div>
+                    
+                    
+                </FormContainer>
+               
             </Center>
         </Container>
     )
@@ -113,7 +111,7 @@ const LogoImageContainer = styled.img`
 
 const KakaoButton = styled.img`
     height: 3em;
-    margin-bottom: 0.5em;
+    border-radius: 1.5em;
     filter: drop-shadow(0.1em 0.1em 0.2em #BBBBBB);
 `;
 
