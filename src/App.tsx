@@ -1,5 +1,4 @@
 import { Global } from "@emotion/react";
-// eslint-disable-next-line import/no-unresolved
 import { CookiesProvider } from "react-cookie";
 import { RouterProvider } from "react-router-dom";
 

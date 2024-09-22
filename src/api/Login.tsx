@@ -7,8 +7,6 @@ import { LoggedInfo } from "../types/Login";
 
 const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
 
-// const JWT = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi7J2066aEIiwibmlja25hbWUiOiLri4nrhKTsnoQiLCJlbWFpbCI6Inlvc2hpNzU5MUBuYXZlci5jb20iLCJtZW1iZXJJZCI6Im1lbWJlcklEIiwiZXhwIjoxNzI0ODMxNjY3fQ.L-LRxO_NvNMg8-c87f7GG6BzNLYnkF882cpPTYCDkJs"
-
 export const doLogin = (code: string) => {
     let userData:LoggedInfo;
 
