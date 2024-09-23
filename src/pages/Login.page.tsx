@@ -9,6 +9,7 @@ import kakaoLoginImage from "../assets/kakao_login_medium_narrow.png"
 import LogoImage from "../assets/Photoravel_LoginPage_Logo.png";
 import { ApiResponse } from "../types/Common";
 import { MemberResponse } from "../types/Login";
+import { doLocalUserLogin } from "../api/Login";
 
 
 const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
@@ -22,12 +23,18 @@ const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await jsonConnection.post<ApiResponse<MemberResponse>>(`/public/member/local`, {
-                username: id,
+            await jsonConnection.post<ApiResponse<MemberResponse>>(`/public/member/local`, {
+                memberId: id,
                 password: password
-            });
-            console.log("Response:", response.data);
-            // 성공적으로 전송된 후 처리할 로직 추가
+            })
+            .then((res) => {
+                if (res.data.result.resultCode != 400)
+                    doLocalUserLogin(res.data.data?.accessToken.token, res.data.data?.refreshToken.token);
+                navigate('/')
+            })
+            .catch((e) => {
+                alert(e.response.data.result.resultMessage);
+            })
         } catch (error) {
             console.error("Error sending data:", error);
             // 에러 처리 로직 추가

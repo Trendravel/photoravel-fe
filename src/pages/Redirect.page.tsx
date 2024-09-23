@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { jsonConnection } from '../api/connectBackend';
 import { decodeToken } from '../api/decodeToken';
-import { doLogin } from '../api/Login';
+import { doOAuthLogin } from '../api/Login';
 import { MemberResponse, NonMemberResponse } from '../types/Login';
 
 const Container = styled.div`
@@ -23,8 +23,8 @@ const RedirectPage = () => {
 
     useEffect(() => {
         if (KEY)
-            doLogin(KEY);
-        
+            doOAuthLogin(KEY);
+
         navigate('/');
     }, [param])
 
