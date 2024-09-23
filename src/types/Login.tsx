@@ -46,3 +46,16 @@ export interface PhotographerRequestDto {
     description: string;
     carrerYear: number;
 }
+
+export interface MemberRegisterRequestDto {
+    memberId: string;
+    email: string;
+    name: string;
+    nickname: string;
+    password: string;
+    profileImg: string;
+}
+
+export interface DuplicatedCheckDto {
+    duplicated: boolean;
+}

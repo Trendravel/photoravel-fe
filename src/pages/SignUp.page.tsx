@@ -1,12 +1,14 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { CenterContainer, FormContainer, TextInput } from "./AddInfo.page";
 import { FileLabel, ImageInput, PreviewImage } from "./AddPlace.page";
 import { LoginButton } from "./PhotographerLogin.page";
 import { jsonConnection } from "../api/connectBackend";
 import { DescriptionArea } from "../components/AddReview";
+import { ApiResponse } from "../types/Common";
+import { DuplicatedCheckDto, MemberRegisterRequestDto } from "../types/Login";
 
 const PageContainer = styled.div`
     position: fixed;
@@ -61,6 +63,7 @@ const CheckButton = styled.button`
 const SignUp = () => {
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
 
+    const navigate = useNavigate();
     const location = useLocation();
     const queryParam = new URLSearchParams(location.search);
     const userType = queryParam.get('for');
@@ -100,15 +103,32 @@ const SignUp = () => {
     };
 
     const activateCheck = (i: number) => {
-        // 모든 값을 false로 초기화하고, i번째 값을 true로 설정
-        setCheck(prevCheck => {
-            const newCheck = prevCheck; // 기본 배열 설정
-            newCheck[i] = true; // i번째 값을 true로 설정
-            return newCheck; // 새로운 배열 반환
-        });
-
-        console.log(check);
+        if (userType === "user") {
+            // 중복확인 배열 매칭을 위한 변수 선언
+            const checkTarget = ["email-check", "memberId-check", "nickname-check"];
+            const checkVariableTarget = [email, id, nickname];
+    
+            jsonConnection.get<ApiResponse<DuplicatedCheckDto>>(BACKEND_ADDRESS + `/public/member/${checkVariableTarget[i]}/${checkTarget[i]}`)
+                .then((res) => {
+                    if (!res.data.data?.duplicated) {
+                        setCheck(prevCheck => {
+                            const newCheck = [...prevCheck]; // 새로운 배열 생성
+                            newCheck[i] = true; // i번째 값을 true로 설정
+                            return newCheck;
+                        });
+                        alert("사용 가능합니다.");
+                    } else {
+                        alert("중복되었습니다!");
+                    }
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
+        } else if (userType === "photographer") {
+            console.log("백엔드 업데이트 시, 사진작가 중복 확인 로직 구현 필요");
+        }
     };
+    
 
     // 입력 값의 유효성 검사
     const validateForm = () => {        
@@ -199,17 +219,23 @@ const SignUp = () => {
         } else if (userType === "user") {
             if (validateForm()) {
                 try {
-                    const response = await jsonConnection.post(BACKEND_ADDRESS+`/public/member/register`, {
-                        "memeberId": id,
+                    await jsonConnection.post<ApiResponse<MemberRegisterRequestDto>>(BACKEND_ADDRESS+`/public/member/register`, {
+                        "memberId": id,
                         "email": email,
                         "password": password,
                         "name": name,
                         "nickname": nickname,
                         "profileImg": "none"
-                    }, {
-                        headers: { "Content-Type": "application/json" }
                     })
-                    console.log("Response: ", response.data)
+                    .then(() => {
+                        alert("회원가입이 완료되었습니다!");
+                        navigate('/login');
+                    })
+                    .catch((e) => {
+                        console.log("err: ", e);
+                        // 가입 에러 메시지 출력
+                        alert(e.response.data.result.resultMessage);
+                    })
                 } catch (e) {
                     console.error("Error sending data: ", e);
                 }
@@ -260,6 +286,7 @@ const SignUp = () => {
                                 placeholder="아이디"
                                 value={id}
                                 onChange={(e) => setId(e.target.value)}
+                                disabled={check[0]}
                             />
                             <CheckButton
                                 onClick={(e) => {
@@ -320,6 +347,7 @@ const SignUp = () => {
                                 placeholder="이메일"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                disabled={check[0]}
                             />
                             <CheckButton
                                 onClick={(e) => {
@@ -336,6 +364,7 @@ const SignUp = () => {
                                 placeholder="아이디"
                                 value={id}
                                 onChange={(e) => setId(e.target.value)}
+                                disabled={check[1]}
                             />
                             <CheckButton
                                 onClick={(e) => {
@@ -364,6 +393,7 @@ const SignUp = () => {
                             placeholder="닉네임"
                             value={nickname}
                             onChange={(e) => setNickname(e.target.value)}
+                            disabled={check[2]}
                         />
                         <CheckButton
                         onClick={(e) => {

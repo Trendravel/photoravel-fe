@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { jsonConnection } from '../api/connectBackend';
 import { decodeToken } from '../api/decodeToken';
 import { doLogin } from '../api/Login';
 import { MemberResponse, NonMemberResponse } from '../types/Login';
@@ -23,12 +24,7 @@ const RedirectPage = () => {
     useEffect(() => {
         if (KEY)
             doLogin(KEY);
-        /* axios.post(`http://localhost:8080/login/oauth2/code/kakao?code=${KEY}`)
-            .then((res) => {
-                const result:MemberResponse|NonMemberResponse = res.data
-                console.log("Login succeed")
-            })
-            .catch((e) => { console.log(e) }) **/
+        
         navigate('/');
     }, [param])
 
