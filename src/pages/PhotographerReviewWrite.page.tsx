@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+// eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
 
 import album from '../assets/images/album.png';
@@ -9,7 +11,24 @@ const PhotographerReviewWrite = () => {
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [photos, setPhotos] = useState<File[]>([]);
+  const [photographerId, setPhotographerId] = useState<string>('');
+  const [currentDate, setCurrentDate] = useState<string>(''); 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const id = localStorage.getItem('photographerId');
+    if (id) {
+      setPhotographerId(id);
+    }
+
+    const today = new Date();
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+    const dayOfWeek = weekdays[today.getDay()]; 
+
+    setCurrentDate(`${today.toLocaleDateString('ko-KR', options)} (${dayOfWeek})`);
+  }, []);
 
   const handleStarClick = (index: number) => {
     setRating(index + 1);
@@ -31,6 +50,36 @@ const PhotographerReviewWrite = () => {
     document.getElementById('photo-input')?.click();
   };
 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    formData.append('content', comment);
+    formData.append('rating', String(rating));
+    formData.append('userId', 'user-id');
+    formData.append('reviewType', 'PHOTOGRAPHER');
+
+    photos.forEach(photo => {
+      formData.append('images', photo);
+    });
+
+    try {
+      const response = await axios.post("http:///private/review/create", formData, {
+        headers: {
+          Authorization: `Bearer `,
+          Accept: '*/*, application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (response.data.success) {
+        alert('리뷰가 성공적으로 작성되었습니다.');
+        navigate('/photographerdetail');
+      }
+    } catch (error) {
+      console.error('리뷰 작성 중 오류 발생:', error);
+      alert('리뷰 작성에 실패했습니다.');
+    }
+  };
+
   return (
     <Container>
       <HeaderContainer>
@@ -41,8 +90,8 @@ const PhotographerReviewWrite = () => {
       </HeaderContainer>
 
       <TitleContainer>
-        <Title>현담</Title>
-        <DateText>2024.07.20 (토)</DateText>
+        <Title>{photographerId}</Title>
+        <DateText>{currentDate}</DateText>
         <RatingContainer>
           {[...Array(5)].map((_, index) => (
             <Star
@@ -57,38 +106,34 @@ const PhotographerReviewWrite = () => {
       </TitleContainer>
 
       <WriteContainer>
-        <PhotoButtonContainer onClick={handlePhotoClick}>
-          {photos.length > 0 ? (
-            <>
-              <PhotoCountText>사진 {photos.length}/10</PhotoCountText>
-              <PhotoGallery>
-                {photos.map((photo, index) => (
-                  <PhotoPreview key={index}>
-                    <img src={URL.createObjectURL(photo)} alt={`photo-${index}`} />
-                    <RemovePhotoButton onClick={() => setPhotos(prev => prev.filter((_, i) => i !== index))}>
-                      &times;
-                    </RemovePhotoButton>
-                  </PhotoPreview>
-                ))}
-              </PhotoGallery>
-            </>
-          ) : (
-            <>
-              <PhotoButtonIcon src={album} />
-              <PhotoCountText>사진 0/10</PhotoCountText>
-            </>
-          )}
-        </PhotoButtonContainer>
-        <input
-          type="file"
-          id="photo-input"
-          style={{ display: 'none' }}
-          accept="image/*"
-          multiple
-          onChange={handleFileChange}
-        />
+        <PhotoSection>
+          <PhotoButtonContainer onClick={handlePhotoClick}>
+            <PhotoButtonIcon src={album} />
+            <PhotoButtonText>{photos.length}/10</PhotoButtonText>
+          </PhotoButtonContainer>
+          <input
+            type="file"
+            id="photo-input"
+            style={{ display: 'none' }}
+            accept="image/*"
+            multiple
+            onChange={handleFileChange}
+          />
+
+          <PhotoGallery>
+            {photos.map((photo, index) => (
+              <PhotoPreview key={index}>
+                <img src={URL.createObjectURL(photo)} alt={`photo-${index}`} />
+                <RemovePhotoButton onClick={() => setPhotos(prev => prev.filter((_, i) => i !== index))}>
+                  &times;
+                </RemovePhotoButton>
+              </PhotoPreview>
+            ))}
+          </PhotoGallery>
+        </PhotoSection>
+
         <CommentInput
-          placeholder="리뷰를 작성해주세요"
+          placeholder="다른 고객들이 참고할 수 있도록 사진작가에 대한 경험을 적어주세요."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={500}
@@ -96,7 +141,7 @@ const PhotographerReviewWrite = () => {
         <CharacterCount>{comment.length} / 500</CharacterCount>
       </WriteContainer>
 
-      <SubmitButton>작성하기</SubmitButton>
+      <SubmitButton onClick={handleSubmit}>작성하기</SubmitButton>
     </Container>
   );
 };
@@ -187,25 +232,49 @@ const WriteContainer = styled.div`
   flex-direction: column; 
 `;
 
+const PhotoSection = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  
+`;
+
 const PhotoButtonContainer = styled.div`
-  width: 93%;
-  height: auto; 
-  padding: 10px;
+  width: 60px;
+  height: 60px; 
+  padding: 5px; 
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-right: 10px;
   background: #fff;
   display: flex; 
+  flex-direction: column;
   align-items: center; 
-  justify-content: space-between; 
+  justify-content: center; 
   cursor: pointer; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: #f8f8f8;
+  }
+`;
+
+const PhotoButtonIcon = styled.img`
+  width: 24px; 
+  margin-bottom: 5px;
+`;
+
+const PhotoButtonText = styled.span`
+  font-weight: 700;
+  font-size: 12px;
+  color: #aaa; 
+  text-align: center;
 `;
 
 const PhotoGallery = styled.div`
   display: flex;
   overflow-x: auto;
-  margin-left: 10px;
+  flex-grow: 1;
 `;
 
 const PhotoPreview = styled.div`
@@ -239,29 +308,18 @@ const RemovePhotoButton = styled.button`
   padding: 0; 
 `;
 
-const PhotoCountText = styled.p`
-  font-weight: 700;
-  font-size: 15px;
-  color: #000; 
-`;
-
-const PhotoButtonIcon = styled.img`
-  margin-right: 10px;
-  width: 25px;
-`;
-
 const CommentInput = styled.textarea`
   width: 100%;
-  height: 180px;
+  height: 200px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
   margin-bottom: 10px;
   resize: none;
   background: #fff;
+  font-size: 15px;
 
   &::placeholder {
-    padding: 3px 6px;
     font-size: 15px;
     color: #CBD0D5;
   }

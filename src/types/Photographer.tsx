@@ -1,3 +1,5 @@
+import { Review } from "./Review";
+
 export interface Photographer {
     accountId: string;
     name: string;
@@ -6,6 +8,9 @@ export interface Photographer {
     profileImg: string;    
     ratingAvg: string;
     reviewCount: number;
-    matches: number;
-    experience: number;
+    createdAt: string;
+    updatedAt: string;
+    careerYear: number;
+    matchingCount: number;
+    recentReviewDtos: Review[];
   }

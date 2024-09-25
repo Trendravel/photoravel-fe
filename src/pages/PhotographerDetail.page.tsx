@@ -1,72 +1,193 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import back from '../assets/images/back.png';
-import pen from '../assets/images/pen.png';
 import pinkstar from '../assets/images/pinkstar.png';
-import region from '../assets/images/region.png';
+import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
+import { Photographer } from '../types/Photographer';
+import { Review } from '../types/Review';
 
 const PhotographerDetail = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { photographer } = location.state;
+  const { photographerId } = useParams<{ photographerId: string }>();
+  const [photographer, setPhotographer] = useState<Photographer | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [isMatched, setIsMatched] = useState<boolean>(false);
 
-  const reviews = [
-    {
-      profileImg: 'https://mblogthumb-phinf.pstatic.net/MjAyMTAxMDVfOTUg/MDAxNjA5ODIyMTAzMjUw.iWi4InBy8sN-JF0yf_3_bvdS0CiB7NVw6tNtX_ZR554g.kJFm4lnX9ulSLmYVk0pPGfog9dn7l4dln8iB9s05Iiwg.JPEG.sj330035/%EC%9D%B8%EC%8A%A4%ED%83%80%ED%94%84%EC%82%AC_(45).jpeg?type=w800',
-      userId: '언제든떠나고싶은',
-      content: '공항철도도 이용하시고 얼리체크인 활용하시면 정말 편합니다.\n단, 쇼핑일정은 체크인전날에~',
-      rating: 3.8,
-      date: '2024.03.14',
-      edited: true,
-    },
-    {
-      profileImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkdRIE0vre8weS0NsYrGNYn7kbLc1fhp3p_A&s',
-      userId: 'hee야웅',
-      content: '영어를 많이 아는 편이 아니라 정말 한자로된 지명이나, 그곳의 사진을 보여주는 것이 택시 탈 때 편해요. 은근 식당에서도 영어가 잘 안통하는 곳이 많습니다.',
-      rating: 4.3,
-      date: '2023.12.19',
-      edited: false, 
-    },
-    {
-      profileImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnUFJ7YUdlbmJ5tS82_sn73pJhBvo9UWJhjw&s',
-      userId: '혜니',
-      content: '생각보다 영어가 안 통해서 택시 탈 때 한자로 된 지명도 알아가는게 좋을 것 같아요!',
-      rating: 3.4,
-      date: '2023.08.26',
-      edited: false, 
-    },
-  ];
+  useEffect(() => {
+    const fetchPhotographerDetail = async () => {
+      try {
+        const response = await axios.get(`http:///public/photographers/${photographerId}/detail`, {
+          headers: {
+            Authorization: `Bearer `,
+            Accept: '*/*',
+          },
+        });
 
-  const handleReviewWrite = () => {
-    navigate('/photographerreviewwrite');
+        if (response.data.result.resultCode === 200) {
+          setPhotographer(response.data.data);
+          setReviews(response.data.data.recentReviewDtos || []);
+        }
+      } catch (error) {
+        console.error('사진작가 정보를 가져오는 데 실패했습니다:', error);
+      }
+    };
+
+    const fetchPhotographerReviews = async () => {
+      try {
+        const response = await axios.get(`http:///photographer/${photographerId}/detail/reviews`, {
+          headers: {
+            Authorization: `Bearer `,
+            Accept: '*/*',
+          },
+        });
+
+        if (response.data.result.resultCode === 200) {
+          setReviews(response.data.data || []);
+        }
+      } catch (error) {
+        console.error('리뷰를 가져오는 데 실패했습니다:', error);
+      }
+    };
+
+    fetchPhotographerDetail();
+    fetchPhotographerReviews();
+  }, [photographerId]);
+
+  const handleEditReview = async (review: Review) => {
+    const newContent = prompt('수정할 리뷰 내용을 입력하세요:', review.content);
+
+    if (newContent) {
+      const reviewUpdateDto = {
+        reviewId: review.reviewId,
+        reviewType: 'PHOTOGRAPHER',
+        content: newContent,
+        rating: review.rating,
+        typeId: null,
+        deleteImages: [],
+      };
+
+      try {
+        const response = await axios.patch('http:///private/review/update', reviewUpdateDto);
+
+        if (response.data.result.resultCode === 200) {
+          alert('리뷰가 성공적으로 수정되었습니다.');
+          setReviews(prevReviews =>
+            prevReviews.map(r => (r.reviewId === review.reviewId ? { ...r, content: newContent } : r))
+          );
+        } else {
+          alert(`오류: ${response.data.result.resultMessage}`);
+        }
+      } catch (error) {
+        console.error('리뷰 수정 중 오류 발생:', error);
+        alert('리뷰 수정에 실패했습니다.');
+      }
+    }
+  };
+
+  const handleDeleteReview = async (reviewId: number) => {
+    const isConfirmed = window.confirm('정말 리뷰를 삭제하시겠습니까?');
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    try {
+      const response = await axios.delete(`http:///private/review/${reviewId}/delete`, {
+        headers: {
+          Authorization: `Bearer `,
+          Accept: '*/*',
+        },
+      });
+
+      if (response.data.result.resultCode === 200) {
+        alert('리뷰가 삭제되었습니다.');
+        setReviews(reviews.filter(review => review.reviewId !== reviewId));
+      } else {
+        alert(`오류: ${response.data.result.resultMessage}`);
+      }
+    } catch (error) {
+      console.error('리뷰 삭제 중 오류 발생:', error);
+      alert('리뷰 삭제에 실패했습니다.');
+    }
+  };
+
+  const currentUserId = localStorage.getItem('userId');
+
+  const handleMatchingRequest = async () => {
+    const memberId = localStorage.getItem('userId');
+
+    const confirmRequest = window.confirm('매칭 요청을 하시겠습니까?');
+
+    if (!confirmRequest) {
+      return;
+    }
+
+    const matchingRequestDto = {
+      memberId,
+      photographerId,
+    };
+
+    try {
+      const response = await axios.post('http:///private/matching/pending', matchingRequestDto, {
+        headers: {
+          Authorization: `Bearer `,
+          Accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.data.result.resultCode === 200) {
+        alert('매칭 요청이 성공적으로 전송되었습니다.');
+        setIsMatched(true);
+      } else {
+        alert(`오류: ${response.data.result.resultMessage}`);
+      }
+    } catch (error) {
+      console.error('매칭 요청 중 오류 발생:', error);
+      alert('매칭 요청에 실패했습니다.');
+    }
+  };
+
+  const handleRequestButtonClick = () => {
+    if (isMatched) {
+      navigate('/matchingstatus');
+    } else {
+      handleMatchingRequest();
+    }
   };
 
   return (
     <Container>
-      <ButtonContainer>
+      <BackButtonContainer>
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon src={back} />
         </BackButton>
-      </ButtonContainer>
+      </BackButtonContainer>
+
       <ContentContainer>
         {photographer && (
           <ProfileInfoContainer>
             <ProfileImageContainer>
               <ProfileImage src={photographer.profileImg} />
             </ProfileImageContainer>
+
             <ProfileInfo>
-              <Name>{photographer.name}</Name>
-              <RegionContainer>
-                <RegionIcon src={region} />
-                {photographer.region}
-              </RegionContainer>
+              <NameRegionContainer>
+                <Name>{photographer.name}</Name>
+                <RegionContainer>
+                  <RegionIcon src={regionIcon} />
+                  {photographer.region}
+                </RegionContainer>
+              </NameRegionContainer>
               <Description>{photographer.description}</Description>
               <StatsContainer>
                 <Stat>
                   <StatLabel>매칭</StatLabel>
-                  <StatCount>{photographer.matches}회</StatCount>
+                  <StatCount>{photographer.matchingCount}회</StatCount>
                 </Stat>
                 <Stat>
                   <StatLabel>리뷰</StatLabel>
@@ -75,14 +196,15 @@ const PhotographerDetail = () => {
                     <StatCount>{photographer.ratingAvg}</StatCount>
                     <ReviewCount>({photographer.reviewCount})</ReviewCount>
                   </StatCountContainer>
-
                 </Stat>
                 <Stat>
                   <StatLabel>총 경력</StatLabel>
-                  <StatCount>{photographer.experience}년</StatCount>
+                  <StatCount>{photographer.careerYear}년</StatCount>
                 </Stat>
               </StatsContainer>
-              <RequestQuoteButton>매칭 요청</RequestQuoteButton>
+              <RequestQuoteButton onClick={handleRequestButtonClick}>
+                {photographerId === currentUserId ? '매칭 현황' : (isMatched ? '매칭 현황' : '매칭 요청')}
+              </RequestQuoteButton>
             </ProfileInfo>
           </ProfileInfoContainer>
         )}
@@ -91,34 +213,39 @@ const PhotographerDetail = () => {
           <Title>
             리뷰 <StyledCount>{reviews.length}</StyledCount>
           </Title>
-          <ReviewButtonContainer>
-            <ReviewWriteButton onClick={handleReviewWrite}>
-              <ReviewWriteIcon src={pen} />
-            </ReviewWriteButton>
-          </ReviewButtonContainer>
         </GuideReviewHeader>
 
         {reviews.map((review, index) => (
           <ReviewCard key={index}>
             <UserInfo>
-              <UserProfileImg src={review.profileImg} />
               <UserDetails>
-                <UserName>{review.userId}</UserName>
+                <UserNameContainer>
+                  <UserName>{review.userName}</UserName>
+                </UserNameContainer>
                 <RatingContainer>
                   {Array.from({ length: 5 }, (_, i) => (
                     <RatingStar key={i} src={pinkstar} filled={i < Math.round(review.rating)} />
                   ))}
                   <ReviewDate>
-                    {review.date}
-                    {review.edited && <span style={{ marginLeft: '3px', color: '#999' }}>, 수정됨</span>}
+                    {new Date(review.createdAt).toLocaleDateString()}
+                    {review.updatedAt && <span style={{ marginLeft: '3px', color: '#999' }}>, 수정됨</span>}
                   </ReviewDate>
                 </RatingContainer>
-
               </UserDetails>
+              <ReportButtonContainer>
+                <ReportButton>신고</ReportButton>
+              </ReportButtonContainer>
             </UserInfo>
             <ReviewContent>{review.content}</ReviewContent>
+            {review.userId === currentUserId && (
+              <ButtonContainer>
+                <EditButton onClick={() => handleEditReview(review)}>수정</EditButton>
+                <DeleteButton onClick={() => handleDeleteReview(review.reviewId)}>삭제</DeleteButton>
+              </ButtonContainer>
+            )}
           </ReviewCard>
         ))}
+
       </ContentContainer>
     </Container>
   );
@@ -143,7 +270,6 @@ const ContentContainer = styled.div`
 `;
 
 const ProfileInfoContainer = styled.div`
-  display: flex;
   margin-bottom: 30px;
   background-color: white;
   padding: 30px 20px;
@@ -161,11 +287,17 @@ const ProfileInfo = styled.div`
   flex-direction: column;
 `;
 
+const NameRegionContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const ProfileImage = styled.img`
   width: 70px; 
   height: 70px;
   border-radius: 50%; 
   border: 4px solid white; 
+  margin-left: -8px;
 `;
 
 const Name = styled.h2`
@@ -180,8 +312,9 @@ const RegionContainer = styled.div`
   background: #f0f0f0;
   border-radius: 5px;
   width: 50px;  
-  padding: 4px 5px;
+  padding: 5px 4px;
   margin-top: 8px;
+  margin-left: 10px;
   margin-bottom: 10px;
   font-size: 10px;
   color: #777;
@@ -189,19 +322,20 @@ const RegionContainer = styled.div`
 
 const RegionIcon = styled.img`
   width: 10px;
-  margin-right: 5px;
+  margin-right: 6px;
 `;
 
 const Description = styled.p`
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 12px;
   color: #333;
+  line-height: 1.3;
 `;
 
 const StatsContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
+  margin: 10px 5px;
 `;
 
 const Stat = styled.div`
@@ -213,7 +347,7 @@ const Stat = styled.div`
 
 const StatCountContainer = styled.div`
   display: flex;
-  align-items: center; 
+  align-items: center;
 `;
 
 const ReviewCount = styled.div`
@@ -222,15 +356,15 @@ const ReviewCount = styled.div`
   margin-left: 5px;
 `;
 
-const StatCount = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-`;
-
 const StatLabel = styled.div`
   margin-bottom: 5px;
-  font-size: 12px;
+  font-size: 10px;
   color: #888;
+`;
+
+const StatCount = styled.div`
+  font-size: 17px;
+  font-weight: bold;
 `;
 
 const StatImage = styled.img`
@@ -243,13 +377,13 @@ const RequestQuoteButton = styled.button`
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 12px 15px;
-  font-size: 14px;
+  padding: 15px 15px;
+  font-size: 15px;
   cursor: pointer;
-  margin-top: 13px;
+  margin-top: 15px;
 `;
 
-const ButtonContainer = styled.div`
+const BackButtonContainer = styled.div`
   margin-top: 20px;
   margin-left: 10px;
   width: 30px;
@@ -290,54 +424,30 @@ const Title = styled.h2`
   margin-left: -10px;
 `;
 
-const ReviewButtonContainer = styled.div`
-  width: 20px;
-  height: 20px;
-  margin-bottom: 15px;
-  font-size: 30px;
-  cursor: pointer;
-  color: #000;
-  opacity: 1;
-`;
-
-const ReviewWriteButton = styled.button`
-  background-color: transparent;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: #000;
-`;
-
-const ReviewWriteIcon = styled.img`
-  margin-top: 7px;
-  width: 20px;
-`;
-
 const ReviewCard = styled.div`
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   background-color: #fff;
+  position: relative;
 `;
 
 const UserInfo = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 10px;
-`;
-
-const UserProfileImg = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: 12px;
-  margin-bottom: 5px;
 `;
 
 const UserDetails = styled.div`
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+  flex-grow: 1; 
+`;
+
+const UserNameContainer = styled.div`
+  display: flex;
+  align-items: center; 
 `;
 
 const UserName = styled.span`
@@ -362,7 +472,7 @@ const RatingContainer = styled.div`
 const ReviewDate = styled.span`
   margin-top: 0.5px;
   margin-left: 10px;
-    margin-right: -20px;
+  margin-right: -20px;
   font-size: 10px;
   color: #999;
 `;
@@ -372,4 +482,39 @@ const ReviewContent = styled.p`
   line-height: 1.5;
   font-size: 13px;
   text-align: left; 
+`;
+
+const ReportButtonContainer = styled.div`
+  margin-left: auto;
+`;
+
+const ReportButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 12px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px; 
+`;
+
+const EditButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: 10px; 
+`;
+
+const DeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #ff6b6b;
+  cursor: pointer;
+  font-size: 12px;
 `;

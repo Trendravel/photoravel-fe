@@ -1,9 +1,10 @@
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import filter from '../assets/images/filter.png';
-import region from '../assets/images/region.png';
+import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
 import BottomSheetUI from '../components/BottomSheet';
 import UpperMenu from '../components/UpperMenu';
@@ -14,75 +15,6 @@ type FilterOptions = {
   sorts: string[];
 };
 
-const photographers: Photographer[] = [
-  {
-    accountId: 'kej88',
-    name: '현담',
-    description: '15년차 개인 사진작가로 활동 중이며, 네이버 오늘의 사진에 두 번 당선되었습니다.',
-    ratingAvg: '5.0',
-    reviewCount: 29,
-    matches: 46,
-    experience: 14,
-    profileImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT48eOU7RJ5msG_0lMbQhcKLPqYPbkiWr8SSA&s',
-    region: '아산시',
-  },
-  {
-    accountId: 'kej88',
-    name: '도성윤',
-    description: '3대 가족사진, 대가족사진, 전문인프로필, 커플, 우정사진촬영/사원증,오케스트라,합창단 등 출장 촬영 전문!',
-    ratingAvg: '3.9',
-    reviewCount: 4,
-    matches: 7,
-    experience: 4,
-    profileImg: 'https://cphoto.asiae.co.kr/listimglink/1/2024061321553916177_1718283339.jpg',
-    region: '예산군',
-  },
-  {
-    accountId: 'kej88',
-    name: '박형근',
-    description: '누구나 찍을 수 있는 사진이 아닌 오랜시간 두고 보아도 미소 지을 수 있는 그런 사진을 남겨 드립니다.',
-    ratingAvg: '4.2',
-    reviewCount: 15,
-    matches: 22,
-    experience: 15,
-    profileImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqpVxMT64FvT6xw4qBTguRkQq9zTnQ3TN3Ow&s',
-    region: '천안시',
-  },
-  {
-    accountId: 'kej88',
-    name: '영진',
-    description: '사진촬영의 결과물은 현장의 분위기와 좋은 사진을 만드려는 작가의 끈기에서 창작됩니다.',
-    ratingAvg: '4.3',
-    reviewCount: 30,
-    matches: 8,
-    experience: 11,
-    profileImg: 'https://www.hynews.ac.kr/news/photo/202009/10519_8579_1515.jpg',
-    region: '홍성군',
-  },
-  {
-    accountId: 'kej88',
-    name: '김건',
-    description: '틀에 갇힌 사진을 찍지 않는 사진작가. 세상에 오직 하나 뿐인 사진을 찍습니다.',
-    ratingAvg: '5.0',
-    reviewCount: 94,
-    matches: 116,
-    experience: 13,
-    profileImg: 'https://img.khan.co.kr/news/2023/03/16/l_2023031701000706200060681.jpg',
-    region: '태안군',
-  },
-  {
-    accountId: 'kej88',
-    name: '장종기',
-    description: '개인촬영 모델촬영 가족여행 우정여행 데이트스냅등 컨셉 촬영 전문 포토그래퍼입니다',
-    ratingAvg: '4.8',
-    reviewCount: 80,
-    matches: 159,
-    experience: 12,
-    profileImg: 'https://cdnimage.ebn.co.kr/news/201705/news_1496024454_893906_main1.jpg',
-    region: '청양군',
-  },
-];
-
 const truncateDescription = (description: string, maxLength: number = 22) => {
   return description.length > maxLength ? description.substring(0, maxLength) + '...' : description;
 }
@@ -90,14 +22,39 @@ const truncateDescription = (description: string, maxLength: number = 22) => {
 const PhotographerList = () => {
   const navigate = useNavigate();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [filteredPhotographers, setFilteredPhotographers] = useState<Photographer[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<FilterOptions>({ regions: [], sorts: [] });
+  const [region, setRegion] = useState<string[]>([]);
 
   useEffect(() => {
-    setFilteredPhotographers(photographers);
-  }, []);
+    const fetchPhotographers = async () => {
+      try {
+        const response = await axios.get(`http:///public/photographers`, {
+          headers: {
+            Authorization: `Bearer `,
+            Accept: '*/*',
+          },
+          params: {
+            region: region,
+          },
+        });
+
+        if (response.data.result.resultCode === 200) {
+          setPhotographers(response.data.data);
+          setFilteredPhotographers(response.data.data);
+        } else {
+          alert(`오류: ${response.data.result.resultMessage}`);
+        }
+      } catch (error) {
+        console.error('사진작가 목록을 가져오는 데 실패했습니다:', error);
+      }
+    };
+
+    fetchPhotographers();
+  }, [region]);
 
   const handleCardClick = (photographer: Photographer) => {
     navigate(`/photographerdetail`, { state: { photographer } });
@@ -112,14 +69,17 @@ const PhotographerList = () => {
 
     if (regions.length > 0) {
       filtered = filtered.filter(photographer => regions.includes(photographer.region));
+      setRegion(regions); 
+    } else {
+      setRegion([]);
     }
 
     if (sorts.includes('평점 높은 순')) {
       filtered.sort((a, b) => Number(b.ratingAvg) - Number(a.ratingAvg)); 
     } else if (sorts.includes('경력 높은 순')) {
-      filtered.sort((a, b) => b.experience - a.experience);
+      filtered.sort((a, b) => b.careerYear - a.careerYear);
     } else if (sorts.includes('매칭 많은 순')) {
-      filtered.sort((a, b) => b.matches - a.matches);
+      filtered.sort((a, b) => b.matchingCount - a.matchingCount);
     }  else if (sorts.includes('리뷰 많은 순')) {
       filtered.sort((a, b) => b.reviewCount - a.reviewCount);
     }
@@ -159,10 +119,10 @@ const PhotographerList = () => {
               <RatingContainer>
                 <RatingIcon src={star} />
                 <Rating>{photographer.ratingAvg}({photographer.reviewCount}) </Rating>
-                <Stats>{photographer.matches}회 매칭   |   경력 {photographer.experience}년</Stats>
+                <Stats>{photographer.matchingCount}회 매칭   |   경력 {photographer.careerYear}년</Stats>
               </RatingContainer>
               <RegionContainer>
-                <RegionIcon src={region} />
+                <RegionIcon src={regionIcon} />
                 {photographer.region}
               </RegionContainer>
             </InfoContainer>

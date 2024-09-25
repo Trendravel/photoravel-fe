@@ -2,9 +2,9 @@ import { ReactNode } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import GuidebookDetail from "./pages/GuidebookDetail.page";
-import GuidebookEdit from "./pages/GuidebookEdit.page";
 import GuidebookList from "./pages/GuidebookList.page";
 import GuidebookWrite from "./pages/GuidebookWrite.page";
+import MatchingStatus from "./pages/MatchingStatus.page";
 import NotFound from "./pages/NotFound.page";
 import PhotographerDetail from "./pages/PhotographerDetail.page";
 import PhotographerList from "./pages/PhotographerList.page";
@@ -21,12 +21,7 @@ const routes: RouteElement[] = [
         path: '/guidebookdetail',
         element: <GuidebookDetail/>,
         errorElement: <NotFound/>
-    }, 
-    {
-        path: '/guidebookedit',
-        element: <GuidebookEdit/>,
-        errorElement: <NotFound/>
-    },      
+    },   
     {
         path: '/guidebooklist',
         element: <GuidebookList/>,
@@ -35,6 +30,11 @@ const routes: RouteElement[] = [
     {
         path: '/guidebookwrite',
         element: <GuidebookWrite/>,
+        errorElement: <NotFound/>
+    },
+    {
+        path: '/matchingstatus',
+        element: <MatchingStatus userRole={"photographer"}/>,
         errorElement: <NotFound/>
     },
     {

@@ -10,8 +10,8 @@ type FilterOptions = {
 
 const BottomSheetUI = ({ applyFilters, sortOptions, selectedFilters }: { applyFilters: (filters: FilterOptions) => void, sortOptions: string[], selectedFilters: FilterOptions }) => {
   const [bottom, setBottom] = useState(-50);
-  const [selectedRegion, setSelectedRegion] = useState<string[]>(selectedFilters.regions); // 수정된 부분
-  const [selectedSort, setSelectedSort] = useState<string[]>(selectedFilters.sorts); // 수정된 부분
+  const [selectedRegion, setSelectedRegion] = useState<string[]>(selectedFilters.regions);
+  const [selectedSort, setSelectedSort] = useState<string[]>(selectedFilters.sorts);
   const isAnimated = useRef(false);
 
   const handleRegionClick = (region: string) => {
