@@ -4,7 +4,7 @@ import { Map, MapMarker, CustomOverlayMap, MarkerClusterer } from "react-kakao-m
 import { useLocation, useNavigate } from "react-router-dom";
 
 import useKakaoLoader from "../api/useKakaoLoader";
-import MarkerImage from "../assets/pin.png";
+import MarkerImage from "../assets/images/pin.png";
 import { MultipleLocation } from "../types/Location";
 import { MapInfo } from "../types/Position";
 

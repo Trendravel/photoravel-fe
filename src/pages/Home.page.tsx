@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from "@emotion/styled";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { jsonConnection } from "../api/connectBackend";

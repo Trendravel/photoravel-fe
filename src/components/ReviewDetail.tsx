@@ -6,7 +6,7 @@ import { CategoryButton } from "./BottomSheet";
 import FullMultipleImageViewer from "./FullMultipleImageViewer";
 import { BottomSheetContentContainer } from "./LocationDetail";
 import ReviewData from "../api/testdata/readLocationReviews.json"
-import MultipleImageIconFile from "../assets/gallery.png";
+import MultipleImageIconFile from "../assets/images/gallery.png";
 import { SingleReview } from "../types/Review";
 
 // 별점 평균, 갯수 등의 간략한 정보

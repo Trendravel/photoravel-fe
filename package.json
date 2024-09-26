@@ -12,7 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "axios": "^1.7.4",
+    "axios": "^1.7.7",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-cookie": "^7.2.0",

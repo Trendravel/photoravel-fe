@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { FormContainer, TextInput } from "./AddInfo.page";
 import { jsonConnection } from "../api/connectBackend";
-import Logo from "../assets/Photoravel_LoginPage_Logo.png"
+import Logo from "../assets/images/Photoravel_LoginPage_Logo.png"
 import { ApiResponse } from "../types/Common";
 import { MemberResponse } from "../types/Login";
 

@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { FormContainer, TextInput } from "./AddInfo.page";
 import { LoginButton } from "./PhotographerLogin.page";
 import { jsonConnection } from "../api/connectBackend";
-import kakaoLoginImage from "../assets/kakao_login_medium_narrow.png"
-import LogoImage from "../assets/Photoravel_LoginPage_Logo.png";
+import { doLocalUserLogin } from "../api/Login";
+import kakaoLoginImage from "../assets/images/kakao_login_medium_narrow.png"
+import LogoImage from "../assets/images/Photoravel_LoginPage_Logo.png";
 import { ApiResponse } from "../types/Common";
 import { MemberResponse } from "../types/Login";
-import { doLocalUserLogin } from "../api/Login";
 
 
 const Login = () => { // 카카오 OAuth 로그인 및 회원가입 처리

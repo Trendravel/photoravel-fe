@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import CrossHairLogo from "../assets/crosshair.png"
+import CrossHairLogo from "../assets/images/crosshair.png"
 import { MapInfo } from "../types/Position";
 
 const PanButton = (props: { setPos: (mapInfo: MapInfo) => void }) => {
