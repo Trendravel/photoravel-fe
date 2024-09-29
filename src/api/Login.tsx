@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NavigateOptions, useNavigate } from "react-router-dom";
 
-import { jsonConnection } from "./connectBackend";
+import { jsonConnection, tokenConnection } from "./connectBackend";
 import { decodeToken } from "./decodeToken"
 import { getCookie, removeCookie, setCookie } from "./useCookie";
 import { ApiResponse } from "../types/Common";
@@ -78,7 +78,7 @@ export const doLogout = () => {
 
 export const refreshAccessToken = async ():Promise<string> => {
     let newToken = "";
-    await jsonConnection.post('/auth/refresh-token', {
+    await tokenConnection.post('/auth/refresh-token', {
         "refreshToken": getCookie("refreshToken")
     })
     .then((res) => newToken = res.data.data.token)
