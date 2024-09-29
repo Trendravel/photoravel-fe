@@ -15,10 +15,18 @@ interface RefreshToken {
 
 export interface NonMemberResponse {
     provider: string;
-    profileImg: File;
+    profileImg: string;
+    id: string;
     email: string;
     nickname: string;
     exist: boolean;
+}
+
+export interface NonMemberParam {
+    email: string;
+    id: string;
+    nickname: string;
+    profileImg: string;
 }
 
 export interface NewMemberInfo {

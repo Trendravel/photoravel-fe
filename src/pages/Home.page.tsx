@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
 import { jsonConnection } from "../api/connectBackend";
-import { doLogin, doLogout } from "../api/Login";
 import LocationInfoData from '../api/testdata/locationMultiRead.json';
 import BottomSheet from "../components/BottomSheet";
 import Map from "../components/Map";
@@ -25,7 +24,7 @@ const Home = () => {
 
     const updateEvent = () => { // mapState 변경 시, 장소를 새로 불러올 클릭 이벤트
         
-        jsonConnection.get<ApiResponse<MapInfo>>(`${BACKEND_ADDRESS}/nowPosition?latitude=${mapState.center.lat}&longitude=${mapState.center.lng}&range=${mapState.level}`)
+        jsonConnection.get<ApiResponse<MapInfo>>(`${BACKEND_ADDRESS}/public/nowPosition?latitude=${mapState.center.lat}&longitude=${mapState.center.lng}&range=${mapState.level*1000}`)
             .then((res) => { console.log(res) })
             .catch((e) => { console.log(e); })
 

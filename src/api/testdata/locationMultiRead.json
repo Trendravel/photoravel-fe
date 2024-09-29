@@ -15,7 +15,8 @@
         "ratingAvg": 4.5,
         "reviewCounts": 99,
         "createdAt": "2024-08-27T12:00:00Z",
-        "updatedAt": "2024-08-27T12:00:00Z"
+        "updatedAt": "2024-08-27T12:00:00Z",
+        "category": "카테고리 없음"
     },
     {
         "locationId": 2,
@@ -31,7 +32,8 @@
         "ratingAvg": 4.5,
         "reviewCounts": 47,
         "createdAt": "2024-08-27T12:00:00Z",
-        "updatedAt": "2024-08-27T12:00:00Z"
+        "updatedAt": "2024-08-27T12:00:00Z",
+        "category": "카테고리 없음"
     },
     {
         "locationId": 3,
@@ -47,7 +49,8 @@
         "ratingAvg": 4.5,
         "reviewCounts": 12,
         "createdAt": "2024-08-27T12:00:00Z",
-        "updatedAt": "2024-08-27T12:00:00Z"
+        "updatedAt": "2024-08-27T12:00:00Z",
+        "category": "🔥 8월의 인기장소"
     },
     {
         "locationId": 4,
@@ -63,7 +66,8 @@
         "ratingAvg": 4.5,
         "reviewCounts": 2,
         "createdAt": "2024-08-27T12:00:00Z",
-        "updatedAt": "2024-08-27T12:00:00Z"
+        "updatedAt": "2024-08-27T12:00:00Z",
+        "category": "카테고리 없음"
     },
     {
         "locationId": 5,
@@ -79,6 +83,7 @@
         "ratingAvg": 4.5,
         "reviewCounts": 75,
         "createdAt": "2024-08-27T12:00:00Z",
-        "updatedAt": "2024-08-27T12:00:00Z"
+        "updatedAt": "2024-08-27T12:00:00Z",
+        "category": "⛱️ 여유로운 여행지"
     }
 ]

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CenterContainer, FormContainer, TextInput } from "./AddInfo.page";
 import { FileLabel, ImageInput, PreviewImage } from "./AddPlace.page";
 import { LoginButton } from "./PhotographerLogin.page";
-import { jsonConnection } from "../api/connectBackend";
+import { formDataConnection, jsonConnection } from "../api/connectBackend";
 import { DescriptionArea } from "../components/AddReview";
 import { ApiResponse } from "../types/Common";
 import { DuplicatedCheckDto, MemberRegisterRequestDto } from "../types/Login";
@@ -192,24 +192,41 @@ const SignUp = () => {
         return isValid;
     };
 
+    const userFormData = () => {
+        const userData = new FormData();
+        
+        const request: { memberId?: string; password: string; name: string; accountId?: string; region?: string; description?: string; nickname?: string; email?: string; } = {
+            password: password,
+            name: name,
+        };
+
+        if (imageFile)
+            userData.append("image", imageFile);
+    
+        // 사용자 유형에 따라 필드를 추가
+        if (userType === "photographer") {
+            request.accountId = id;
+            request.region = chosenRegion;
+            request.description = description;
+        } else if (userType === "user") {
+            request.memberId = id;
+            request.nickname = nickname;
+            request.email = email;
+        }
+
+        userData.append('request', JSON.stringify(request));
+
+        return userData;
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (userType === "photographer") {
-            const userData = new FormData();
-
-            userData.append("accountId", id);
-            userData.append("password", password);
-            userData.append("name", name);
-            userData.append("region", chosenRegion);
-            userData.append("description", description);
-            if (imageFile)
-                userData.append("image", imageFile as File);
+            const userData = userFormData();
 
             try {
-                const response = await jsonConnection.post(BACKEND_ADDRESS+`/public/photographers/join`, userData, {
-                    headers: { "Content-Type": "multipart/form-data" }
-                });
+                const response = await formDataConnection.post(BACKEND_ADDRESS+`/public/photographers/join`, userData);
                 console.log("Response:", response.data);
                 // 성공적으로 전송된 후 처리할 로직 추가
             } catch (e) {
@@ -218,15 +235,13 @@ const SignUp = () => {
             }
         } else if (userType === "user") {
             if (validateForm()) {
+                const userData = userFormData();
+                
                 try {
-                    await jsonConnection.post<ApiResponse<MemberRegisterRequestDto>>(BACKEND_ADDRESS+`/public/member/register`, {
-                        "memberId": id,
-                        "email": email,
-                        "password": password,
-                        "name": name,
-                        "nickname": nickname,
-                        "profileImg": "none"
-                    })
+                    await formDataConnection.patch<ApiResponse<MemberRegisterRequestDto>>(BACKEND_ADDRESS+`/public/member/register`, userData, { headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data'
+                    }})
                     .then(() => {
                         alert("회원가입이 완료되었습니다!");
                         navigate('/login');
@@ -332,7 +347,7 @@ const SignUp = () => {
                 }
                 { // 일반 회원 가입 페이지
                 (userType === "user")?
-                <CenterContainer width="90vw" height="18em">
+                <CenterContainer width="90vw" height="33em">
                     <TitleContainer>
                         <Title>포토래블의 회원으로,</Title>
                         <Title>사진을 지도에 담아보세요🤳✨</Title>
@@ -341,6 +356,28 @@ const SignUp = () => {
                     width="" margin="1em auto"
                     onSubmit={handleSubmit}
                     >   
+                        <FileLabel
+                        width="65%"
+                        height="6em"
+                        htmlFor="imageUpload"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={handleFileSelect}
+                        >
+                            {imageSrc ?
+                                (
+                                <PreviewImage src={imageSrc} alt="미리보기" />
+                                ):
+                                (
+                                "프로필 사진 설정하기"
+                                )
+                            }
+                        </FileLabel>
+                        <ImageInput
+                        type="file"
+                        accept="image/*"
+                        id="imageUpload"
+                        onChange={handleFileSelect}
+                        />
                         <InputContainer>
                             <TextInput
                                 type="email"

@@ -10,7 +10,7 @@ import ReviewDetail from './ReviewDetail';
 import SingleSpotDetail from './SingleSpotDetail';
 import SpotDetail from './SpotDetail';
 import SpecificLocationInfo from '../api/testdata/locationSingleRead.json'
-import { MultipleLocation } from '../types/Location';
+import { Category, MultipleLocation } from '../types/Location';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 10;
@@ -109,12 +109,12 @@ const InfoContainer = styled.div`
     padding: 0.1em 0.5em 0.1em 0.75em;
 `;
 
-export const CategoryButton = styled.button<{color:string}>`
+export const CategoryButton = styled.button<{color:string, hoverColor?: string[], isActive?: boolean, activeIndex?: number|null}>`
     margin: 0 0.5em 0 0;
     font-weight: 600;
     padding: 0.25em 1em 0.25em 1em;
     border-radius: 2em;
-    background-color: ${(props) => props.color};
+    background-color: ${(props) => (props.isActive ? props.color : props.activeIndex?.toString? "#aaa": props.color )};
     color: white;
     box-shadow: 0.1em 0.1em 0.2em #BBBBBB;
 `;
@@ -165,12 +165,23 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
             navigate('/');
     }
 
+    // 카테고리 필터링 메소드
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+    const handleButtonClick = (index: number) => {
+        if (activeIndex === index) {
+            setActiveIndex(null);
+        } else {
+            setActiveIndex(index);
+        }
+    };
+
 
     // 설명 간략화 메소드
     const descriptionLimit = 50;
     let simplifiedDescription = "";
 
-    const specificLocation = specificData.find((item:MultipleLocation) => item.locationId === Number(id));
+    const specificLocation = specificData.find((item: MultipleLocation) => item.locationId === Number(id));
     if (specificLocation && specificLocation.description.length >= descriptionLimit) {
         simplifiedDescription = specificLocation.description.slice(0, descriptionLimit+1);
         simplifiedDescription += " ...";
@@ -318,16 +329,36 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                         onTouchStart={handleContainerTouch}
                         onTouchEnd={handleContainerTouch}
                     >
-                        <CategoryButton color={"#ff808a"}>
+                        <CategoryButton
+                        color={"#ff808a"}
+                        isActive={activeIndex === 0}
+                        onClick={() => handleButtonClick(0)}
+                        activeIndex={activeIndex}
+                        >
                             🔥 8월의 인기장소
                         </CategoryButton>
-                        <CategoryButton color={"#87debe"}>
+                        <CategoryButton
+                        color={"#87debe"}
+                        isActive={activeIndex === 1}
+                        onClick={() => handleButtonClick(1)}
+                        activeIndex={activeIndex}
+                        >
                             ⛱️ 여유로운 여행지
                         </CategoryButton>
-                        <CategoryButton color={"#a3aedc"}>
+                        <CategoryButton
+                        color={"#a3aedc"}
+                        isActive={activeIndex === 2}
+                        onClick={() => handleButtonClick(2)}
+                        activeIndex={activeIndex}
+                        >
                             🌊 액티비티 여행지
                         </CategoryButton>
-                        <CategoryButton color={"#fcae69"}>
+                        <CategoryButton
+                        color={"#fcae69"}
+                        isActive={activeIndex === 3}
+                        onClick={() => handleButtonClick(3)}
+                        activeIndex={activeIndex}
+                        >
                             📱 인스타 속 그 장소!
                         </CategoryButton>
                     </CategoryContainer>
@@ -335,8 +366,8 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                     onTouchStart={handleContainerTouch}
                     onTouchEnd={handleContainerTouch}
                     >
-                        {
-                            location.pathname === "/" &&
+                        { // 기본 조회
+                            location.pathname === "/" && !activeIndex?.toString &&
                             locationData.map((data) => 
                                 <LocationInfo
                                     key={data.locationId}
@@ -344,10 +375,21 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                                 />
                             )
                         }
-                        {
-                            location.pathname === "/search" &&
+                        { // 검색어 필터링
+                            location.pathname === "/search" && !activeIndex &&
                             locationData.map((data) =>
                                 (data.name.includes(keyword!))?
+                                    <LocationInfo
+                                        key={data.locationId}
+                                        data={data}
+                                    />:
+                                    <></>
+                            )
+                        }
+                        { // 카테고리 필터링
+                            activeIndex?.toString() &&
+                            locationData.map((data) =>
+                                (data.category === Category[activeIndex])?
                                     <LocationInfo
                                         key={data.locationId}
                                         data={data}
@@ -366,7 +408,17 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                 >
                     <LocationImage src={specificLocation.images[0]}/>
                     <InfoContainer>
-                        <PlaceName>{specificLocation.name}</PlaceName>
+                        <PlaceName
+                            onClick={() => {
+                                isAnimated.current = true;
+                                setPostion(100)
+                                setTimeout(()=>{
+                                    isAnimated.current = false;
+                                }, 200);
+                            }}
+                        >
+                            {specificLocation.name}
+                        </PlaceName>
                         <RatingArea>
                             <Rating
                                 initialValue={specificLocation.ratingAvg}

@@ -20,12 +20,17 @@ const RedirectPage = () => {
     const KEY = param.get("code"); // 파라미터에서 코드를 보내주기 위해 분류
 
     const navigate = useNavigate();
-
+    
     useEffect(() => {
-        if (KEY)
-            doOAuthLogin(KEY);
-
-        navigate('/');
+        if (KEY) {
+            doOAuthLogin(KEY, navigate);
+            /*
+            setCookie("name", userData.name);
+            setCookie("nickname", userData.nickname);
+            setCookie("email", userData.email);
+            setCookie("memberId", userData.memberId);
+            **/
+        }
     }, [param])
 
     return (

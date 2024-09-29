@@ -3,6 +3,10 @@ import { useState } from "react";
 
 import { LoginButton } from "./PhotographerLogin.page";
 import { jsonConnection } from "../api/connectBackend";
+import { useLocation, useNavigate } from "react-router-dom";
+import { MemberResponse, NonMemberParam } from "../types/Login";
+import { setOAuthLogin } from "../api/Login";
+import { ApiResponse } from "../types/Common";
 
 const PageContainer = styled.div`
     position: fixed;
@@ -70,24 +74,36 @@ export const SubmitButton = styled.button`
 `;
 
 const AddInfo = () => {
-    const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
-    const [id, setId] = useState("");
-    const [name, setName] = useState("");
+    const { state } = useLocation();
+    const userData:NonMemberParam = state;
+    const navigate = useNavigate();
+
+    const [id, setId] = useState("kakao_"+userData.id);
+    const [name, setName] = useState(userData.nickname);
     const [nickname, setNickname] = useState("");
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(userData.email);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await jsonConnection.post(BACKEND_ADDRESS+`/login/addInfo`, {
+            await jsonConnection.post<ApiResponse<MemberResponse>>(`/login/addInfo`, {
                 provider: "kakao",
                 id: id,
                 name: name,
                 nickname: nickname,
                 email: email,
-                profileImg: ""
-            });
-            console.log("Response:", response.data);
+                profileImg: userData.profileImg
+            })
+            .then((res) => {
+                console.log(res);
+                setOAuthLogin(res.data.data!);
+                navigate('/');
+            })
+            .catch((e) => {
+                alert("가입 중 에러가 발생했습니다. 다시 시도해주세요.");
+                console.error(e);
+            })
+            
             // 성공적으로 전송된 후 처리할 로직 추가
         } catch (error) {
             console.error("Error sending data:", error);
@@ -102,37 +118,37 @@ const AddInfo = () => {
                     <Title>📝 거의 다 됐어요,</Title>
                     <Title>추가 정보를 입력해주세요!</Title>
                 </TitleContainer>
-                <form onSubmit={handleSubmit}>
-                    <FormContainer width="100%" margin="1em auto">
-                        <TextInput
-                            type="text"
-                            placeholder="아이디"
-                            value={id}
-                            onChange={(e) => setId(e.target.value)}
-                        />
-                        <TextInput
-                            type="text"
-                            placeholder="이름"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <TextInput
-                            type="text"
-                            placeholder="닉네임"
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
-                        />
-                        <TextInput
-                            type="text"
-                            placeholder="이메일"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </FormContainer>
+                <FormContainer width="100%" margin="1em auto" onSubmit={handleSubmit}>
+                    <TextInput
+                        type="text"
+                        placeholder="아이디"
+                        value={id}
+                        onChange={(e) => setId(e.target.value)}
+                        disabled
+                    />
+                    <TextInput
+                        type="text"
+                        placeholder="이름"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <TextInput
+                        type="text"
+                        placeholder="닉네임"
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                    />
+                    <TextInput
+                        type="text"
+                        placeholder="이메일"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                     <LoginButton type="submit">
                         가입하기
                     </LoginButton>
-                </form>
+                </FormContainer>
+                
             </CenterContainer>
         </PageContainer>
     );
