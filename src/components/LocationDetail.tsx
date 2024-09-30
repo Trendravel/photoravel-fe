@@ -119,7 +119,7 @@ export const SeeMoreText = styled.p`
 
 const LocationDetail = (props: {data: SingleLocation}) => {
     const navigate = useNavigate();
-    const spotData:MultiSpot[] = SpotInfo;
+    const spotData:MultiSpot[] | null = SpotInfo;
 
     return (
         <BottomSheetContentContainer>
@@ -132,8 +132,14 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                 </Description>
                 <RatingArea>
                     <Rate>
-                        ⭐ {props.data.ratingAvg} ({props.data.reviewCounts >= 99?
-                                                    "99" :props.data.reviewCounts })
+                        { 
+                        (props.data.reviewCounts=== 0)?
+                            "리뷰"
+                        :
+                            <>⭐ {props.data.ratingAvg} ({props.data.reviewCounts >= 99?
+                                "99+" :props.data.reviewCounts })</>
+                        }
+                        
                     </Rate>
                     <SeeMoreText
                         onClick={(e) => {
@@ -149,6 +155,11 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                     onTouchEnd={(e) => e.stopPropagation()}
                 >
                     {
+                        (props.data.reviewCounts === 0)? 
+                        <ReviewBox>
+                            리뷰가 없습니다!
+                        </ReviewBox>
+                        :
                         props.data.recentReviewDtos.map((review, i) => 
                             <ReviewBox
                                 key={i}
@@ -188,12 +199,17 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                     onTouchEnd={(e) => e.stopPropagation()}
                     >
                         {
+                            (spotData)?
                             spotData.map((spot: spotMultiRead) =>
                                 <SmallSpotCard
                                 key={spot.spotId}
                                 data={spot}
                                 />
                             )
+                            :
+                            <ReviewBox>
+                                등록된 포토스팟이 없습니다!
+                            </ReviewBox>
                         }
                     </SpotCardContainer>
                 </SpotContainer>
