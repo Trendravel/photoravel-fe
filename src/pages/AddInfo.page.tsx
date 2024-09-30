@@ -41,7 +41,7 @@ const Title = styled.p`
     margin: 0 0 0.25em 0;
 `;
 
-export const FormContainer = styled.form<{margin?: string, width: string}>`
+export const FormContainer = styled.form<{margin?: string, width?: string}>`
     display: flex;
     flex-direction: column;
     margin: ${(props) => props.margin ? props.margin : ""};

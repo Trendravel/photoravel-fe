@@ -30,7 +30,7 @@ const AddReview = () => {
     const queryParam = new URLSearchParams(location.search);
     const spotId = queryParam.get("spotfor");
 
-    const reviewType = spotId? "LocationReview":"";
+    const reviewType = spotId? "SpotReview":"LocationReview";
 
     useEffect(() => {
         console.log(reviewType)
