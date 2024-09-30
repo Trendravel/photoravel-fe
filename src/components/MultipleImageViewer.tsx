@@ -8,20 +8,32 @@ const ViewerContainer = styled.div`
     background-color: #F0F0F0;
 `;
 
-const ImageViewer = styled.img<{height: string;}>`
-    width: auto;
+const ImageContainer = styled.div<{height: string}>`
+    position: relative;
+    width: 100%;
     height: ${(props) => props.height};
+`;
+
+const ImageViewer = styled.img`
+    position: absolute; 
+    top: 0;
+    right: 0;
+    transform: translate(50, 50);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: auto;
 `
-const PMButton = styled.button<{color: string, left: string, right: string}>`
+const PMButton = styled.button<{left: string, right: string}>`
     position: absolute;
     color: white;
     z-index: 1;
-    background-color: ${(props) => props.color};
     padding: 0.75em;
     top: 40%;
     left: ${(props) => props.left};
     right: ${(props) => props.right};
-    opacity: 0.7;
+    font-size: 14pt;
+    font-weight: 900;
 `;
 
 const MultipleImageViewer = (props: {height: string, src: string[]}) => {
@@ -31,14 +43,10 @@ const MultipleImageViewer = (props: {height: string, src: string[]}) => {
 
     return (
         <ViewerContainer>
-            <ImageViewer
-                height={props.height}
-                src={imageSrc[currentIndex]}
-            >   
-                
-            </ImageViewer>
+            <ImageContainer height="20vh">
+                <ImageViewer src={imageSrc[currentIndex]}/>
+            </ImageContainer>
             <PMButton
-                color="#000000"
                 left=""
                 right="0"
                 onClick={() => {
@@ -46,11 +54,11 @@ const MultipleImageViewer = (props: {height: string, src: string[]}) => {
                         setCurrentIndex(currentIndex+1);
                     }
                 }}
+                onTouchStart={(e) => e.stopPropagation()}
             >
                 &gt;
             </PMButton>
             <PMButton
-                color="#000000"
                 left="0"
                 right=""
                 onClick={() => {
@@ -58,6 +66,7 @@ const MultipleImageViewer = (props: {height: string, src: string[]}) => {
                         setCurrentIndex(currentIndex-1);
                     }
                 }}
+                onTouchStart={(e) => e.stopPropagation()}
             >
                 &lt;
             </PMButton>
