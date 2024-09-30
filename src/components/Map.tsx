@@ -7,15 +7,17 @@ import useKakaoLoader from "../api/useKakaoLoader";
 import MarkerImage from "../assets/images/pin.png";
 import { MultipleLocation } from "../types/Location";
 import { MapInfo } from "../types/Position";
+import { spotMultiRead } from "../types/Spot";
 
-const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateChange: (newState: MapInfo) => void, setIsUpdated: (state: boolean) => void }) => {
-    const locationData = props.data;
+const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo, spotData: spotMultiRead[] | null, onMapStateChange: (newState: MapInfo) => void, setIsUpdated: (state: boolean) => void }) => {
+    const locationData = props.locationData;
     const [state, setState] = useState(props.pos);
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
     const navigate = useNavigate();
     const location = useLocation();
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
+    const spotLocationId = queryParam.get("spotfor");
 
     const debounce = (func: (map:kakao.maps.Map) => void, delay: number) => {
         let timeout: number;
@@ -32,22 +34,28 @@ const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateCha
             setState(props.pos);
     }, [props.pos]);
 
+    // 스팟 마커 업데이트
+    useEffect(() => {
+        console.log("Spot Detected! ", props.spotData);
+    }, [props.spotData])
+
     useEffect(() => { // 장소 상세페이지 이동 시, 지도 이동 로직
-        if (id) {
-            const targetPlace = props.data.find((item) => item.locationId === Number(id))
+        console.log(id)
+        if (id && !spotLocationId || spotLocationId) {
+            const targetPlace = props.locationData!.find((item) => item.locationId === Number((spotLocationId)? spotLocationId : id))
                 if (targetPlace) {
                     setState({
                         center: {
                             lat: targetPlace.latitude,
                             lng: targetPlace.longitude
                         },
-                        level: 6
+                        level: (spotLocationId)? 3: 6
                     })
                 } else {
                     alert("해당 장소 정보를 불러올 수 없습니다!")
                 }
         }
-    }, [props.data, id]);
+    }, [props.locationData, id]);
 
     useKakaoLoader();
 
@@ -90,7 +98,7 @@ const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateCha
                 minLevel={8}
             >
             {
-                locationData.map((data: MultipleLocation) => (
+                locationData!.map((data: MultipleLocation) => (
                     <div key={data.locationId}>
                         <MapMarker
                             key={data.locationId}
@@ -119,7 +127,36 @@ const KakaoMap = (props: { data: MultipleLocation[], pos: MapInfo, onMapStateCha
                 ))
             }
             </MarkerClusterer>
-            
+            {
+                (props.spotData && spotLocationId) &&
+                props.spotData!.map((data: spotMultiRead) => (
+                    <div key={data.spotId}>
+                        <MapMarker
+                            key={data.spotId}
+                            image={{
+                                src: MarkerImage.toString(),
+                                size: { width: 25, height: 25 }
+                            }}
+                            position={{
+                                lat: data.latitude,
+                                lng: data.longitude,
+                            }}
+                            onClick={() => { navigate(`/place?spotfor=${id}&id=${data.spotId}`) }}
+                        />
+                        <CustomOverlayMap
+                        position={{ lat: data.latitude, lng: data.longitude }}
+                        yAnchor={1}>
+                            <p
+                            style={{
+                                transform: 'translateY(20px)',
+                                fontSize: '10pt'
+                            }}>
+                                {data.title}
+                            </p>
+                        </CustomOverlayMap>
+                    </div>
+                ))
+            }
         </Map>
     );
 }

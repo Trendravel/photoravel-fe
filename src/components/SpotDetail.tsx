@@ -1,18 +1,24 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
 
 import { CategoryButton } from "./BottomSheet";
 import { BottomSheetContentContainer } from "./LocationDetail";
 import MediumSpotCard from "./MediumSpotCard";
 import { InfoText, SimplifiedInfoContainer } from "./ReviewDetail";
 import SpotData from "../api/testdata/spotMultiRead.json"
-import { MultiSpot } from "../types/Spot";
+import { spotMultiRead } from "../types/Spot";
 
 const SpotListContainer = styled.div`
     margin-top: 1em;
 `;
 
-const SpotDetail = () => {
-    const spotData:MultiSpot[] = SpotData;
+const SpotDetail = (props: {selectedSpotData: spotMultiRead[] | null, setSelectedSpotData: (data: spotMultiRead[] | null) => void}) => {
+    const spotData: spotMultiRead[] | null = SpotData;
+    
+    useEffect(() => {
+        props.setSelectedSpotData(spotData);
+    }, [])
+    
 
     return (
         <BottomSheetContentContainer>

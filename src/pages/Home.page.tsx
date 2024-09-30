@@ -11,6 +11,7 @@ import ReloadButton from "../components/ReloadButton";
 import UpperMenu from "../components/UpperMenu";
 import { ApiResponse } from "../types/Common";
 import { MapInfo } from "../types/Position";
+import { spotMultiRead } from "../types/Spot";
 
 const Home = () => {
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
@@ -21,6 +22,7 @@ const Home = () => {
         center: { lat: 36.769989, lng: 126.931633 },
         level: 6
     })
+    const [selectedSpotData, setSelectedSpotData] = useState<spotMultiRead[] | null>(null);
 
     const updateEvent = () => { // mapState 변경 시, 장소를 새로 불러올 클릭 이벤트
         
@@ -37,10 +39,20 @@ const Home = () => {
 
     return (
         <HomeContainer>
-            <Map data={locationData} pos={currentPos} onMapStateChange={setMapState} setIsUpdated={setIsUpdated}/>
+            <Map
+            locationData={locationData}
+            pos={currentPos}
+            spotData={selectedSpotData}
+            onMapStateChange={setMapState}
+            setIsUpdated={setIsUpdated}
+            />
             <ReloadButton isOpen={!isUpdated} clickEvent={updateEvent}/>
             <UpperMenu/>
-            <BottomSheet data={locationData}/>
+            <BottomSheet
+            locationData={locationData}
+            selectedSpotData={selectedSpotData}
+            setSelectedSpotData={setSelectedSpotData}
+            />
             <PanButton setPos={setCurrentPos}/>
         </HomeContainer>
     )

@@ -6,7 +6,7 @@ import MultipleImageViewer from "./MultipleImageViewer";
 import SmallSpotCard from "./SmallSpotCard";
 import SpotInfo from "../api/testdata/spotMultiRead.json";
 import { SingleLocation } from "../types/Location";
-import { MultiSpot } from "../types/Spot";
+import { MultiSpot, spotMultiRead } from "../types/Spot";
 
 export const BottomSheetContentContainer = styled.div`
     display: block;
@@ -136,7 +136,7 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                                                     "99" :props.data.reviewCounts })
                     </Rate>
                     <SeeMoreText
-                        onTouchStart={(e) => {
+                        onClick={(e) => {
                             e.stopPropagation()
                             navigate(`/place?reviewfor=${props.data.locationId}`) 
                         }}
@@ -174,7 +174,7 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                             이 장소의 포토스팟 📸
                         </SpotText>
                         <SeeMoreText
-                        onTouchStart={(e) => {
+                        onClick={(e) => {
                             e.stopPropagation()
                             navigate(`/place?spotfor=${props.data.locationId}`) 
                         }}
@@ -188,8 +188,11 @@ const LocationDetail = (props: {data: SingleLocation}) => {
                     onTouchEnd={(e) => e.stopPropagation()}
                     >
                         {
-                            spotData.map((spot) =>
-                                <SmallSpotCard data={spot}/>
+                            spotData.map((spot: spotMultiRead) =>
+                                <SmallSpotCard
+                                key={spot.spotId}
+                                data={spot}
+                                />
                             )
                         }
                     </SpotCardContainer>

@@ -11,6 +11,7 @@ import SingleSpotDetail from './SingleSpotDetail';
 import SpotDetail from './SpotDetail';
 import SpecificLocationInfo from '../api/testdata/locationSingleRead.json'
 import { Category, MultipleLocation } from '../types/Location';
+import { spotMultiRead } from '../types/Spot';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 10;
@@ -134,12 +135,12 @@ const ButtonContainer = styled.div`
     flex-direction: row-reverse;
 `;
 
-const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
+const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selectedSpotData: spotMultiRead[] | null, setSelectedSpotData: (data: spotMultiRead[] | null) => void}) => {
     // 기본 정의
-    const locationData = props.data;
+    const locationData = props.locationData;
     const specificData = SpecificLocationInfo;
     const [position, setPostion] = useState(window.innerHeight-75);
-
+    
     // 라우팅 처리를 위한 정의
     const navigate = useNavigate();
     const location = useLocation();
@@ -295,7 +296,6 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
         }
     }, [position])
 
-
     return (
         <BottomSheet
             onTouchStart={handleHover}
@@ -368,7 +368,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                     >
                         { // 기본 조회
                             location.pathname === "/" && !activeIndex?.toString &&
-                            locationData.map((data) => 
+                            locationData!.map((data) => 
                                 <LocationInfo
                                     key={data.locationId}
                                     data={data}
@@ -377,7 +377,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                         }
                         { // 검색어 필터링
                             location.pathname === "/search" && !activeIndex &&
-                            locationData.map((data) =>
+                            locationData!.map((data) =>
                                 (data.name.includes(keyword!))?
                                     <LocationInfo
                                         key={data.locationId}
@@ -388,7 +388,7 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
                         }
                         { // 카테고리 필터링
                             activeIndex?.toString() &&
-                            locationData.map((data) =>
+                            locationData!.map((data) =>
                                 (data.category === Category[activeIndex])?
                                     <LocationInfo
                                         key={data.locationId}
@@ -458,7 +458,10 @@ const BottomSheetUI = (props: { data: MultipleLocation[] }) => {
             }
             {
                 (spotId && !id && !reviewId && !reviewTargetId) &&
-                <SpotDetail/>
+                <SpotDetail
+                    selectedSpotData={props.selectedSpotData}
+                    setSelectedSpotData={props.setSelectedSpotData}
+                />
             }
             {
                 (spotId && id) &&
