@@ -8,12 +8,8 @@ import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
 import BottomSheetUI from '../components/BottomSheet';
 import UpperMenu from '../components/UpperMenu';
+import { FilterOptions } from '../types/FilterOptions';
 import { Photographer } from '../types/Photographer';
-
-type FilterOptions = {
-  regions: string[];
-  sorts: string[];
-};
 
 const truncateDescription = (description: string, maxLength: number = 22) => {
   return description.length > maxLength ? description.substring(0, maxLength) + '...' : description;

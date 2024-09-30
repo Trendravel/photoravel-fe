@@ -9,6 +9,7 @@ import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
 import { Photographer } from '../types/Photographer';
 import { Review } from '../types/Review';
+import { getCookie } from '../api/useCookie';
 
 const PhotographerDetail = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const PhotographerDetail = () => {
   const [photographer, setPhotographer] = useState<Photographer | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isMatched, setIsMatched] = useState<boolean>(false);
+
+  const currentUserId = getCookie('userId');
 
   useEffect(() => {
     const fetchPhotographerDetail = async () => {
@@ -114,8 +117,6 @@ const PhotographerDetail = () => {
       alert('리뷰 삭제에 실패했습니다.');
     }
   };
-
-  const currentUserId = localStorage.getItem('userId');
 
   const handleMatchingRequest = async () => {
     const memberId = localStorage.getItem('userId');
@@ -403,7 +404,7 @@ const BackButton = styled.button`
 `;
 
 const BackIcon = styled.img`
-  width: 25px;
+  width: 20px;
 `;
 
 const GuideReviewHeader = styled.div`

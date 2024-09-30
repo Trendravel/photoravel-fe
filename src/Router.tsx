@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
+import AccountDelete from "./pages/AccountDelete.page";
+import EditProfile from "./pages/EditProfile.page";
 import GuidebookDetail from "./pages/GuidebookDetail.page";
 import GuidebookList from "./pages/GuidebookList.page";
 import GuidebookWrite from "./pages/GuidebookWrite.page";
@@ -18,6 +20,16 @@ interface RouteElement {
 
 const routes: RouteElement[] = [
     {
+        path: '/accountdelete',
+        element: <AccountDelete/>,
+        errorElement: <NotFound/>
+    },  
+    {
+        path: '/editprofile',
+        element: <EditProfile/>,
+        errorElement: <NotFound/>
+    },  
+    {
         path: '/guidebookdetail',
         element: <GuidebookDetail/>,
         errorElement: <NotFound/>
@@ -34,7 +46,7 @@ const routes: RouteElement[] = [
     },
     {
         path: '/matchingstatus',
-        element: <MatchingStatus userRole={"photographer"}/>,
+        element: <MatchingStatus userRole={"photographer"} accountId={""}/>,
         errorElement: <NotFound/>
     },
     {

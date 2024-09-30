@@ -1,12 +1,9 @@
 import styled from '@emotion/styled';
 import { useRef, useState } from 'react';
-
+import { FilterOptions } from '../types/FilterOptions';
 import cancel from '../assets/images/cancel.png';
-
-type FilterOptions = {
-  regions: string[];
-  sorts: string[];
-}
+import RegionFilter from './RegionFilter';
+import SortFilter from './SortFilter';
 
 const BottomSheetUI = ({ applyFilters, sortOptions, selectedFilters }: { applyFilters: (filters: FilterOptions) => void, sortOptions: string[], selectedFilters: FilterOptions }) => {
   const [bottom, setBottom] = useState(-50);
@@ -14,22 +11,13 @@ const BottomSheetUI = ({ applyFilters, sortOptions, selectedFilters }: { applyFi
   const [selectedSort, setSelectedSort] = useState<string[]>(selectedFilters.sorts);
   const isAnimated = useRef(false);
 
-  const handleRegionClick = (region: string) => {
-    setSelectedRegion((prev) =>
-      prev.includes(region) ? prev.filter(c => c !== region) : [...prev, region]
-    );
-  };
-
-  const handleSortClick = (sort: string) => {
-    setSelectedSort((prev) =>
-      prev.includes(sort) ? prev.filter(c => c !== sort) : [...prev, sort]
-    );
+  const handleClose = () => {
+    setBottom(-600);
   };
 
   const handleApply = () => {
     applyFilters({ regions: selectedRegion, sorts: selectedSort });
   };
-
 
   const handleReset = () => {
     if (confirm('필터를 초기화 시키시겠습니까?')) {
@@ -39,17 +27,9 @@ const BottomSheetUI = ({ applyFilters, sortOptions, selectedFilters }: { applyFi
     }
   };
 
-  const handleClose = () => {
-    setBottom(-600);
-  };
-
   return (
     <>
-      <BottomSheet
-        bottom={bottom}
-        height="65vh"
-        isAnimated={isAnimated.current}
-      >
+      <BottomSheet bottom={bottom} height="65vh" isAnimated={isAnimated.current}>
         <Handle />
         <Header>
           <Title>필터</Title>
@@ -58,35 +38,9 @@ const BottomSheetUI = ({ applyFilters, sortOptions, selectedFilters }: { applyFi
           </CancelButton>
         </Header>
         <Divider />
-        <RegionContainer>
-          <Label>지역</Label>
-          <RegionButtonContainer>
-            {['계룡시', '공주시', '금산군', '논산시', '당진시', '보령시', '부여군', '서산시', '서천군', '아산시', '예산군', '청양군', '천안시', '태안군', '홍성군'].map(region => (
-              <RegionButton
-                key={region}
-                selected={selectedRegion.includes(region)}
-                onClick={() => handleRegionClick(region)}
-              >
-                {region}
-              </RegionButton>
-            ))}
-          </RegionButtonContainer>
-        </RegionContainer>
+        <RegionFilter selectedRegion={selectedRegion} setSelectedRegion={setSelectedRegion} />
         <Divider />
-        <SortContainer>
-          <Label>정렬</Label>
-          <SortButtonContainer>
-            {sortOptions.map(sort => (
-              <SortButton
-                key={sort}
-                selected={selectedSort.includes(sort)}
-                onClick={() => handleSortClick(sort)}
-              >
-                {sort}
-              </SortButton>
-            ))}
-          </SortButtonContainer>
-        </SortContainer>
+        <SortFilter sortOptions={sortOptions} selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
         <ButtonContainer>
           <ResetButton onClick={handleReset}>초기화</ResetButton>
           <ApplyButton onClick={handleApply}>적용</ApplyButton>
@@ -141,70 +95,11 @@ const CancelButton = styled.button`
 const CancelIcon = styled.img`
   width: 27px;
   margin-top: -7px;
-`
-
-const Label = styled.p`
-  font-size: 18px;
-  font-weight: 600;
-  margin-top: 20px;
-  margin-left: -4px;
-`;
-
-const RegionContainer = styled.div`
-  display: flex;
-  flex-direction: column; 
-  align-items: flex-start;
-  padding: 0.2em 1.5em;
-`;
-
-const RegionButtonContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.5em;
-  padding: 10px 0;
-  justify-items: center;
-`;
-
-const RegionButton = styled.button<{ selected: boolean }>`
-  margin: 0.5em;
-  padding: 0.8em 1em;
-  border-radius: 2em;
-  background-color: ${(props) => props.selected ? '#FF6B6B' : '#F2F4F6'};
-  color: ${(props) => props.selected ? 'white' : '#565C64'};
-  border: none;
-  cursor: pointer;
 `;
 
 const Divider = styled.div`
   height: 1px;
   background-color: #ccc;
-`;
-
-const SortContainer = styled.div`
-  display: flex;
-  flex-direction: column; 
-  align-items: flex-start;
-  padding: 0.2em 1.5em;
-`;
-
-const SortButtonContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.2em;
-  padding: 10px 0;
-  justify-items: center;
-`;
-
-const SortButton = styled.button<{ selected: boolean }>`
-  margin: 0.5em;
-  padding: 1em 0.7em;
-  min-width: 70px;
-  border-radius: 2em;
-  background-color: ${(props) => props.selected ? '#FF6B6B' : '#F2F4F6'};
-  color: ${(props) => props.selected ? 'white' : '#565C64'};
-  border: none;
-  cursor: pointer;
-  text-align: center;
 `;
 
 const ButtonContainer = styled.div`

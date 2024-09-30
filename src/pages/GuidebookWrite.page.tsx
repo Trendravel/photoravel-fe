@@ -3,30 +3,15 @@ import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 // eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
-
-export enum Region {
-  ASAN = '아산',
-  CHEONAN = '천안',
-  GYERYONG = '계룡',
-  GONGJU = '공주',
-  NONSAN = '논산',
-  DANGJIN = '당진',
-  BORYEONG = '보령',
-  SEOSAN = '서산',
-  GEUMSAN = '금산',
-  BUYEO = '부여',
-  SEOCHEON = '서천',
-  YESAN = '예산',
-  CHEONGYANG = '청양',
-  TAEAN = '태안',
-  HONGSEONG = '홍성',
-}
+import { Guidebook, Region } from '../types/Guidebook';
+import { getCookie } from '../api/useCookie';
 
 const GuidebookWrite = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [guidebook, setGuidebook] = useState<Guidebook | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
   const [images, setImages] = useState<File[]>([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -35,10 +20,16 @@ const GuidebookWrite = () => {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+    if (guidebook) {
+      setGuidebook({ ...guidebook, title: e.target.value });
+    }
   };
 
   const handleRegionSelect = (region: Region) => {
     setSelectedRegion(region);
+    if (guidebook) {
+      setGuidebook({ ...guidebook, region });
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,15 +77,19 @@ const GuidebookWrite = () => {
       return;
     }
 
-    const userId = localStorage.getItem('userId');
+    const userId = getCookie('userId');
 
     const formData = new FormData();
 
-    const guidebookData = {
-      userId: userId,
+    const guidebookData: Guidebook = {
+      userId: userId || '',
       title: title,
       content: content,
       region: selectedRegion,
+      views: 0,
+      images: JSON.stringify(images),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     formData.append('data', new Blob([JSON.stringify(guidebookData)], { type: 'application/json' }));

@@ -1,9 +1,10 @@
 import { Review } from "./Review";
+import { Region } from "./Guidebook";
 
 export interface Photographer {
     accountId: string;
     name: string;
-    region: string;
+    region: Region;
     description: string;
     profileImg: string;    
     ratingAvg: string;

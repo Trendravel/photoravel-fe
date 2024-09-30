@@ -6,17 +6,18 @@ import styled from 'styled-components';
 
 import album from '../assets/images/album.png';
 import back from '../assets/images/back.png';
+import { getCookie } from '../api/useCookie';
 
 const PhotographerReviewWrite = () => {
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [photos, setPhotos] = useState<File[]>([]);
   const [photographerId, setPhotographerId] = useState<string>('');
-  const [currentDate, setCurrentDate] = useState<string>(''); 
+  const [currentDate, setCurrentDate] = useState<string>('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const id = localStorage.getItem('photographerId');
+    const id = getCookie('photographerId');
     if (id) {
       setPhotographerId(id);
     }
@@ -25,7 +26,7 @@ const PhotographerReviewWrite = () => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
     const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-    const dayOfWeek = weekdays[today.getDay()]; 
+    const dayOfWeek = weekdays[today.getDay()];
 
     setCurrentDate(`${today.toLocaleDateString('ko-KR', options)} (${dayOfWeek})`);
   }, []);
@@ -50,12 +51,14 @@ const PhotographerReviewWrite = () => {
     document.getElementById('photo-input')?.click();
   };
 
+  const userId = getCookie('userId');
+
   const handleSubmit = async () => {
     const formData = new FormData();
 
     formData.append('content', comment);
     formData.append('rating', String(rating));
-    formData.append('userId', 'user-id');
+    formData.append('userId', userId || '');
     formData.append('reviewType', 'PHOTOGRAPHER');
 
     photos.forEach(photo => {
@@ -174,11 +177,11 @@ const BackButton = styled.button`
 `;
 
 const BackIcon = styled.img`
-  width: 25px;
+  width: 20px;
 `;
 
 const HeaderText = styled.p`
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   text-align: center;
   flex: 1;

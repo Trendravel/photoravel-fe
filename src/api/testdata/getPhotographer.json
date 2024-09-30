@@ -11,32 +11,6 @@
         "createdAt": "2020-05-15T10:30:00Z",
         "updatedAt": "2023-01-10T12:00:00Z",
         "careerYear": 15,
-        "recentReviewDtos": [
-            {
-                "content": "공항철도도 이용하시고 얼리체크인 활용하시면 정말 편합니다.\n단, 쇼핑일정은 체크인전날에~",
-                "rating": 3.8,
-                "images": [
-                    "https://mblogthumb-phinf.pstatic.net/MjAyMTAxMDVfOTUg/MDAxNjA5ODIyMTAzMjUw.iWi4InBy8sN-JF0yf_3_bvdS0CiB7NVw6tNtX_ZR554g.kJFm4lnX9ulSLmYVk0pPGfog9dn7l4dln8iB9s05Iiwg.JPEG.sj330035/%EC%9D%B8%EC%8A%A4%ED%83%80%ED%94%84%EC%82%AC_(45).jpeg?type=w800"
-                ],
-                "userName": "언제든떠나고싶은"
-            },
-            {
-                "content": "영어를 많이 아는 편이 아니라 정말 한자로된 지명이나, 그곳의 사진을 보여주는 것이 택시 탈 때 편해요. 은근 식당에서도 영어가 잘 안통하는 곳이 많습니다.",
-                "rating": 4.3,
-                "images": [
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkdRIE0vre8weS0NsYrGNYn7kbLc1fhp3p_A&s"
-                ],
-                "userName": "hee야웅"
-            },
-            {
-                "content": "생각보다 영어가 안 통해서 택시 탈 때 한자로 된 지명도 알아가는게 좋을 것 같아요!",
-                "rating": 3.4,
-                "images": [
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnUFJ7YUdlbmJ5tS82_sn73pJhBvo9UWJhjw&s"
-                ],
-                "userName": "혜니"
-            }
-        ],
         "matchingCount": 46
     },
     {
@@ -51,7 +25,6 @@
         "createdAt": null,
         "updatedAt": null,
         "careerYear": 4,
-        "recentReviewDtos": [],
         "matchingCount": 7
     },
     {
@@ -66,7 +39,6 @@
         "createdAt": null,
         "updatedAt": null,
         "careerYear": 15,
-        "recentReviewDtos": [],
         "matchingCount": 22
     },
     {
@@ -81,7 +53,6 @@
         "createdAt": null,
         "updatedAt": null,
         "careerYear": 11,
-        "recentReviewDtos": [],
         "matchingCount": 8
     },
     {
@@ -96,7 +67,6 @@
         "createdAt": null,
         "updatedAt": null,
         "careerYear": 13,
-        "recentReviewDtos": [],
         "matchingCount": 116
     },
     {
@@ -111,7 +81,6 @@
         "createdAt": null,
         "updatedAt": null,
         "careerYear": 12,
-        "recentReviewDtos": [],
         "matchingCount": 159
     }
 ]

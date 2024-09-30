@@ -4,16 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import back from '../assets/images/back.png';
-
-interface MatchingStatus {
-  memberId: string;
-  photographerId: string;
-  matchingStatus: 'Pending' | 'Accepted' | 'Rejected' | 'Cancel' | 'Complete';
-}
+import { MatchingInfo } from '../types/MatchingInfo';
+import { getCookie } from '../api/useCookie';
 
 const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: string }> = ({ userRole, accountId }) => {
   const navigate = useNavigate();
-  const [statuses, setStatuses] = useState<MatchingStatus[]>([]);
+  const [statuses, setStatuses] = useState<MatchingInfo[]>([]);
 
   useEffect(() => {
     const fetchMatchingStatuses = async () => {
@@ -28,7 +24,7 @@ const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: s
             },
           });
         } else {
-          const memberId = localStorage.getItem('userId'); 
+          const memberId = getCookie('userId'); 
           response = await axios.get(`http:///private/matching/user/${memberId}`, {
             headers: {
               Authorization: `Bearer `,

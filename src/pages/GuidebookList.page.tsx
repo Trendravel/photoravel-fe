@@ -9,12 +9,9 @@ import magnifier from '../assets/images/magnifier.png';
 import BottomSheetUI from '../components/BottomSheet';
 import UpperMenu from "../components/UpperMenu";
 import WriteButton from '../components/WriteButton';
+import { FilterOptions } from '../types/FilterOptions';
 import { Guidebook } from '../types/Guidebook';
-
-type FilterOptions = {
-  regions: string[];
-  sorts: string[];
-};
+import { getCookie } from '../api/useCookie'; 
 
 const GuidebookList = () => {
   const navigate = useNavigate();
@@ -57,7 +54,7 @@ const GuidebookList = () => {
 
   const handleWriteButtonClick = () => {
     navigate('/guidebookwrite');
-    const userId = localStorage.getItem('userId');
+    const userId = getCookie('userId');
 
     if (userId) {
       navigate('/guidebookwrite');

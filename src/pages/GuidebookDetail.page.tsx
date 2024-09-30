@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import back from '../assets/images/back.png';
 import kebab from '../assets/images/kebab.png';
 import { Guidebook } from '../types/Guidebook';
+import { getCookie } from '../api/useCookie'; 
 
 const GuidebookDetail = () => {
   const navigate = useNavigate();
@@ -17,11 +18,11 @@ const GuidebookDetail = () => {
   const [updatedTitle, setUpdatedTitle] = useState('');
   const [updatedContent, setUpdatedContent] = useState('');
 
-  const guidebookId = localStorage.getItem('guidebookId');
+  const guidebookId = getCookie('guidebookId');
 
   useEffect(() => {
     const fetchUserId = () => {
-      const loggedInUserId = localStorage.getItem('userId');
+      const loggedInUserId = getCookie('userId');
       setUserId(loggedInUserId);
     };
 
@@ -202,7 +203,7 @@ const BackButton = styled.button`
 `;
 
 const BackIcon = styled.img`
-  width: 25px;
+  width: 20px;
 `;
 
 const MenuButton = styled.button`
