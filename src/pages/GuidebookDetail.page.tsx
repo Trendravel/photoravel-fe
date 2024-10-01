@@ -22,7 +22,7 @@ const GuidebookDetail = () => {
 
   useEffect(() => {
     const fetchUserId = () => {
-      const loggedInUserId = getCookie('userId');
+      const loggedInUserId = getCookie('memberId');
       setUserId(loggedInUserId);
     };
 

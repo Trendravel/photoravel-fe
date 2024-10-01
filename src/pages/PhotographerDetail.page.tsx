@@ -7,6 +7,7 @@ import { getCookie } from '../api/useCookie';
 import back from '../assets/images/back.png';
 import pinkstar from '../assets/images/pinkstar.png';
 import regionIcon from '../assets/images/regionIcon.png';
+import setting from '../assets/images/setting.png';
 import star from '../assets/images/star.png';
 import { Photographer } from '../types/Photographer';
 import { Review } from '../types/Review';
@@ -18,7 +19,7 @@ const PhotographerDetail = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isMatched, setIsMatched] = useState<boolean>(false);
 
-  const currentUserId = getCookie('userId');
+  const currentUserId = getCookie('accountId');
 
   useEffect(() => {
     const fetchPhotographerDetail = async () => {
@@ -28,6 +29,7 @@ const PhotographerDetail = () => {
         if (response.data.result.resultCode === 200) {
           setPhotographer(response.data.data);
           setReviews(response.data.data.recentReviewDtos || []);
+          console.log('Photographer data:', response.data.data);
         }
       } catch (error) {
         console.error('사진작가 정보를 가져오는 데 실패했습니다:', error);
@@ -104,7 +106,7 @@ const PhotographerDetail = () => {
   };
 
   const handleMatchingRequest = async () => {
-    const memberId = localStorage.getItem('userId');
+    const memberId = getCookie('memberId');
 
     const confirmRequest = window.confirm('매칭 요청을 하시겠습니까?');
 
@@ -140,10 +142,14 @@ const PhotographerDetail = () => {
     }
   };
 
+  const handleEditProfile = () => {
+    navigate('/EditProfile')
+  }
+
   return (
     <Container>
       <BackButtonContainer>
-        <BackButton onClick={() => navigate(-1)}>
+        <BackButton onClick={() => navigate('/photographerlist')}>
           <BackIcon src={back} />
         </BackButton>
       </BackButtonContainer>
@@ -162,6 +168,9 @@ const PhotographerDetail = () => {
                   <RegionIcon src={regionIcon} />
                   {photographer.region}
                 </RegionContainer>
+                <EditProfileButton onClick={handleEditProfile}>
+                  {photographerId === currentUserId && <img src={setting} alt="설정" />}
+                </EditProfileButton>
               </NameRegionContainer>
               <Description>{photographer.description}</Description>
               <StatsContainer>
@@ -270,6 +279,7 @@ const ProfileInfo = styled.div`
 const NameRegionContainer = styled.div`
   display: flex;
   align-items: center;
+    justify-content: space-between; 
 `;
 
 const ProfileImage = styled.img`
@@ -298,6 +308,27 @@ const RegionContainer = styled.div`
   margin-bottom: 10px;
   font-size: 10px;
   color: #777;
+`;
+
+const EditProfileButton = styled.button`
+  background-color: transparent; 
+  border: none; 
+  cursor: pointer;
+  display: flex;
+  align-items: center; 
+  padding: 5px; 
+  min-width: 50px; 
+  height: 40px; 
+  
+  img {
+    width: 20px; 
+    height: 20px;
+    margin-left: 5px;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const RegionIcon = styled.img`

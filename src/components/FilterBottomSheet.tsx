@@ -6,13 +6,13 @@ import RegionFilter from './RegionFilter';
 import SortFilter from './SortFilter';
 
 const FilterBottomSheet = ({ applyFilters, sortOptions, selectedFilters }: { applyFilters: (filters: FilterOptions) => void, sortOptions: string[], selectedFilters: FilterOptions }) => {
-  const [bottom, setBottom] = useState(-50);
+  const [bottom, setBottom] = useState(0);
   const [selectedRegion, setSelectedRegion] = useState<string[]>(selectedFilters.regions);
   const [selectedSort, setSelectedSort] = useState<string[]>(selectedFilters.sorts);
   const isAnimated = useRef(false);
 
   const handleClose = () => {
-    setBottom(-600);
+    setBottom(-700);
   };
 
   const handleApply = () => {
@@ -29,7 +29,7 @@ const FilterBottomSheet = ({ applyFilters, sortOptions, selectedFilters }: { app
 
   return (
     <>
-      <BottomSheet bottom={bottom} height="65vh" isAnimated={isAnimated.current}>
+      <BottomSheet bottom={bottom} height="70vh" isAnimated={isAnimated.current}>
         <Handle />
         <Header>
           <Title>필터</Title>
@@ -59,12 +59,26 @@ const BottomSheet = styled.div<{ bottom: number, height: string, isAnimated: boo
   right: 0;
   bottom: ${(props) => props.bottom}px;
   background-color: white;
-  padding-top: 16px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 0 -2px 3.84px rgba(0, 0, 0, 0.25);
   transition: ${(props) => props.isAnimated ? "bottom 0.2s ease-in-out" : ""};
   height: ${(props) => props.height};
+
+  @media (max-width: 430px) {
+    height: 58vh;
+    padding: 10px 0px;
+  }
+
+  @media (max-width: 415px) {
+    height: 64vh;
+    padding: 10px 0px; 
+  }
+
+  @media (max-width: 375px) { 
+    height: 82vh;
+    padding: 7px 0px; 
+  }
 `;
 
 const Handle = styled.div`
@@ -78,11 +92,11 @@ const Handle = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: 10px 15px;
 `;
 
 const Title = styled.p`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
 `;
 
@@ -105,11 +119,14 @@ const Divider = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0.3em 1em;
+  padding: 1em; 
+  margin-top: auto;
 `;
 
 const ResetButton = styled.button`
-  padding: 15px 68px;
+  flex: 1; 
+  margin-right: 8px;
+  padding: 16px 0;
   border-radius: 10px;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -120,7 +137,9 @@ const ResetButton = styled.button`
 `;
 
 const ApplyButton = styled.button`
-  padding: 15px 68px;
+  flex: 1;
+  margin-left: 8px; 
+  padding: 16px 0; 
   border-radius: 10px;
   background-color: #ff6b6b;
   color: white;

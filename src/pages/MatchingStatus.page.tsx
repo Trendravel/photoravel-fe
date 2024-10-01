@@ -19,7 +19,7 @@ const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: s
         if (userRole === 'photographer') {
           response = await jsonConnection.get(`/private/matching/photographer/${accountId}`);
         } else {
-          const memberId = getCookie('userId'); 
+          const memberId = getCookie('memberId'); 
           response = await jsonConnection.get(`//private/matching/user/${memberId}`);
         }
 

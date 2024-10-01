@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { jsonConnection } from '../api/connectBackend';
+import { getCookie } from '../api/useCookie'; 
 import filter from '../assets/images/filter.png';
+import magnifier from '../assets/images/magnifier.png';
 import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
 import FilterBottomSheet from '../components/FilterBottomSheet';
@@ -19,6 +21,7 @@ const PhotographerList = () => {
   const navigate = useNavigate();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filteredPhotographers, setFilteredPhotographers] = useState<Photographer[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
   const [noResults, setNoResults] = useState(false);
@@ -78,6 +81,22 @@ const PhotographerList = () => {
     setSelectedFilters({ regions, sorts });
     toggleBottomSheet();
   }
+
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+
+    const name = getCookie('name');
+    let filtered = photographers.filter(photographer => {
+      const matchesSearch = photographer.name.toLowerCase().includes(value.toLowerCase());
+      const matchesUser = photographer.name === name;
+      return matchesSearch && matchesUser;
+    });
+
+    setFilteredPhotographers(filtered);
+    setIsFiltered(filtered.length > 0);
+    setNoResults(filtered.length === 0);
+  };
   
   return (
     <Container>
@@ -85,12 +104,33 @@ const PhotographerList = () => {
       <Title>사진작가 매칭</Title>
       <Subtitle>당신의 특별한 순간을 담아줄 사진작가를 찾아보세요!</Subtitle>
 
-      <FilterButtonContainer>
-        <FilterButton onClick={toggleBottomSheet}>
-          <FilterIcon src={filter} />
-          필터
-        </FilterButton>
-      </FilterButtonContainer>
+      <SearchContainer style={{ position: 'relative' }}>
+        <SearchInput
+          type="text"
+          placeholder="사진작가 이름으로 검색하세요"
+          value={searchTerm}
+          onChange={handleSearchInputChange}
+          style={{ paddingRight: '30px' }}
+        />
+        <img
+          src={magnifier}
+          alt="검색"
+          style={{
+            position: 'absolute',
+            right: '120px',
+            top: '50%',
+            width: '5%',
+            transform: 'translateY(-50%)',
+            pointerEvents: 'none'
+          }}
+        />
+        <FilterButtonContainer>
+          <FilterButton onClick={toggleBottomSheet}>
+            <FilterIcon src={filter} />
+            필터
+          </FilterButton>
+        </FilterButtonContainer>
+      </SearchContainer>
 
       {noResults ? (
         <NoResultsMessage>조건에 맞는 사진작가가 없습니다.</NoResultsMessage>
@@ -154,10 +194,24 @@ const Subtitle = styled.p`
   margin-bottom: 40px;
 `;
 
+const SearchContainer = styled.div`
+  display: flex;
+  margin-bottom: 30px;
+  margin-left: 18px;
+`;
+
+const SearchInput = styled.input`
+  flex: 1;
+  font-size: 15px;
+  padding: 15px 20px;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+  margin-right: 10px;
+`;
+
 const FilterButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end; 
-  margin-bottom: 32px;
   margin-right: 17px;
 `;
 
