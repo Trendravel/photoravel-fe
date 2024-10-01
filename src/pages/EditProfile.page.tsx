@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCookie } from '../api/useCookie';
 import styled from 'styled-components';
+import { getCookie } from '../api/useCookie';
 import axios from 'axios';
 import back from '../assets/images/back.png';
 import rightarrow from '../assets/images/rightarrow.png';
@@ -13,9 +13,10 @@ const EditProfile = () => {
     const [name, setName] = useState('');
     const [region, setRegion] = useState('');
     const [description, setDescription] = useState('');
-    const [careerYear, setCareerYear] = useState(0);
-    const [image, setImage] = useState(null);
+    const [careerYear, setCareerYear] = useState('');
+    const [image, setImage] = useState<File | null>(null);
     const navigate = useNavigate();
+    const fileInputRef = useRef<HTMLInputElement | null>(null); 
 
     const regions = [
         '계룡', '공주', '금산', '논산', '당진',
@@ -24,31 +25,25 @@ const EditProfile = () => {
     ];
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const response = await axios.get('http:///private/photographers/profile', {
-                    headers: {
-                        'Authorization': `Bearer `,
-                    },
-                });
+        const initialAccountId = getCookie('accountId') || '';
+        const initialName = getCookie('name') || '';
+        const initialRegion = getCookie('region') || '';
+        const initialDescription = getCookie('description') || '';
+        const initialCareerYear = getCookie('careerYear') || '0';
 
-                const { accountId, name, region, description, careerYear, image } = response.data;
-                setAccountId(accountId);
-                setName(name);
-                setRegion(region);
-                setDescription(description);
-                setCareerYear(careerYear);
-                setImage(image);
-            } catch (error) {
-                console.error('프로필 정보를 가져오는 중 오류 발생:', error);
-            }
-        };
-
-        fetchProfile();
+        setAccountId(initialAccountId);
+        setName(initialName);
+        setRegion(initialRegion);
+        setDescription(initialDescription);
+        setCareerYear(initialCareerYear);
     }, []);
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]); // 단일 파일 업로드
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setImage(e.target.files[0]); 
+        } else {
+            setImage(null);
+        }
     };
 
     const handleSave = async () => {
@@ -61,7 +56,10 @@ const EditProfile = () => {
             description,
             careerYear,
         }));
-        formData.append('image', image);
+
+        if (image) {
+            formData.append('image', image);
+        }
 
         try {
             const response = await axios.patch(
@@ -92,7 +90,22 @@ const EditProfile = () => {
                 <div></div>
             </Header>
 
-            <ProfileImage src={user} alt="Profile" />
+            <ProfileImageContainer>
+                <ProfileImage
+                    src={image ? URL.createObjectURL(image) : user}
+                    alt="Profile"
+                />
+                 <AddButton onClick={() => fileInputRef.current?.click()}>
+                    +
+                </AddButton>
+                <Input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageChange}
+                />
+            </ProfileImageContainer>
 
             <Section>
                 <Label>기본정보</Label>
@@ -100,23 +113,23 @@ const EditProfile = () => {
                     type="text"
                     value={accountId}
                     onChange={(e) => setAccountId(e.target.value)}
-                    placeholder="계정 ID"
+                    placeholder="변경할 계정 ID를 적어주세요"
                 />
                 <Input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="비밀번호"
+                    placeholder="변경할 비밀번호를 적어주세요"
                 />
             </Section>
 
             <Section>
-                <Label>휴대전화 번호</Label>
+                <Label>이름</Label>
                 <Input
                     type="text"
-                    value={accountId} // 여기에 맞는 상태로 설정
-                    onChange={(e) => setAccountId(e.target.value)} // 여기에 맞는 상태로 설정
-                    placeholder="010-1234-5678"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="변경할 이름을 적어주세요"
                 />
             </Section>
 
@@ -134,12 +147,22 @@ const EditProfile = () => {
             </Section>
 
             <Section>
+                <Label>경력</Label>
+                <Input
+                    type="number"
+                    value={careerYear}
+                    onChange={(e) => setCareerYear(e.target.value)}
+                    placeholder="경력을 적어주세요 (숫자만)"
+                />
+            </Section>
+
+            <Section>
                 <Label>자기소개</Label>
                 <Input
                     type="text"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="자기소개"
+                    placeholder="자기소개를 적어주세요 (수상 이력, 강점 등)"
                 />
             </Section>
 
@@ -171,7 +194,6 @@ const Header = styled.header`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
 `;
 
 const Title = styled.h1`
@@ -180,15 +202,15 @@ const Title = styled.h1`
 `;
 
 const BackButton = styled.button`
-  background-color: transparent;
-  border: none;
-  padding: 0.5rem 0rem;
-  color: #000;
-  cursor: pointer;
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 0rem;
+    color: #000;
+    cursor: pointer;
 `;
 
 const BackIcon = styled.img`
-  width: 20px;
+    width: 20px;
 `;
 
 const Section = styled.section`
@@ -237,12 +259,33 @@ const SaveButton = styled.button`
     width: 100%;
 `;
 
+const ProfileImageContainer = styled.div`
+    position: relative;
+    display: inline-block;
+    margin: 20px auto; 
+`;
+
 const ProfileImage = styled.img`
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    margin: 20px auto; 
     display: block; 
+`;
+
+const AddButton = styled.button`
+    position: absolute;
+    bottom: 3px;
+    right: 3px; 
+    background-color: #999;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const DeleteAccount = styled.div`
