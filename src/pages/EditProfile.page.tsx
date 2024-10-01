@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { formDataConnection } from '../api/connectBackend';
 import { getCookie } from '../api/useCookie';
-import axios from 'axios';
 import back from '../assets/images/back.png';
 import rightarrow from '../assets/images/rightarrow.png';
 import user from '../assets/images/user.png';
@@ -62,17 +63,9 @@ const EditProfile = () => {
         }
 
         try {
-            const response = await axios.patch(
-                'http:///private/photographers/update',
-                formData,
-                {
-                    headers: {
-                        'Authorization': `Bearer `,
-                        'Accept': 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                    },
-                }
-            );
+            const response = await formDataConnection.patch(
+                '/private/photographers/update',
+                formData);
             console.log('수정 성공:', response.data);
             alert('프로필이 성공적으로 수정되었습니다.');
         } catch (error) {

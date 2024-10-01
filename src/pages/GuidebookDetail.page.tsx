@@ -1,13 +1,13 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
 
+import { jsonConnection } from '../api/connectBackend';
+import { getCookie } from '../api/useCookie'; 
 import back from '../assets/images/back.png';
 import kebab from '../assets/images/kebab.png';
 import { Guidebook } from '../types/Guidebook';
-import { getCookie } from '../api/useCookie'; 
 
 const GuidebookDetail = () => {
   const navigate = useNavigate();
@@ -32,12 +32,7 @@ const GuidebookDetail = () => {
   useEffect(() => {
     const fetchGuidebookDetail = async () => {
       try {
-        const response = await axios.get(`http:///public/guidebooks/${guidebookId}/detail`, {
-          headers: {
-            Authorization: `Bearer `,
-            Accept: '*/*',
-          },
-        });
+        const response = await jsonConnection.get(`/public/guidebooks/${guidebookId}/detail`);
         setGuidebook(response.data.data);
         setUpdatedTitle(response.data.data.title);
         setUpdatedContent(response.data.data.content);
@@ -66,12 +61,7 @@ const GuidebookDetail = () => {
     };
 
     try {
-      const response = await axios.patch(`http:///private/guidebooks/update`, updatedData, {
-        headers: {
-          Authorization: `Bearer `,
-          Accept: '*/*',
-        },
-      });
+      const response = await jsonConnection.patch(`/private/guidebooks/update`, updatedData);
 
       if (response.status === 200) {
         alert('글이 수정되었습니다.');
@@ -91,7 +81,7 @@ const GuidebookDetail = () => {
   const handleDelete = async () => {
     if (window.confirm('삭제하시겠습니까?')) {
       try {
-        const response = await axios.delete(`http://private/guidebooks/${guidebookId}/delete`);
+        const response = await jsonConnection.delete(`/private/guidebooks/${guidebookId}/delete`);
         if (response.status === 200) {
           alert('글이 삭제되었습니다.');
           navigate('/guidebooklist');

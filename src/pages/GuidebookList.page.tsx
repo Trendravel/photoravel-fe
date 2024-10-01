@@ -1,9 +1,10 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
 
+import { jsonConnection } from '../api/connectBackend';
+import { getCookie } from '../api/useCookie'; 
 import filter from '../assets/images/filter.png';
 import magnifier from '../assets/images/magnifier.png';
 import FilterBottomSheet from '../components/FilterBottomSheet';
@@ -11,7 +12,6 @@ import UpperMenu from "../components/UpperMenu";
 import WriteButton from '../components/WriteButton';
 import { FilterOptions } from '../types/FilterOptions';
 import { Guidebook } from '../types/Guidebook';
-import { getCookie } from '../api/useCookie'; 
 
 const GuidebookList = () => {
   const navigate = useNavigate();
@@ -25,15 +25,7 @@ const GuidebookList = () => {
 
   const fetchGuidebooks = async () => {
     try {
-      const response = await axios.get('http:///public/guidebooks', {
-        headers: {
-          Authorization: `Bearer `,
-          Accept: '*/*',
-        },
-        params: {
-          region: region,
-        },
-      });
+      const response = await jsonConnection.get(`/public/guidebooks?region=${region}`);
       setFilteredGuidebooks(response.data.data);
     } catch (error) {
       console.error('가이드북을 가져오는 데 실패했습니다:', error);

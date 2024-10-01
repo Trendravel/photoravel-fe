@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCookie } from '../api/useCookie';
 import styled from 'styled-components';
-import axios from 'axios';
+
+import { jsonConnection } from '../api/connectBackend';
+import { getCookie } from '../api/useCookie';
 import back from '../assets/images/back.png';
 
 const AccountDelete = () => {
@@ -21,14 +22,8 @@ const AccountDelete = () => {
         }
 
         try {
-            const response = await axios.delete(
-                `http:///private/photographers/${photographerId}/delete`,
-                {
-                    headers: {
-                        'Authorization': `Bearer `,
-                        'Accept': '*/*',
-                    },
-                }
+            const response = await jsonConnection.delete(
+                `/private/photographers/${photographerId}/delete`
             );
 
             if (response.status === 200) {
