@@ -7,6 +7,7 @@ import { jsonConnection } from "../api/connectBackend";
 import Logo from "../assets/images/Photoravel_LoginPage_Logo.png"
 import { ApiResponse } from "../types/Common";
 import { MemberResponse } from "../types/Login";
+import { doLocalUserLogin } from "../api/Login";
 
 const PageContainer = styled.div`
     position: fixed;
@@ -63,15 +64,18 @@ const PhotographerLogin = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await jsonConnection.post<ApiResponse<MemberResponse>>(`/public/photographers/login`, {
+            await jsonConnection.post<ApiResponse<MemberResponse>>(`/public/photographers/login`, {
                 username: id,
                 password: password
-            });
-            console.log("Response:", response.data);
+            }).then((res) => {
+                if (res.data.result.resultCode != 400)
+                    doLocalUserLogin(res.data.data?.accessToken.token, res.data.data?.refreshToken.token);
+                navigate('/')
+            })
             // 성공적으로 전송된 후 처리할 로직 추가
         } catch (error) {
             console.error("Error sending data:", error);
-            // 에러 처리 로직 추가
+            alert("로그인에 실패했습니다!")
         }
     };
 
