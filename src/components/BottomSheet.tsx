@@ -9,7 +9,7 @@ import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './Lo
 import ReviewDetail from './ReviewDetail';
 import SingleSpotDetail from './SingleSpotDetail';
 import SpotDetail from './SpotDetail';
-import jsonConnection from '../api/connectBackend';
+import { jsonConnection } from '../api/connectBackend';
 import NotFound from '../components/NotFound';
 import { ApiResponse } from '../types/Common';
 import { Category, MultipleLocation, SingleLocation } from '../types/Location';

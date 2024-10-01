@@ -4,36 +4,35 @@ import { refreshAccessToken } from "./Login";
 import { getCookie, setCookie } from "./useCookie";
 
 const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
-// eslint-disable-next-line prefer-const
-let accessToken = getCookie("accessToken");
-const refreshToken = getCookie("refreshToken");
 
-export const jsonConnection = axios.create({
-    baseURL: BACKEND_ADDRESS,
-    headers: {
-        'Accept': '*/*',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-    }
-})
+const createAxiosInstance = () => {
+    const instance = axios.create({
+        baseURL: BACKEND_ADDRESS,
+        headers: {
+            'Accept': '*/*',
+            'Content-Type': 'application/json',
+        }
+    });
 
-export const formDataConnection = axios.create({
-    baseURL: BACKEND_ADDRESS,
-    headers: {
-        'Accept': '*/*',
-        'Content-Type': 'application/form-data',
-        'Authorization': `Bearer ${accessToken}`
-    }
-})
+    // 요청 인터셉터 추가
+    instance.interceptors.request.use(config => {
+        const accessToken = getCookie("accessToken");
+        if (accessToken) {
+            config.headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+        return config;
+    });
 
-export const tokenConnection = axios.create({
-    baseURL: BACKEND_ADDRESS,
-    headers: {
-        'Accept': '*/*',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${refreshToken}`
-    }
-})
+    return instance;
+};
+
+const jsonConnection = createAxiosInstance();
+const formDataConnection = createAxiosInstance();
+const tokenConnection = createAxiosInstance();
+
+// 각 인스턴스의 Content-Type 설정
+formDataConnection.defaults.headers['Content-Type'] = 'application/form-data';
+tokenConnection.defaults.headers['Authorization'] = `Bearer ${getCookie("refreshToken")}`;
 
 const failedQueue: Array<{ resolve: (value?: unknown) => void; reject: (error: unknown) => void }> = [];
 let isRefreshing = false; // 토큰 갱신 중 여부를 추적하는 플래그
@@ -84,5 +83,4 @@ jsonConnection.interceptors.response.use(
     }
 );
 
-
-export default jsonConnection;
+export { jsonConnection, formDataConnection, tokenConnection };

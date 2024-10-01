@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Rate } from "./LocationInfo";
 import MultipleImageViewer from "./MultipleImageViewer";
 import SmallSpotCard from "./SmallSpotCard";
-import jsonConnection from "../api/connectBackend";
+import { jsonConnection } from "../api/connectBackend";
 import { ApiResponse } from "../types/Common";
 import { SingleLocation } from "../types/Location";
 import { spotMultiRead } from "../types/Spot";
@@ -115,6 +115,12 @@ const SpotText = styled.p`
     font-weight: 500;
 `;
 
+const ControlContainer = styled.div`
+    text-align: right;
+    color: #aaaaaa;
+    margin: 0.25em 0 0.25em 0;
+`;
+
 export const SeeMoreText = styled.p`
     font-size: 9pt;
     font-weight: 400;
@@ -122,7 +128,6 @@ export const SeeMoreText = styled.p`
 
 const LocationDetail = (props: {data: SingleLocation | undefined }) => {
     const navigate = useNavigate();
-    // TODO: 스팟 불러오기
     
     const locationData = props.data;
     const [spotData, setSpotData] = useState<spotMultiRead[] | undefined>(undefined);
@@ -142,11 +147,26 @@ const LocationDetail = (props: {data: SingleLocation | undefined }) => {
         })
     }, [])
 
+    const handleDelete = () => {
+        jsonConnection.delete(`/private/location/${locationData?.locationId}/delete`)
+        .then((res) => {
+            console.log(res)
+            alert("삭제가 완료되었습니다!");
+            navigate('/');
+        })
+        .catch((e) => console.error(e))
+    }
+
     return (
         <BottomSheetContentContainer>
             {
                 (locationData !== undefined) &&
                 <>
+                <ControlContainer
+                onClick={handleDelete}
+                >
+                    삭제하기
+                </ControlContainer>
                 <MultipleImageViewer height="20vh" src={locationData.images}/>
                 <MainInfoContainer>
                     <PlaceName>{locationData.name}</PlaceName>
