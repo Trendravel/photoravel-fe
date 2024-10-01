@@ -5,7 +5,7 @@ import { jsonConnection, tokenConnection } from "./connectBackend";
 import { decodeToken } from "./decodeToken"
 import { getCookie, removeCookie, setCookie } from "./useCookie";
 import { ApiResponse } from "../types/Common";
-import { LoggedInfo, MemberResponse, NonMemberResponse } from "../types/Login";
+import { MemberResponse, NonMemberResponse, PhotographerLoggedInfo, UserLoggedInfo } from "../types/Login";
 
 export const doOAuthLogin = async (code: string, navigate: (path: string, options?: NavigateOptions) => void) => {
 
@@ -42,7 +42,7 @@ export const setOAuthLogin = (response: MemberResponse, navigate: (path: string,
     setCookie("accessToken", response.accessToken.token);
     setCookie("refreshToken", response.refreshToken.token);
     
-    const userData:LoggedInfo = decodeToken(response.accessToken.token);
+    const userData:UserLoggedInfo = decodeToken(response.accessToken.token);
     setCookie("name", userData.name);
     setCookie("nickname", userData.nickname);
     setCookie("email", userData.email);
@@ -56,11 +56,21 @@ export const doLocalUserLogin = (accessToken: string|undefined, refreshToken: st
         setCookie("accessToken", accessToken);
         setCookie("refreshToken", refreshToken);
 
-        const userData:LoggedInfo = decodeToken(accessToken);
+        const userData: UserLoggedInfo | PhotographerLoggedInfo = decodeToken(accessToken);
+        
         setCookie("name", userData.name);
-        setCookie("nickname", userData.nickname);
-        setCookie("email", userData.email);
-        setCookie("memberId", userData.memberId);
+        setCookie("role", userData.role)
+        
+        if (userData.email) { // 일반 유저
+            setCookie("nickname", userData.nickname);
+            setCookie("email", userData.email);
+            setCookie("memberId", userData.memberId);
+        }
+
+        if (userData.role === "photographer") {
+            setCookie("accountId", userData.accountId);
+        }
+        
     } else {
         console.error("로그인 처리 중 토큰 값 이상 발견")
     }
@@ -74,6 +84,8 @@ export const doLogout = () => {
     removeCookie("nickname");
     removeCookie("email");
     removeCookie("memberId");
+    removeCookie("accountId");
+    removeCookie("role");
 }
 
 export const refreshAccessToken = async ():Promise<string> => {

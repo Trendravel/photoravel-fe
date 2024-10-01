@@ -81,7 +81,8 @@ const SignUp = () => {
     // 사진작가 변수
     const [chosenRegion, setChosenRegion] = useState("");
     const [description, setDescription] = useState("");
-    const regions = ["계룡시", "공주시", "금산군", "논산시", "당진시", "보령시", "부여군", "서산시", "서천군", "아산시", "예산군", "청양군", "천안시", "태안군", "홍성군"];
+    const regions = ["계룡", "공주", "금산", "논산", "당진", "보령", "부여", "서산", "서천", "아산", "예산", "청양", "천안", "태안", "홍성"];
+    const [careerYear, SetCareerYear] = useState(0);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -195,7 +196,7 @@ const SignUp = () => {
     const userFormData = () => {
         const userData = new FormData();
         
-        const request: { memberId?: string; password: string; name: string; accountId?: string; region?: string; description?: string; nickname?: string; email?: string; } = {
+        const data: { memberId?: string; password: string; name: string; accountId?: string; region?: string; description?: string; nickname?: string; email?: string; careerYear: number; } = {
             password: password,
             name: name,
         };
@@ -205,16 +206,17 @@ const SignUp = () => {
     
         // 사용자 유형에 따라 필드를 추가
         if (userType === "photographer") {
-            request.accountId = id;
-            request.region = chosenRegion;
-            request.description = description;
+            data.accountId = id;
+            data.region = chosenRegion;
+            data.description = description;
+            data.careerYear = careerYear;
         } else if (userType === "user") {
-            request.memberId = id;
-            request.nickname = nickname;
-            request.email = email;
+            data.memberId = id;
+            data.nickname = nickname;
+            data.email = email;
         }
 
-        userData.append('request', JSON.stringify(request));
+        userData.append('data', JSON.stringify(data));
 
         return userData;
     }
@@ -226,8 +228,11 @@ const SignUp = () => {
             const userData = userFormData();
 
             try {
-                const response = await formDataConnection.post(BACKEND_ADDRESS+`/public/photographers/join`, userData);
-                console.log("Response:", response.data);
+                const response = await formDataConnection.post(BACKEND_ADDRESS+`/public/photographers/join`, userData).then(() => {
+                    alert("회원가입이 완료되었습니다!");
+                     navigate('/photographer/login');
+                })
+                
                 // 성공적으로 전송된 후 처리할 로직 추가
             } catch (e) {
                 console.error("Error sending data:", e);
@@ -334,12 +339,17 @@ const SignUp = () => {
                                 )
                             }
                         </SelectBox>
+                        <TextInput
+                            type='number'
+                            placeholder="경력 기간 (년수)"
+                            onChange={(e) => SetCareerYear(Number(e.target.value))}
+                        />
                         <DescriptionArea
                             placeholder="자기소개를 적어주세요! (경력, 수상 이력, 강점 등)"
                             onChange={(e) => setDescription(e.target.value)}
                         />
                         <LoginButton type="submit">
-                        작가 등록하기
+                            작가 등록하기
                         </LoginButton>
                     </FormContainer>
                 </CenterContainer>

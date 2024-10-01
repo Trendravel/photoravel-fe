@@ -37,11 +37,20 @@ export interface NewMemberInfo {
     profileImg: string;
 }
 
-export interface LoggedInfo {
+export interface UserLoggedInfo {
+    role: string;
     name: string;
     nickname: string;
     email: string;
     memberId: string;
+    exp: number;
+}
+
+export interface PhotographerLoggedInfo {
+    accountId: string;
+    role: string;
+    name: string;
+    issuer: string;
     exp: number;
 }
 
