@@ -26,7 +26,6 @@ const Home = () => {
     const [selectedSpotData, setSelectedSpotData] = useState<spotMultiRead[] | null>(null);
 
     const updateEvent = () => { // mapState 변경 시, 장소를 새로 불러올 클릭 이벤트
-        
         jsonConnection.get<ApiResponse<MultipleLocation[]>>(`${BACKEND_ADDRESS}/public/nowPosition?latitude=${mapState.center.lat}&longitude=${mapState.center.lng}&range=${mapState.level*600}`)
             .then((res) => {
                 const data = res.data.data;
@@ -40,8 +39,8 @@ const Home = () => {
        setIsUpdated(true);
     }
 
-    useEffect(() => {
-        //
+    useEffect(() => { // 실행 시, 현재 위치 이동 및 장소 조회
+        updateEvent();
     }, [])
 
     return (

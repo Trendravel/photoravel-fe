@@ -35,7 +35,6 @@ const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo
     }, [props.pos]);
 
     useEffect(() => { // 장소 상세페이지 이동 시, 지도 이동 로직
-        console.log(id)
         if (id && !spotLocationId || spotLocationId) {
             const targetPlace = props.locationData!.find((item) => item.locationId === Number((spotLocationId)? spotLocationId : id))
                 if (targetPlace) {

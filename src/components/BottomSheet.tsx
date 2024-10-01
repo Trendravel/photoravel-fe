@@ -322,10 +322,6 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
         }
     }, [position])
 
-    useEffect(() => {
-        console.log("locationData: ", locationData)
-    }, [locationData])
-
     return (
         <BottomSheet
             onTouchStart={handleHover}

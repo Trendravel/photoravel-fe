@@ -115,7 +115,7 @@ const SpotText = styled.p`
     font-weight: 500;
 `;
 
-const ControlContainer = styled.div`
+export const ControlContainer = styled.div`
     text-align: right;
     color: #aaaaaa;
     margin: 0.25em 0 0.25em 0;
@@ -186,6 +186,8 @@ const LocationDetail = (props: {data: SingleLocation | undefined }) => {
                             
                         </Rate>
                         <SeeMoreText
+                            onTouchStart={(e) => e.stopPropagation()}
+                            onTouchEnd={(e) => e.stopPropagation()}
                             onClick={(e) => {
                                 e.stopPropagation()
                                 navigate(`/place?reviewfor=${locationData!.locationId}`) 
@@ -229,6 +231,8 @@ const LocationDetail = (props: {data: SingleLocation | undefined }) => {
                                 이 장소의 포토스팟 📸
                             </SpotText>
                             <SeeMoreText
+                            onTouchStart={(e) => e.stopPropagation()}
+                            onTouchEnd={(e) => e.stopPropagation()}
                             onClick={(e) => {
                                 e.stopPropagation()
                                 navigate(`/place?spotfor=${locationData.locationId}`) 

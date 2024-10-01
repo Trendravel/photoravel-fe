@@ -4,9 +4,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { CategoryButton } from "./BottomSheet";
 import FullMultipleImageViewer from "./FullMultipleImageViewer";
-import { BottomSheetContentContainer } from "./LocationDetail";
-import ReviewData from "../api/testdata/readLocationReviews.json"
+import { BottomSheetContentContainer, ControlContainer } from "./LocationDetail";
+import NotFound from "./NotFound";
+import { jsonConnection } from "../api/connectBackend";
 import MultipleImageIconFile from "../assets/images/gallery.png";
+import { ApiResponse } from "../types/Common";
 import { SingleReview } from "../types/Review";
 
 // 별점 평균, 갯수 등의 간략한 정보
@@ -65,33 +67,74 @@ const MultipleImageIcon = styled.img`
     z-index: 1;
 `;
 
+const SpaceBetweenContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const DeleteText = styled.p`
+    text-align: right;
+    color: #aaaaaa;
+`;
+
 const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
     
     const navigate = useNavigate();
     const location = useLocation();
     const queryParam = new URLSearchParams(location.search);
-    const reviewId = queryParam.get("reviewfor");
+    const locationId = queryParam.get("reviewfor");
     const spotId = queryParam.get("spotfor");
 
-    const reviewType = spotId && reviewId? "SpotReview":"LocationReview";
+    const reviewType = spotId && locationId? "SPOT":"LOCATION";
 
-    const reviews:SingleReview[] = ReviewData; // TODO: 장소/스팟 리뷰 데이터 선택적 핸들링
-    const reviewCount = reviews.length;
+    const [reviews, setReviews] = useState<SingleReview[] | null> (null); // TODO: 장소/스팟 리뷰 데이터 선택적 핸들링
+    const [reviewCount, setReviewCount] = useState<number | null>(null);
     const [rateAverage, setRateAverage] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const [images, setImages] = useState([""]);
-    
-    useEffect(() => {
-        let totalRate = 0;
-        
-        reviews.forEach((review) => {
-            totalRate += review.rating;
-        })
+    const [totalRate, setTotalRate] = useState(0);
 
-        setRateAverage(totalRate / reviewCount || 0);
+    const calculateAverageRate = (reviews: SingleReview[]) => {
+        if (reviews.length === 0) return 0;
+        const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+        return total / reviews.length;
+    };
+
+
+    useEffect(() => {
+        if (reviewType === "LOCATION") {
+            jsonConnection.get<ApiResponse<SingleReview[]>>(`/public/location/${locationId}/detail/reviews`)
+            .then((res) => {
+                const data = res.data.data;
+                if (data) {
+                    setReviews(data);
+                    setReviewCount(data.length);
+
+                    const average = calculateAverageRate(data);
+                    setRateAverage(average);
+                    
+                }
+            })
+            .catch((e) => {
+                alert("장소 리뷰를 불러오는데 실패했습니다!")
+                console.error(e);
+            })
+        }        
 
         console.log(reviewType);
     }, [])
+
+    const handleDelete = (reviewId: number) => {
+        jsonConnection.delete(`/private/review/${reviewId}/delete`)
+        .then((res) => {
+            console.log(res);
+            alert("리뷰가 삭제되었습니다.");
+        })
+        .catch((e) => {
+            console.error(e);
+            alert("리뷰 삭제 중 문제가 발생했습니다.")
+        })
+    }
 
     const changeIsOpen = () => {
         if (isOpen)
@@ -115,9 +158,9 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                 <CategoryButton
                 color="#FF808A"
                 onClick={() => {
-                    if (reviewType === "LocationReview") {
-                        navigate(`/place?addreviewto=${reviewId}`)
-                    } else if (reviewType === "SpotReview") {
+                    if (reviewType === "LOCATION") {
+                        navigate(`/place?addreviewto=${locationId}`)
+                    } else if (reviewType === "SPOT") {
                         navigate(`/place?spotfor=${spotId}&addreviewto=${spotId}`)
                     }
                 }}
@@ -127,14 +170,23 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
             </SimplifiedInfoContainer>
             <ReviewContainer>
                 {
+                    reviews?
                     reviews.map((review) =>
                         <Review key={review.reviewId}>
-                            <p style={{
-                                fontWeight: "500",
-                                marginBottom: "0.75em"
-                            }}>
-                                ⭐️ {review.rating}
-                            </p>
+                            <SpaceBetweenContainer>
+                                <p style={{
+                                    fontWeight: "500",
+                                    marginBottom: "0.75em"
+                                }}>
+                                    ⭐️ {review.rating}
+                                </p>
+                                <DeleteText
+                                    onClick={() => handleDelete(review.reviewId)}
+                                >
+                                    삭제하기
+                                </DeleteText>
+                            </SpaceBetweenContainer>
+                            
                             <p>{review.content}</p>
                             <div
                                 style={{textAlign: "center"}}
@@ -169,7 +221,8 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                                 {review.createdAt}
                             </DetailInfo>
                         </Review>
-                    )
+                    ):
+                    <NotFound/>
                 }
             </ReviewContainer>
             <FullMultipleImageViewer

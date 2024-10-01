@@ -83,6 +83,7 @@ export const refreshAccessToken = async ():Promise<string> => {
     })
     .then((res) => newToken = res.data.data.token)
     .catch((e) => console.log(e))
+    console.log(newToken)
 
     return new Promise((resolve) => {
         setTimeout(() => {

@@ -67,6 +67,7 @@ jsonConnection.interceptors.response.use(
                 failedQueue.length = 0; // 큐 비우기
 
                 originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+                
                 return jsonConnection(originalRequest); // 원래 요청 재시도
             } catch (err) {
                 console.error("Token refresh failed: ", err);

@@ -10,7 +10,7 @@ import { BottomSheetContentContainer } from './LocationDetail';
 import { FormContainer, SubmitButton } from '../pages/AddInfo.page';
 import { FileLabel, ImageInput, PreviewImage } from '../pages/AddPlace.page';
 import { getCookie } from '../api/useCookie';
-import { formDataConnection } from '../api/connectBackend';
+import { formDataConnection, jsonConnection } from '../api/connectBackend';
 
 const AddReview = () => {
   const navigate = useNavigate();
@@ -54,7 +54,22 @@ const AddReview = () => {
   };
 
   const validateData = () => {
-    
+
+    if (description.length < 10) {
+        alert("리뷰 내용은 최소 10자 이상 작성해주세요!")
+        return false;
+    }
+    if (rating <= 0.5 || rating > 5) {
+        alert("평점은 1점 이상, 5점 이하로 매길 수 있습니다.")
+        return false;
+    }
+
+    if (!reviewType) {
+        alert("장소 또는 스팟 정보를 불러오지 못했습니다. 다시 시도해주세요!")
+        return false;
+    }
+
+    return true;
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -69,15 +84,37 @@ const AddReview = () => {
         typeId: (reviewType === "LOCATION")? Number(locationId) : Number(spotId)
     };
 
-    if (selectedPhotos.length !== 0) { // 사진이 있는 경우 form-data
-        const formData = new FormData();
-        formData.append('data', JSON.stringify(data));
-        selectedPhotos.forEach((file, i) => {
-            formData.append(`images[${i}]`, file);
-        })
-
-    } else {
-        console.log(data)
+    if (validateData()) {
+        if (selectedPhotos.length !== 0) { // 사진이 있는 경우 form-data
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(data));
+            selectedPhotos.forEach((file) => {
+                formData.append(`images`, file);
+            })
+            formDataConnection.post(`/private/review/create`, formData)
+            .then((res) => {
+                console.log(res);
+                alert("리뷰가 작성되었습니다.");
+                if (reviewType === "LOCATION")
+                    navigate(`/place?reviewfor=${locationId}`);
+            })
+            .catch((e) => {
+                alert("리뷰 작성에 실패했습니다!");
+                console.error(e);
+            })
+        } else {
+            jsonConnection.post(`/private/review/create`, data)
+            .then((res) => {
+                console.log(res);
+                alert("리뷰가 작성되었습니다.");
+                if (reviewType === "LOCATION")
+                    navigate(`/place?reviewfor=${locationId}`);
+            })
+            .catch((e) => {
+                alert("리뷰 작성에 실패했습니다!");
+                console.error(e);
+            })
+        }
     }
 
   }
