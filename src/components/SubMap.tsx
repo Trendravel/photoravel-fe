@@ -3,7 +3,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 import { Position } from "../types/Position";
 
-const KakaoMap = (props: {pos: Position, setPos: React.Dispatch<React.SetStateAction<Position>>}) => {
+const KakaoMap = (props: {pos: Position, setPos: React.Dispatch<React.SetStateAction<Position>>, height?: string}) => {
     const [state, setState] = useState({
         center: {
             lat: 36.769989,
@@ -43,7 +43,7 @@ const KakaoMap = (props: {pos: Position, setPos: React.Dispatch<React.SetStateAc
         isPanto={true} // 부드러운 이동
         style={{
             width: "100vw",
-            height: "40vh",
+            height: props.height? props.height: "40vh",
             position: "relative",
             zIndex: 0
         }}
