@@ -98,6 +98,7 @@ const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo
                 minLevel={8}
             >
             {
+                (locationData) &&
                 locationData!.map((data: MultipleLocation) => (
                     <div key={data.locationId}>
                         <MapMarker

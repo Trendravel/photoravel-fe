@@ -10,8 +10,10 @@ import ReviewDetail from './ReviewDetail';
 import SingleSpotDetail from './SingleSpotDetail';
 import SpotDetail from './SpotDetail';
 import SpecificLocationInfo from '../api/testdata/locationSingleRead.json'
-import { Category, MultipleLocation } from '../types/Location';
+import { Category, MultipleLocation, SingleLocation } from '../types/Location';
 import { spotMultiRead } from '../types/Spot';
+import jsonConnection from '../api/connectBackend';
+import { ApiResponse } from '../types/Common';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 10;
@@ -138,7 +140,7 @@ const ButtonContainer = styled.div`
 const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selectedSpotData: spotMultiRead[] | null, setSelectedSpotData: (data: spotMultiRead[] | null) => void}) => {
     // 기본 정의
     const locationData = props.locationData;
-    const specificData = SpecificLocationInfo;
+    const [specificLocation, setSpecificLocation] = useState<MultipleLocation | undefined>(undefined);
     const [position, setPostion] = useState(window.innerHeight-75);
     
     // 라우팅 처리를 위한 정의
@@ -178,17 +180,37 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
     };
 
 
-    // 설명 간략화 메소드
+    // 설명 간략화 메소드 (간략보기)
     const descriptionLimit = 50;
-    let simplifiedDescription = "";
+    const [specificLocationData, setSpecificLocationData] = useState<SingleLocation | undefined>(undefined);
+    const [simplifiedDescription, setSimplifiedDescription] = useState<string>("");
+    
+    useEffect(() => { // 장소 상세보기 (간략 & 상세) 데이터 로직
 
-    const specificLocation = specificData.find((item: MultipleLocation) => item.locationId === Number(id));
-    if (specificLocation && specificLocation.description.length >= descriptionLimit) {
-        simplifiedDescription = specificLocation.description.slice(0, descriptionLimit+1);
-        simplifiedDescription += " ...";
-    } else if (specificLocation) {
-        simplifiedDescription = specificLocation.description;
-    }
+        if (id) {
+            setSpecificLocation(
+                props.locationData!.find((item: MultipleLocation) => item.locationId === Number(id))
+            );
+
+            jsonConnection
+            .get<ApiResponse<SingleLocation>>(`/public/location/${id}/detail`)
+            .then((res) => {
+                const data = res.data.data;
+                setSpecificLocationData(data);  // 상태 업데이트
+                // 설명 로직 추가
+                if (data!.description.length >= descriptionLimit) {
+                    const shortDescription = data!.description.slice(0, descriptionLimit + 1) + " ...";
+                    setSimplifiedDescription(shortDescription);
+                } else {
+                    setSimplifiedDescription(data!.description);
+                }
+            })
+            .catch((e) => {
+                alert("장소가 없습니다!");
+                console.error(e);
+            });
+        }
+    }, [id]);
 
     // 바텀시트 터치 이벤트 메소드
     useEffect(() => {
@@ -196,7 +218,6 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
     }, []);
 
     useEffect(() => { // 경우에 따른 위치 초기설정
-        console.log("id: ", id, ", spot: ", spotId);
         if (id && !spotId) { // 스팟이 아닌 장소 간략소개
             setPostion(window.innerHeight - 175);
         } else if (reviewId || spotId || reviewTargetId) { // 리뷰나 스팟은 최대
@@ -368,6 +389,7 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
                     >
                         { // 기본 조회
                             location.pathname === "/" && !activeIndex?.toString &&
+                            locationData &&
                             locationData!.map((data) => 
                                 <LocationInfo
                                     key={data.locationId}
@@ -377,6 +399,7 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
                         }
                         { // 검색어 필터링
                             location.pathname === "/search" && !activeIndex &&
+                            locationData &&
                             locationData!.map((data) =>
                                 (data.name.includes(keyword!))?
                                     <LocationInfo
@@ -401,7 +424,8 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
                 </>
             }
             { // 특정 장소 조회 (간략 보기)
-                (!spotId && id) && specificLocation && (position === window.innerHeight - 175) &&
+                (!spotId && id) && (position === window.innerHeight - 175) &&
+                specificLocation &&
                 <LocationContainer
                     onTouchStart={handleContainerTouch}
                     onTouchEnd={handleContainerTouch}
@@ -449,7 +473,7 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
             { // 특정 장소 조회 (상세 보기)
                 (!spotId && id) && specificLocation && (position < window.innerHeight - 175) &&
                 <LocationDetail
-                    data={specificLocation}
+                    data={specificLocationData}
                 />
             }
             {

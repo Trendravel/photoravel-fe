@@ -1,9 +1,11 @@
+/* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating';
 
+// eslint-disable-next-line import/namespace
 import { BottomSheetContentContainer } from './LocationDetail';
 import { FormContainer, SubmitButton } from '../pages/AddInfo.page';
 import { FileLabel, ImageInput, PreviewImage } from '../pages/AddPlace.page';
@@ -51,6 +53,10 @@ const AddReview = () => {
     document.getElementById('file-upload')!.click();
   };
 
+  const validateData = () => {
+    
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -67,12 +73,9 @@ const AddReview = () => {
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));
         selectedPhotos.forEach((file, i) => {
-            console.log(`images[${i}]: `, file)
             formData.append(`images[${i}]`, file);
         })
-        
-        console.log(formData.get('data'));
-        console.log(formData.getAll('images[0]'));
+
     } else {
         console.log(data)
     }

@@ -10,12 +10,13 @@ import PanButton from "../components/PanButton";
 import ReloadButton from "../components/ReloadButton";
 import UpperMenu from "../components/UpperMenu";
 import { ApiResponse } from "../types/Common";
+import { MultipleLocation } from "../types/Location";
 import { MapInfo } from "../types/Position";
 import { spotMultiRead } from "../types/Spot";
 
 const Home = () => {
     const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
-    const [locationData, setLocationData] = useState(LocationInfoData);
+    const [locationData, setLocationData] = useState<MultipleLocation[] | null>(null);
     const [isUpdated, setIsUpdated] = useState(true);
     const [mapState, setMapState] = useState<MapInfo>({ center: { lat: 37.5665, lng: 126.978 }, level: 3 });
     const [currentPos, setCurrentPos] = useState({
@@ -26,9 +27,15 @@ const Home = () => {
 
     const updateEvent = () => { // mapState 변경 시, 장소를 새로 불러올 클릭 이벤트
         
-        jsonConnection.get<ApiResponse<MapInfo>>(`${BACKEND_ADDRESS}/public/nowPosition?latitude=${mapState.center.lat}&longitude=${mapState.center.lng}&range=${mapState.level*1000}`)
-            .then((res) => { console.log(res) })
-            .catch((e) => { console.log(e); })
+        jsonConnection.get<ApiResponse<MultipleLocation[]>>(`${BACKEND_ADDRESS}/public/nowPosition?latitude=${mapState.center.lat}&longitude=${mapState.center.lng}&range=${mapState.level*1000}`)
+            .then((res) => {
+                const data = res.data.data;
+                setLocationData(data!);
+            })
+            .catch((e) => { 
+                alert("장소를 불러오는데 오류가 발생했습니다!");
+                console.error(e);
+            })
 
        setIsUpdated(true);
     }

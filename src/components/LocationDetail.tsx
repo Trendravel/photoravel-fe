@@ -7,6 +7,9 @@ import SmallSpotCard from "./SmallSpotCard";
 import SpotInfo from "../api/testdata/spotMultiRead.json";
 import { SingleLocation } from "../types/Location";
 import { MultiSpot, spotMultiRead } from "../types/Spot";
+import { useEffect, useState } from "react";
+import jsonConnection from "../api/connectBackend";
+import { ApiResponse } from "../types/Common";
 
 export const BottomSheetContentContainer = styled.div`
     display: block;
@@ -117,103 +120,129 @@ export const SeeMoreText = styled.p`
     font-weight: 400;
 `;
 
-const LocationDetail = (props: {data: SingleLocation}) => {
+const LocationDetail = (props: {data: SingleLocation | undefined }) => {
     const navigate = useNavigate();
-    const spotData:MultiSpot[] | null = SpotInfo;
+    // TODO: 스팟 불러오기
+    
+    const locationData = props.data;
+    const [spotData, setSpotData] = useState<MultiSpot[] | undefined>(undefined);
+    
+    useEffect(() => {
+        jsonConnection.get<ApiResponse<MultiSpot[]>>(`/public/location/${locationData?.locationId}/spots`)
+        .then((res) => {
+            const data = res.data.data;
+            setSpotData(data);
+            
+            if (spotData)
+                console.log(spotData);
+        })
+        .catch((e) => {
+            alert("스팟을 불러오는데 실패했습니다!");
+            console.error(e);
+        })
+    }, [])
 
     return (
         <BottomSheetContentContainer>
-            <MultipleImageViewer height="20vh" src={props.data.images}/>
-            <MainInfoContainer>
-                <PlaceName>{props.data.name}</PlaceName>
-                <Address>📍 {props.data.address}</Address>
-                <Description>
-                    { props.data.description }
-                </Description>
-                <RatingArea>
-                    <Rate>
-                        { 
-                        (props.data.reviewCounts=== 0)?
-                            "리뷰"
-                        :
-                            <>⭐ {props.data.ratingAvg} ({props.data.reviewCounts >= 99?
-                                "99+" :props.data.reviewCounts })</>
-                        }
-                        
-                    </Rate>
-                    <SeeMoreText
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            navigate(`/place?reviewfor=${props.data.locationId}`) 
-                        }}
-                    >
-                        전체보기 &gt;
-                    </SeeMoreText>
-                </RatingArea>
-                <ReviewContainer
-                    onTouchStart={(e) => e.stopPropagation()}
-                    onTouchEnd={(e) => e.stopPropagation()}
-                >
-                    {
-                        (props.data.reviewCounts === 0)? 
-                        <ReviewBox>
-                            리뷰가 없습니다!
-                        </ReviewBox>
-                        :
-                        props.data.recentReviewDtos.map((review, i) => 
-                            <ReviewBox
-                                key={i}
-                                onClick={() => navigate(`/place?reviewfor=${props.data.locationId}`) }
-                            >
-                                <SingleRate>
-                                    ⭐️ {review.rating}
-                                </SingleRate>
-                                <ReviewContent>
-                                    {
-                                        review.images[0]? <ReviewImage src={review.images[0]}/>:<></>
-                                    }
-                                    {review.content}
-                                </ReviewContent>
-                            </ReviewBox>
-                        )
-                    }
-                    
-                </ReviewContainer>
-                <SpotContainer>
+            {
+                (locationData !== undefined) &&
+                <>
+                <MultipleImageViewer height="20vh" src={locationData.images}/>
+                <MainInfoContainer>
+                    <PlaceName>{locationData.name}</PlaceName>
+                    <Address>📍 {locationData.address}</Address>
+                    <Description>
+                        { locationData.description }
+                    </Description>
                     <RatingArea>
-                        <SpotText>
-                            이 장소의 포토스팟 📸
-                        </SpotText>
+                        <Rate>
+                            { 
+                            (locationData.reviewCounts=== 0)?
+                                "리뷰"
+                            :
+                                <>⭐ {locationData.ratingAvg} ({locationData.reviewCounts >= 99?
+                                    "99+" :locationData.reviewCounts })</>
+                            }
+                            
+                        </Rate>
                         <SeeMoreText
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            navigate(`/place?spotfor=${props.data.locationId}`) 
-                        }}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                navigate(`/place?reviewfor=${locationData!.locationId}`) 
+                            }}
                         >
                             전체보기 &gt;
                         </SeeMoreText>
                     </RatingArea>
-                    
-                    <SpotCardContainer
-                    onTouchStart={(e) => e.stopPropagation()}
-                    onTouchEnd={(e) => e.stopPropagation()}
+                    <ReviewContainer
+                        onTouchStart={(e) => e.stopPropagation()}
+                        onTouchEnd={(e) => e.stopPropagation()}
                     >
                         {
-                            (spotData)?
-                            spotData.map((spot: spotMultiRead) =>
-                                <SmallSpotCard
-                                key={spot.spotId}
-                                data={spot}
-                                />
-                            )
-                            :
+                            (locationData.reviewCounts === 0)? 
                             <ReviewBox>
-                                등록된 포토스팟이 없습니다!
+                                리뷰가 없습니다!
                             </ReviewBox>
+                            :
+                            locationData.recentReviewDtos.map((review, i) => 
+                                <ReviewBox
+                                    key={i}
+                                    onClick={() => navigate(`/place?reviewfor=${locationData.locationId}`) }
+                                >
+                                    <SingleRate>
+                                        ⭐️ {review.rating}
+                                    </SingleRate>
+                                    <ReviewContent>
+                                        {
+                                            review.images[0]? <ReviewImage src={review.images[0]}/>:<></>
+                                        }
+                                        {review.content}
+                                    </ReviewContent>
+                                </ReviewBox>
+                            )
                         }
-                    </SpotCardContainer>
-                </SpotContainer>
-            </MainInfoContainer>
+                        
+                    </ReviewContainer>
+                    <SpotContainer>
+                        <RatingArea>
+                            <SpotText>
+                                이 장소의 포토스팟 📸
+                            </SpotText>
+                            <SeeMoreText
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                navigate(`/place?spotfor=${locationData.locationId}`) 
+                            }}
+                            >
+                                전체보기 &gt;
+                            </SeeMoreText>
+                        </RatingArea>
+                        
+                        <SpotCardContainer
+                        style={(spotData?.length === 0)? {
+                            height: '8.5em'
+                        }:{}}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        onTouchEnd={(e) => e.stopPropagation()}
+                        >
+                            {
+                                (spotData?.length !== 0 && spotData)?
+                                spotData.map((spot: spotMultiRead) =>
+                                    <SmallSpotCard
+                                    key={spot.spotId}
+                                    data={spot}
+                                    />
+                                )
+                                :
+                                <ReviewBox>
+                                    등록된 포토스팟이 없습니다!
+                                </ReviewBox>
+                            }
+                        </SpotCardContainer>
+                    </SpotContainer>
+                </MainInfoContainer>
+                </>
+            }
         </BottomSheetContentContainer>
     )
     
