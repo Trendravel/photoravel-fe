@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { jsonConnection } from '../api/connectBackend';
 import filter from '../assets/images/filter.png';
 import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
@@ -28,15 +28,7 @@ const PhotographerList = () => {
   useEffect(() => {
     const fetchPhotographers = async () => {
       try {
-        const response = await axios.get(`http:///public/photographers`, {
-          headers: {
-            Authorization: `Bearer `,
-            Accept: '*/*',
-          },
-          params: {
-            region: region,
-          },
-        });
+        const response = await jsonConnection.get(`/public/photographers?region=${region}`);
 
         if (response.data.result.resultCode === 200) {
           setPhotographers(response.data.data);

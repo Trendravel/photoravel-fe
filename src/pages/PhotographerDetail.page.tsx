@@ -1,15 +1,15 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { jsonConnection } from '../api/connectBackend';
+import { getCookie } from '../api/useCookie';
 import back from '../assets/images/back.png';
 import pinkstar from '../assets/images/pinkstar.png';
 import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
 import { Photographer } from '../types/Photographer';
 import { Review } from '../types/Review';
-import { getCookie } from '../api/useCookie';
 
 const PhotographerDetail = () => {
   const navigate = useNavigate();
@@ -23,12 +23,7 @@ const PhotographerDetail = () => {
   useEffect(() => {
     const fetchPhotographerDetail = async () => {
       try {
-        const response = await axios.get(`http:///public/photographers/${photographerId}/detail`, {
-          headers: {
-            Authorization: `Bearer `,
-            Accept: '*/*',
-          },
-        });
+        const response = await jsonConnection.get(`/public/photographers/${photographerId}/detail`);
 
         if (response.data.result.resultCode === 200) {
           setPhotographer(response.data.data);
@@ -41,12 +36,7 @@ const PhotographerDetail = () => {
 
     const fetchPhotographerReviews = async () => {
       try {
-        const response = await axios.get(`http:///photographer/${photographerId}/detail/reviews`, {
-          headers: {
-            Authorization: `Bearer `,
-            Accept: '*/*',
-          },
-        });
+        const response = await jsonConnection.get(`/photographer/${photographerId}/detail/reviews`);
 
         if (response.data.result.resultCode === 200) {
           setReviews(response.data.data || []);
@@ -74,7 +64,7 @@ const PhotographerDetail = () => {
       };
 
       try {
-        const response = await axios.patch('http:///private/review/update', reviewUpdateDto);
+        const response = await jsonConnection.patch('/private/review/update', reviewUpdateDto);
 
         if (response.data.result.resultCode === 200) {
           alert('리뷰가 성공적으로 수정되었습니다.');
@@ -99,12 +89,7 @@ const PhotographerDetail = () => {
     }
 
     try {
-      const response = await axios.delete(`http:///private/review/${reviewId}/delete`, {
-        headers: {
-          Authorization: `Bearer `,
-          Accept: '*/*',
-        },
-      });
+      const response = await jsonConnection.delete(`/private/review/${reviewId}/delete`);
 
       if (response.data.result.resultCode === 200) {
         alert('리뷰가 삭제되었습니다.');
@@ -133,13 +118,7 @@ const PhotographerDetail = () => {
     };
 
     try {
-      const response = await axios.post('http:///private/matching/pending', matchingRequestDto, {
-        headers: {
-          Authorization: `Bearer `,
-          Accept: '*/*',
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await jsonConnection.post('/private/matching/pending', matchingRequestDto);
 
       if (response.data.result.resultCode === 200) {
         alert('매칭 요청이 성공적으로 전송되었습니다.');

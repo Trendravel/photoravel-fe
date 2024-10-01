@@ -1,11 +1,11 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { jsonConnection } from '../api/connectBackend';
+import { getCookie } from '../api/useCookie';
 import back from '../assets/images/back.png';
 import { MatchingInfo } from '../types/MatchingInfo';
-import { getCookie } from '../api/useCookie';
 
 const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: string }> = ({ userRole, accountId }) => {
   const navigate = useNavigate();
@@ -17,20 +17,10 @@ const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: s
         let response;
 
         if (userRole === 'photographer') {
-          response = await axios.get(`http:///private/matching/photographer/${accountId}`, {
-            headers: {
-              Authorization: `Bearer `,
-              Accept: '*/*',
-            },
-          });
+          response = await jsonConnection.get(`/private/matching/photographer/${accountId}`);
         } else {
           const memberId = getCookie('userId'); 
-          response = await axios.get(`http:///private/matching/user/${memberId}`, {
-            headers: {
-              Authorization: `Bearer `,
-              Accept: '*/*',
-            },
-          });
+          response = await jsonConnection.get(`//private/matching/user/${memberId}`);
         }
 
         if (response.data.result.resultCode === 200) {
@@ -58,16 +48,8 @@ const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: s
       };
 
       try {
-        const response = await axios.patch(
-          'http:///private/matching/accept',
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer `,
-              Accept: '*/*',
-              'Content-Type': 'application/json',
-            },
-          }
+        const response = await jsonConnection.patch(
+          '/private/matching/accept', requestBody
         );
 
         if (response.data.resultCode === 200) {
@@ -95,16 +77,8 @@ const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: s
       };
 
       try {
-        const response = await axios.patch(
-          'http:///private/matching/reject',
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer `,
-              Accept: '*/*',
-              'Content-Type': 'application/json',
-            },
-          }
+        const response = await jsonConnection.patch(
+          '/private/matching/reject', requestBody
         );
 
         if (response.data.resultCode === 200) {
@@ -132,16 +106,8 @@ const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: s
       };
 
       try {
-        const response = await axios.patch(
-          'http:///private/matching/complete',
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer `,
-              Accept: '*/*',
-              'Content-Type': 'application/json',
-            },
-          }
+        const response = await jsonConnection.patch(
+          '/private/matching/complete', requestBody
         );
 
         if (response.data.resultCode === 200) {
@@ -169,16 +135,8 @@ const MatchingStatus: React.FC<{ userRole: 'photographer' | 'user'; accountId: s
       };
 
       try {
-        const response = await axios.patch(
-          'http:///private/matching/cancel',
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer `,
-              Accept: '*/*',
-              'Content-Type': 'application/json',
-            },
-          }
+        const response = await jsonConnection.patch(
+          '/private/matching/cancel', requestBody
         );
 
         if (response.data.resultCode === 200) {

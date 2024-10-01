@@ -1,10 +1,11 @@
-import axios from 'axios';
 import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 // eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
-import { Guidebook, Region } from '../types/Guidebook';
+
+import { formDataConnection } from '../api/connectBackend';
 import { getCookie } from '../api/useCookie';
+import { Guidebook, Region } from '../types/Guidebook';
 
 const GuidebookWrite = () => {
   const navigate = useNavigate();
@@ -99,13 +100,7 @@ const GuidebookWrite = () => {
     });
 
     try {
-      const response = await axios.post("http:///private/guidebooks/create", formData, {
-        headers: {
-          'Authorization': `Bearer `,
-          'Accept': '*/*',
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await formDataConnection.post("/private/guidebooks/create", formData);
 
       if (response.status === 200) {
         alert('글 작성이 완료되었습니다!');
