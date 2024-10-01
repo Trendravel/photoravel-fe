@@ -7,17 +7,22 @@ import { Rating } from 'react-simple-star-rating';
 import { BottomSheetContentContainer } from './LocationDetail';
 import { FormContainer, SubmitButton } from '../pages/AddInfo.page';
 import { FileLabel, ImageInput, PreviewImage } from '../pages/AddPlace.page';
+import { getCookie } from '../api/useCookie';
+import { formDataConnection } from '../api/connectBackend';
 
 const AddReview = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParam = new URLSearchParams(location.search);
   const spotId = queryParam.get('spotfor');
+  const locationId = queryParam.get('addreviewto');
 
-  const reviewType = spotId ? 'SpotReview' : 'LocationReview';
+  const reviewType = spotId ? 'SPOT' : 'LOCATION';
 
   const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [rating, setRating] = useState<number>(0);
+  const [description, setDescriptiopn] = useState<string>("");
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -46,37 +51,45 @@ const AddReview = () => {
     document.getElementById('file-upload')!.click();
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const data = {
+        reviewId: 0,
+        reviewType: reviewType,
+        content: description,
+        rating: rating,
+        userId: getCookie('memberId'),
+        typeId: (reviewType === "LOCATION")? Number(locationId) : Number(spotId)
+    };
+
+    if (selectedPhotos.length !== 0) { // 사진이 있는 경우 form-data
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+        selectedPhotos.forEach((file, i) => {
+            console.log(`images[${i}]: `, file)
+            formData.append(`images[${i}]`, file);
+        })
+        
+        console.log(formData.get('data'));
+        console.log(formData.getAll('images[0]'));
+    } else {
+        console.log(data)
+    }
+
+  }
+
   useEffect(() => {
     console.log(reviewType);
   }, []);
 
-  //   const [imageSrc, setImageSrc] = useState<string | null>(null);
-
-  //   const handleFileSelect = (
-  //     event:
-  //       | React.ChangeEvent<HTMLInputElement>
-  //       | React.DragEvent<HTMLLabelElement>,
-  //   ) => {
-  //     const files =
-  //       event.type === 'change' ? event.target.files : event.dataTransfer.files;
-  //     if (files && files.length > 0) {
-  //       const file = files[0];
-  //       if (file.type.startsWith('image/')) {
-  //         const reader = new FileReader();
-  //         reader.onload = (e) => {
-  //           setImageSrc(e.target?.result as string);
-  //         };
-  //         reader.readAsDataURL(file);
-  //       } else {
-  //         alert('이미지 파일만 선택할 수 있습니다.');
-  //       }
-  //     }
-  //   };
-
   return (
     <BottomSheetContentContainer>
       <Title style={{ marginTop: '0.25em' }}>리뷰 작성하기</Title>
-      <FormContainer margin="auto auto 1em">
+      <FormContainer 
+        margin="auto auto 1em"
+        onSubmit={handleSubmit}
+      >
         <ImageUploadSection>
           <Label>이미지 등록하기</Label>
           <ReviewImageContainer>
@@ -141,13 +154,23 @@ const AddReview = () => {
             </PhotosLayout>
           </ReviewImageContainer>
         </ImageUploadSection>
-        <Rating iconsCount={5} allowFraction />
+        <Rating
+        iconsCount={5}
+        allowFraction
+        onClick={(e) => setRating((e <= 1)? 1: e)}
+        />
         <DescriptionArea
           onTouchStart={(e) => e.stopPropagation()}
+          onChange={(e) => setDescriptiopn(e.target.value)}
           placeholder="여기에 설명을 추가하세요"
         />
+        <SubmitButton
+        type="submit"
+        style={{width: 'fit-content', margin: 'auto'}}
+        >
+            리뷰 작성하기
+        </SubmitButton>
       </FormContainer>
-      <SubmitButton type="submit">리뷰 작성하기</SubmitButton>
     </BottomSheetContentContainer>
   );
 };
