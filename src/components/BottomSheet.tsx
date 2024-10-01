@@ -9,11 +9,11 @@ import LocationInfo, { Description, LocationImage, Rate, RatingArea } from './Lo
 import ReviewDetail from './ReviewDetail';
 import SingleSpotDetail from './SingleSpotDetail';
 import SpotDetail from './SpotDetail';
-import SpecificLocationInfo from '../api/testdata/locationSingleRead.json'
+import jsonConnection from '../api/connectBackend';
+import NotFound from '../components/NotFound';
+import { ApiResponse } from '../types/Common';
 import { Category, MultipleLocation, SingleLocation } from '../types/Location';
 import { spotMultiRead } from '../types/Spot';
-import jsonConnection from '../api/connectBackend';
-import { ApiResponse } from '../types/Common';
 
 const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>`
   z-index: 10;
@@ -108,6 +108,7 @@ const PlaceName = styled.p`
 
 const InfoContainer = styled.div`
     display: block;
+    width: 100%;
     text-align: left;
     padding: 0.1em 0.5em 0.1em 0.75em;
 `;
@@ -255,6 +256,10 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
 
     }
 
+    const isEmptyOrNull = (value: any) => {
+        return value === null || value === undefined || (Array.isArray(value) && value.length === 0);
+    }
+
     const handleTouchEnd = () => {
         isDragging.current = false;
         const currentYPos = position;
@@ -316,6 +321,10 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
         window.removeEventListener('touchend', handleTouchEnd);
         }
     }, [position])
+
+    useEffect(() => {
+        console.log("locationData: ", locationData)
+    }, [locationData])
 
     return (
         <BottomSheet
@@ -388,13 +397,19 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
                     onTouchEnd={handleContainerTouch}
                     >
                         { // 기본 조회
-                            location.pathname === "/" && !activeIndex?.toString &&
-                            locationData &&
-                            locationData!.map((data) => 
-                                <LocationInfo
-                                    key={data.locationId}
-                                    data={data}
-                                />
+                            location.pathname === "/" && !isEmptyOrNull(locationData) ? (
+                                (activeIndex === null) ? (
+                                    locationData!.map(data => (
+                                        <LocationInfo
+                                            key={data.locationId}
+                                            data={data}
+                                        />
+                                    ))
+                                ) : ( // 장소 필터링 시에는 감추기
+                                    <></>
+                                )
+                            ) : ( // 주변 장소가 없음
+                                <NotFound />
                             )
                         }
                         { // 검색어 필터링
@@ -409,17 +424,31 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
                                     <></>
                             )
                         }
-                        { // 카테고리 필터링
-                            activeIndex?.toString() &&
-                            locationData!.map((data) =>
-                                (data.category === Category[activeIndex])?
-                                    <LocationInfo
+                        {
+                            activeIndex !== null && locationData ? (
+                                locationData.map(data => 
+                                    data.category === Category[activeIndex] ? (
+                                        <LocationInfo
                                         key={data.locationId}
                                         data={data}
-                                    />:
-                                    <></>
+                                        />
+                                    ) : null
+                                ).filter(Boolean).length > 0 ? (
+                                locationData.map(data => 
+                                    data.category === Category[activeIndex] ? (
+                                        <LocationInfo
+                                            key={data.locationId}
+                                            data={data}
+                                        />
+                                    ) : null
+                                )
+                            ) : (
+                                <NotFound />
                             )
+                            ) 
+                            : null
                         }
+    
                     </LocationListContainer>
                 </>
             }

@@ -34,11 +34,6 @@ const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo
             setState(props.pos);
     }, [props.pos]);
 
-    // 스팟 마커 업데이트
-    useEffect(() => {
-        console.log("Spot Detected! ", props.spotData);
-    }, [props.spotData])
-
     useEffect(() => { // 장소 상세페이지 이동 시, 지도 이동 로직
         console.log(id)
         if (id && !spotLocationId || spotLocationId) {
@@ -59,6 +54,10 @@ const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo
 
     useKakaoLoader();
 
+    const customTexts = (size: number) => {
+        return `${Math.ceil(size / 2)}`; // 카운트를 1/2로 조정하여 배열로 반환
+    };
+
     const handleCenterChanged = useCallback(debounce((map: kakao.maps.Map) => {
         const newState: MapInfo = {
             center: {
@@ -75,6 +74,8 @@ const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo
 
         props.setIsUpdated(false);
     }, 300), [props]);
+
+    
 
     return (
         <Map
@@ -96,6 +97,8 @@ const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo
         >
             <MarkerClusterer
                 minLevel={8}
+                minClusterSize={4}
+                texts={customTexts}
             >
             {
                 (locationData) &&

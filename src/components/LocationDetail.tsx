@@ -1,15 +1,15 @@
 import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Rate } from "./LocationInfo";
 import MultipleImageViewer from "./MultipleImageViewer";
 import SmallSpotCard from "./SmallSpotCard";
-import SpotInfo from "../api/testdata/spotMultiRead.json";
-import { SingleLocation } from "../types/Location";
-import { MultiSpot, spotMultiRead } from "../types/Spot";
-import { useEffect, useState } from "react";
 import jsonConnection from "../api/connectBackend";
 import { ApiResponse } from "../types/Common";
+import { SingleLocation } from "../types/Location";
+import { spotMultiRead } from "../types/Spot";
+
 
 export const BottomSheetContentContainer = styled.div`
     display: block;
@@ -125,10 +125,10 @@ const LocationDetail = (props: {data: SingleLocation | undefined }) => {
     // TODO: 스팟 불러오기
     
     const locationData = props.data;
-    const [spotData, setSpotData] = useState<MultiSpot[] | undefined>(undefined);
+    const [spotData, setSpotData] = useState<spotMultiRead[] | undefined>(undefined);
     
     useEffect(() => {
-        jsonConnection.get<ApiResponse<MultiSpot[]>>(`/public/location/${locationData?.locationId}/spots`)
+        jsonConnection.get<ApiResponse<spotMultiRead[]>>(`/public/location/${locationData?.locationId}/spots`)
         .then((res) => {
             const data = res.data.data;
             setSpotData(data);
