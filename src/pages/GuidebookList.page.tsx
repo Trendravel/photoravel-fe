@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import filter from '../assets/images/filter.png';
 import magnifier from '../assets/images/magnifier.png';
-import BottomSheetUI from '../components/BottomSheet';
+import FilterBottomSheet from '../components/FilterBottomSheet';
 import UpperMenu from "../components/UpperMenu";
 import WriteButton from '../components/WriteButton';
 import { FilterOptions } from '../types/FilterOptions';
@@ -23,26 +23,22 @@ const GuidebookList = () => {
   const [selectedFilters, setSelectedFilters] = useState<FilterOptions>({ regions: [], sorts: [] });
   const [region, setRegion] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchGuidebooks = async () => {
-      try {
-        const response = await axios.get('http:///public/guidebooks', {
-          headers: {
-            Authorization: `Bearer `,
-            Accept: '*/*', 
-          },
-          params: {
-            region: region,
-          },
-        });
-        setFilteredGuidebooks(response.data.data);
-      } catch (error) {
-        console.error('가이드북을 가져오는 데 실패했습니다:', error);
-      }
-    };
-
-    fetchGuidebooks();
-  }, [region]);
+  const fetchGuidebooks = async () => {
+    try {
+      const response = await axios.get('http:///public/guidebooks', {
+        headers: {
+          Authorization: `Bearer `,
+          Accept: '*/*',
+        },
+        params: {
+          region: region,
+        },
+      });
+      setFilteredGuidebooks(response.data.data);
+    } catch (error) {
+      console.error('가이드북을 가져오는 데 실패했습니다:', error);
+    }
+  };
 
   const handleCardClick = (guidebook: Guidebook) => {
     navigate(`/guidebookdetail`, { state: { guidebook } });
@@ -70,10 +66,10 @@ const GuidebookList = () => {
       );
       setFilteredGuidebooks(results);
     } else {
-      fetchGuidebooks(); 
+      fetchGuidebooks();
     }
   }, [searchTerm]);
-
+  
   const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -155,7 +151,7 @@ const GuidebookList = () => {
       )}
 
       {isBottomSheetOpen && (
-        <BottomSheetUI
+        <FilterBottomSheet
           applyFilters={applyFilters}
           sortOptions={['조회수 높은 순', '최신순']}
           selectedFilters={selectedFilters}
@@ -297,7 +293,3 @@ const PostDate = styled.div`
   margin-top: 30px;
   margin-bottom: -10px;
 `;
-
-function fetchGuidebooks() {
-  throw new Error('Function not implemented.');
-}

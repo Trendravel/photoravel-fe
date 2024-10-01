@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import filter from '../assets/images/filter.png';
 import regionIcon from '../assets/images/regionIcon.png';
 import star from '../assets/images/star.png';
-import BottomSheetUI from '../components/BottomSheet';
+import FilterBottomSheet from '../components/FilterBottomSheet';
 import UpperMenu from '../components/UpperMenu';
 import { FilterOptions } from '../types/FilterOptions';
 import { Photographer } from '../types/Photographer';
@@ -127,7 +127,7 @@ const PhotographerList = () => {
       )}
 
       {isBottomSheetOpen && (
-        <BottomSheetUI 
+        <FilterBottomSheet 
           applyFilters={({ regions, sorts }) => applyFilters({ regions, sorts })}
           sortOptions={['평점 높은 순', '경력 높은 순', '매칭 많은 순', '리뷰 많은 순']}
           selectedFilters={selectedFilters}
