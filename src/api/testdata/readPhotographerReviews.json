@@ -1,0 +1,41 @@
+[
+    {
+        "reviewType": "PHOTOGRAPHER",
+        "content": "작가님과의 촬영이 정말 즐거웠습니다! 자연스러운 포즈를 이끌어내는 능력이 뛰어나서 결과물이 기대 이상이었어요.",
+        "rating": 3.8,
+        "images": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH2OHQT42aDM0HvZPnNV_l_SjSC_xIOUV-PQ&s",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPpeXjN0RHkuguRLFrevmmraE0CKgrXZ4gYvl4Wvt_4TNv25NQz5_IvZrTO7MI3-7_HPU&usqp=CAU"
+        ],
+        "userName": "언제든떠나고싶은",
+        "createdAt": "2024-03-14T00:00:00Z",
+        "updatedAt": "2024-03-15T00:00:00Z",
+        "reviewId": 1
+    },
+    {
+        "reviewType": "PHOTOGRAPHER",
+        "content": "작가님과의 촬영에서 정말 멋진 사진을 남길 수 있었습니다! 자연스러운 분위기를 잘 살려주셔서 좋았어요.",
+        "rating": 4.3,
+        "images": [
+            "https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfMjAw/MDAxNDk2Nzc3NzgwNTcw.eHREFuBbOQtzI0ei7_AvC_HO1Lob_phPrEfM9Xpy5qYg._3OY5u-RPiJuSlrB3SzKTT9ByzOlnirO3Z2-rJwFq14g.JPEG.cooljemes/170408_195.jpg?type=w800",
+            "https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfMjkw/MDAxNDk2Nzc3NzgwODI4.AYd79-5HXlX89i7cUle2RHo9CiUubV1tuosRhLxRgVwg.bZd1xWF-zourqH68tgvpyy25ZSW7XOKqOsnjLg-_8pkg.JPEG.cooljemes/170408_189.jpg?type=w800",
+            ""
+        ],
+        "userName": "hee야웅",
+        "createdAt": "2023-12-19T00:00:00Z",
+        "updatedAt": null,
+        "reviewId": 2
+    },
+    {
+        "reviewType": "PHOTOGRAPHER",
+        "content": "정말 친절하시고 사진 촬영이 어색했는데 작가님께서 자연스러운 포즈도 추천해주셔서 수월하게 사진 촬영을 할 수 있었습니다!",
+        "rating": 3.4,
+        "images": [
+            "https://mblogthumb-phinf.pstatic.net/MjAyNDAxMDVfMjMz/MDAxNzA0NDE3OTQ4MzEy.y1iuGpsE6Siyy87HMChevulJDXBDkrm_-Qw8BMpC-Ewg.1dass_1dl9uUO420-q_boHJD5XIPZSW0nW3U0NZ5SQkg.JPEG.gjalswjd9/IMG_2929.JPG?type=w800"
+        ],
+        "userName": "혜니",
+        "createdAt": "2023-08-26T00:00:00Z",
+        "updatedAt": null,
+        "reviewId": 3
+    }
+]
