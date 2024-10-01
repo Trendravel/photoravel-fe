@@ -3,8 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import SideMenu from "./SideMenu";
-import LogoImage from "../assets/images/c78932b8e701f058.png";
-
+import LogoImage from "../assets/images/logo.png";
 
 const UpperMenu = () => {
     const navigate = useNavigate();

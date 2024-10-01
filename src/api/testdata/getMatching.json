@@ -1,0 +1,28 @@
+[
+    {
+      "memberId": "user123",
+      "photographerId": "photog1",
+      "matchingStatus": "Accepted"
+    },
+    {
+      "memberId": "user456",
+      "photographerId": "photog2",
+      "matchingStatus": "Pending"
+    },
+    {
+      "memberId": "user789",
+      "photographerId": "photog3",
+      "matchingStatus": "Rejected"
+    },
+    {
+      "memberId": "user101",
+      "photographerId": "photog4",
+      "matchingStatus": "Accepted"
+    },
+    {
+      "memberId": "user202",
+      "photographerId": "photog5",
+      "matchingStatus": "Pending"
+    }
+  ]
+  

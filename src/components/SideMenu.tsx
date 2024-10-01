@@ -128,21 +128,22 @@ const SideMenu: React.FC<SidebarProps> = ({isOpen, toggleMenu}) => {
             }
             </UserContainer>
             <Option to="/addplace">장소 등록</Option>
-            <Option to="/guidebook">가이드북</Option>
-            <Option to="/findguide">가이드 찾기</Option>
-            {
-                isLoggedIn &&
-                <BottomRightText
-                    onClick={() => {
-                        doLogout()
-                        setIsLoggedIn(false)
-                    }}
-                >
-                    로그아웃
-                </BottomRightText>
-            }
-            
-        </Container>
+            <Option to="/guidebooklist">가이드북</Option>
+            <Option to="/photographerlist">사진작가 찾기</Option>
+            {/* {isLoggedIn && ( */}
+                    <>
+                        <Option to="/editprofile">프로필 수정</Option>
+                        <BottomRightText
+                            onClick={() => {
+                                doLogout();
+                                setIsLoggedIn(false);
+                            }}
+                        >
+                            로그아웃
+                        </BottomRightText>
+                    </>
+                {/* )} */}
+            </Container>
         <Background isOpen={isOpen} onClick={toggleMenu}/>
         </>
     )
