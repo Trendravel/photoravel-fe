@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { jsonConnection } from '../api/connectBackend';
@@ -14,12 +14,15 @@ import { Review } from '../types/Review';
 
 const PhotographerDetail = () => {
   const navigate = useNavigate();
-  const { photographerId } = useParams<{ photographerId: string }>();
-  const [photographer, setPhotographer] = useState<Photographer | null>(null);
+  const location = useLocation();
+  const [photographer, setPhotographer] = useState<Photographer | null>(location.state.photographer);
+  const [photographerId, setPhotographerId] = useState<string|undefined>(photographer?.accountId);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isMatched, setIsMatched] = useState<boolean>(false);
 
-  const currentUserId = getCookie('accountId');
+  const currentUserId = getCookie('memberId');
+  const currentPhotographerId = getCookie('accountId');
+  console.log(currentUserId, currentPhotographerId, photographerId)
 
   useEffect(() => {
     const fetchPhotographerDetail = async () => {
@@ -192,7 +195,7 @@ const PhotographerDetail = () => {
                 </Stat>
               </StatsContainer>
               <RequestQuoteButton onClick={handleRequestButtonClick}>
-                {photographerId === currentUserId ? '매칭 현황' : (isMatched ? '매칭 현황' : '매칭 요청')}
+                {photographerId === currentPhotographerId ? '매칭 현황' : (isMatched ? '매칭 현황' : '매칭 요청')}
               </RequestQuoteButton>
             </ProfileInfo>
           </ProfileInfoContainer>
