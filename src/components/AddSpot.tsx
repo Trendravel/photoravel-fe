@@ -1,7 +1,15 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 
+import SubMap from '../components/SubMap';
+import UpperMenu from '../components/UpperMenu';
+import { Position } from '../types/Position';
+
 const AddSpot = () => {
+  const [selectedPos, setSelectedPos] = useState<Position>({
+    latitude: 0,
+    longitude: 0,
+  });
   const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
 
@@ -33,86 +41,94 @@ const AddSpot = () => {
   };
 
   return (
-    <Container>
-      <Header>📍 장소 등록하기</Header>
-      <MapContainer>{/* 지도 컴포넌트가 들어갈 자리 */}</MapContainer>
-      <ImageUploadSection>
-        <Label>이미지 등록하기</Label>
-        <ReviewImageContainer>
-          <PhotosLayout>
-            {previews.length > 0 && (
-              <PreviewImageLayout>
-                {previews.map((preview, index) => (
-                  <PreviewImageContainer key={index}>
-                    <PreviewImageWrapper>
-                      <PreviewImage src={preview} />
-                    </PreviewImageWrapper>
-                    <RemoveButton
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      onClick={() => handleRemove(index)}
-                    >
-                      <FillBlack
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2Z"
-                        vectorEffect="non-scaling-stroke"
-                      />
-                      <StrokeWhite
-                        d="M7 7L13 13M13 7L7 13"
-                        vectorEffect="non-scaling-stroke"
-                      />
-                    </RemoveButton>
-                  </PreviewImageContainer>
-                ))}
-              </PreviewImageLayout>
-            )}
-            <UploadImageBoxInput
-              id="file-upload"
-              type="file"
-              accept="image/jpg, image/gif, image/png, image/jpeg, image/heic, image/webp"
-              multiple
-              onChange={handleFileChange}
-            />
-            <UploadImageBoxContainer onClick={handleUploadClick}>
-              <UploadImageBoxHiddenInput />
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                color="black"
-              >
-                <StrokeBlack
-                  d="M10 4V10M10 10V16M10 10H4M10 10H16"
-                  strokeMiterlimit="10"
-                  vectorEffect="non-scaling-stroke"
-                />
-              </svg>
-              <UploadImageCount>
-                {selectedPhotos ? `${selectedPhotos.length} / 10` : '+'}
-              </UploadImageCount>
-            </UploadImageBoxContainer>
-          </PhotosLayout>
-        </ReviewImageContainer>
-      </ImageUploadSection>
-      <Label>장소 이름</Label>
-      <Input type="text" placeholder="장소 이름을 입력하세요" />
-      <Label>장소 설명</Label>
-      <Description rows={4} placeholder="장소에 대한 설명을 입력하세요" />
-      <RegisterButton>장소 등록</RegisterButton>
-    </Container>
+    <FixedBox>
+      <Container>
+        <UpperMenu />
+        <Header>📍 장소 등록하기</Header>
+        <SubMap pos={selectedPos} setPos={setSelectedPos} />
+        <ImageUploadSection>
+          <Label>이미지 등록하기</Label>
+          <ReviewImageContainer>
+            <PhotosLayout>
+              {previews.length > 0 && (
+                <PreviewImageLayout>
+                  {previews.map((preview, index) => (
+                    <PreviewImageContainer key={index}>
+                      <PreviewImageWrapper>
+                        <PreviewImage src={preview} />
+                      </PreviewImageWrapper>
+                      <RemoveButton
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        onClick={() => handleRemove(index)}
+                      >
+                        <FillBlack
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2Z"
+                          vectorEffect="non-scaling-stroke"
+                        />
+                        <StrokeWhite
+                          d="M7 7L13 13M13 7L7 13"
+                          vectorEffect="non-scaling-stroke"
+                        />
+                      </RemoveButton>
+                    </PreviewImageContainer>
+                  ))}
+                </PreviewImageLayout>
+              )}
+              <UploadImageBoxInput
+                id="file-upload"
+                type="file"
+                accept="image/jpg, image/gif, image/png, image/jpeg, image/heic, image/webp"
+                multiple
+                onChange={handleFileChange}
+              />
+              <UploadImageBoxContainer onClick={handleUploadClick}>
+                <UploadImageBoxHiddenInput />
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  color="black"
+                >
+                  <StrokeBlack
+                    d="M10 4V10M10 10V16M10 10H4M10 10H16"
+                    strokeMiterlimit="10"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </svg>
+                <UploadImageCount>
+                  {selectedPhotos ? `${selectedPhotos.length} / 10` : '+'}
+                </UploadImageCount>
+              </UploadImageBoxContainer>
+            </PhotosLayout>
+          </ReviewImageContainer>
+        </ImageUploadSection>
+        <Label>장소 이름</Label>
+        <Input type="text" placeholder="장소 이름을 입력하세요" />
+        <Label>장소 설명</Label>
+        <Description rows={4} placeholder="장소에 대한 설명을 입력하세요" />
+        <RegisterButton>장소 등록</RegisterButton>
+      </Container>
+    </FixedBox>
   );
 };
+
+const FixedBox = styled.div`
+  position: fixed;
+`;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 6em;
   font-family: 'Arial', sans-serif;
 `;
 
