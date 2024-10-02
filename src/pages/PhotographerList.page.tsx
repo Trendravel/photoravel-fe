@@ -25,8 +25,8 @@ const PhotographerList = () => {
   const [filteredPhotographers, setFilteredPhotographers] = useState<Photographer[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
   const [noResults, setNoResults] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<FilterOptions>({ regions: [], sorts: [] });
-  const [region, setRegion] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<FilterOptions>({ regions: ["아산"], sorts: ["경력 높은 순"] });
+  const [region, setRegion] = useState<string[]>(["아산"]);
 
   useEffect(() => {
     const fetchPhotographers = async () => {
