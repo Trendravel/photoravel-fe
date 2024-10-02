@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import AccountDelete from "./pages/AccountDelete.page";
 import AddInfo from "./pages/AddInfo.page";
 import AddPlace from "./pages/AddPlace.page";
+import AddSpot from "./pages/AddSpot.page";
 import EditProfile from "./pages/EditProfile.page";
 import GuidebookDetail from "./pages/GuidebookDetail.page";
 import GuidebookList from "./pages/GuidebookList.page";
@@ -111,6 +112,11 @@ const routes: RouteElement[] = [
     {
         path: '/addplace',
         element: <AddPlace/>,
+        errorElement: <NotFound/>
+    },
+    {
+        path: '/addspot',
+        element: <AddSpot/>,
         errorElement: <NotFound/>
     },
     {

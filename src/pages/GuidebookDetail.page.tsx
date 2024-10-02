@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
 
@@ -11,15 +11,16 @@ import { Guidebook } from '../types/Guidebook';
 
 const GuidebookDetail = () => {
   const navigate = useNavigate();
-  const [guidebook, setGuidebook] = useState<Guidebook | null>(null);
+  const location = useLocation();
+  const [guidebook, setGuidebook] = useState<Guidebook | null>(location.state.guidebook);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState('');
   const [updatedContent, setUpdatedContent] = useState('');
 
-  const guidebookId = getCookie('guidebookId');
-
+  const guidebookId = guidebook?.id;
+  
   useEffect(() => {
     const fetchUserId = () => {
       const loggedInUserId = getCookie('memberId');

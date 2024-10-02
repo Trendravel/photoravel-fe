@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { CategoryButton } from "./BottomSheet";
 import FullMultipleImageViewer from "./FullMultipleImageViewer";
-import { BottomSheetContentContainer, ControlContainer } from "./LocationDetail";
+import { BottomSheetContentContainer } from "./LocationDetail";
 import NotFound from "./NotFound";
 import { jsonConnection } from "../api/connectBackend";
 import MultipleImageIconFile from "../assets/images/gallery.png";
@@ -92,7 +92,6 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
     const [rateAverage, setRateAverage] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const [images, setImages] = useState([""]);
-    const [totalRate, setTotalRate] = useState(0);
 
     const calculateAverageRate = (reviews: SingleReview[]) => {
         if (reviews.length === 0) return 0;
@@ -116,10 +115,25 @@ const ReviewDetail = () => { // 상세 리뷰 조회 & 리뷰 업로드
                 }
             })
             .catch((e) => {
-                alert("장소 리뷰를 불러오는데 실패했습니다!")
                 console.error(e);
             })
-        }        
+        } else if (reviewType === "SPOT") {
+            jsonConnection.get<ApiResponse<SingleReview[]>>(`/public/location/${locationId}/spot/${spotId}/detail/reviews`)
+            .then((res) => {
+                const data = res.data.data;
+                if (data) {
+                    setReviews(data);
+                    setReviewCount(data.length);
+
+                    const average = calculateAverageRate(data);
+                    setRateAverage(average);
+                    
+                }
+            })
+            .catch((e) => {
+                console.error(e);
+            })
+        }   
 
         console.log(reviewType);
     }, [])

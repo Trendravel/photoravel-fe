@@ -1,17 +1,99 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { formDataConnection, jsonConnection } from '../api/connectBackend';
+import { getCookie } from '../api/useCookie';
+import SubMap from '../components/SubMap';
+import UpperMenu from '../components/UpperMenu';
+import { Position } from '../types/Position';
 
 import SubMap from '../components/SubMap';
 import UpperMenu from '../components/UpperMenu';
 import { Position } from '../types/Position';
 
 const AddSpot = () => {
+<<<<<<< HEAD:src/components/AddSpot.tsx
   const [selectedPos, setSelectedPos] = useState<Position>({
     latitude: 0,
     longitude: 0,
   });
+=======
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const locationId = queryParams.get('spotfor');
+  const navigate = useNavigate();
+
+>>>>>>> 26da1e2 (fix: 가이드북 필터링, 가이드북 데이터핸들링 수정):src/pages/AddSpot.page.tsx
   const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [selectedPos, setSelectedPos] = useState<Position>({
+    latitude: 0,
+    longitude: 0
+  });
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+
+
+  const validateForm = () => { // 폼 무결성 검사
+
+    if (selectedPos.latitude === 0) {
+      alert("지도를 클릭하여 위치를 선택하세요!")
+      return false;
+    }
+        
+    if (title === "") {
+      alert("장소 이름을 입력하세요!");
+      return false;
+    }
+
+    if (description.length < 10) {
+      alert("설명은 최소 10자 이상 입력하세요!")
+      return false;
+    }
+
+    return true;
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      const formData = new FormData();
+      
+      const data = {
+        "spotId": 0,
+        "locationId": locationId,
+        "latitude": selectedPos.latitude,
+        "longitude": selectedPos.longitude,
+        "description": description,
+        "title": title,
+        "userId": getCookie("memberId")
+      }
+
+      formData.append("data", JSON.stringify(data));
+      
+      if (selectedPhotos) {
+        selectedPhotos.forEach((file) =>
+          formData.append('images', file)
+        )
+          
+        formDataConnection.post('/private/spot/create', formData)
+        .then((res) => {
+          console.log(res);
+          navigate(`/`); 
+        })
+        .catch((e) => console.log(e) )
+      } else {
+        jsonConnection.post('/private/spot/create', JSON.stringify(data))
+        .then((res) => { 
+          console.log(res)
+          navigate(`/`); 
+        })
+        .catch((e) => console.log(e) )
+      }    
+    }
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -41,6 +123,7 @@ const AddSpot = () => {
   };
 
   return (
+<<<<<<< HEAD:src/components/AddSpot.tsx
     <FixedBox>
       <Container>
         <UpperMenu />
@@ -117,6 +200,96 @@ const AddSpot = () => {
         <RegisterButton>장소 등록</RegisterButton>
       </Container>
     </FixedBox>
+=======
+    <Container>
+      <UpperMenu/>
+      <Header>📍 장소 등록하기</Header>
+      <SubMap
+      pos={selectedPos}
+      setPos={setSelectedPos}
+      height="25vh"
+      />
+      <ImageUploadSection>
+        <Label>이미지 등록하기</Label>
+        <ReviewImageContainer>
+          <PhotosLayout>
+            {previews.length > 0 && (
+              <PreviewImageLayout>
+                {previews.map((preview, index) => (
+                  <PreviewImageContainer key={index}>
+                    <PreviewImageWrapper>
+                      <PreviewImage src={preview} />
+                    </PreviewImageWrapper>
+                    <RemoveButton
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      onClick={() => handleRemove(index)}
+                    >
+                      <FillBlack
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2Z"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                      <StrokeWhite
+                        d="M7 7L13 13M13 7L7 13"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    </RemoveButton>
+                  </PreviewImageContainer>
+                ))}
+              </PreviewImageLayout>
+            )}
+            <UploadImageBoxInput
+              id="file-upload"
+              type="file"
+              accept="image/jpg, image/gif, image/png, image/jpeg, image/heic, image/webp"
+              multiple
+              onChange={handleFileChange}
+            />
+            <UploadImageBoxContainer onClick={handleUploadClick}>
+              <UploadImageBoxHiddenInput />
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                color="black"
+              >
+                <StrokeBlack
+                  d="M10 4V10M10 10V16M10 10H4M10 10H16"
+                  strokeMiterlimit="10"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+              <UploadImageCount>
+                {selectedPhotos ? `${selectedPhotos.length} / 10` : '+'}
+              </UploadImageCount>
+            </UploadImageBoxContainer>
+          </PhotosLayout>
+        </ReviewImageContainer>
+      </ImageUploadSection>
+      <Label>장소 이름</Label>
+      <Input
+      type="text"
+      placeholder="장소 이름을 입력하세요"
+      onChange={(e) => setTitle(e.target.value)}
+      />
+      <Label>장소 설명</Label>
+      <Description
+      rows={4}
+      placeholder="장소에 대한 설명을 입력하세요"
+      onChange={(e) => setDescription(e.target.value)}
+      />
+      <RegisterButton onClick={handleSubmit}>
+        장소 등록
+      </RegisterButton>
+    </Container>
+>>>>>>> 26da1e2 (fix: 가이드북 필터링, 가이드북 데이터핸들링 수정):src/pages/AddSpot.page.tsx
   );
 };
 
@@ -129,25 +302,20 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 6em;
+<<<<<<< HEAD:src/components/AddSpot.tsx
   font-family: 'Arial', sans-serif;
+=======
+>>>>>>> 26da1e2 (fix: 가이드북 필터링, 가이드북 데이터핸들링 수정):src/pages/AddSpot.page.tsx
 `;
 
 const Header = styled.h1`
   font-size: 24px;
-  margin: 20px 0;
-`;
-
-const MapContainer = styled.div`
-  width: 25rem;
-  height: 300px; /* 원하는 높이 설정 */
-  background-color: #eaeaea; /* 맵의 배경색 */
-  border-radius: 10px;
-  margin-bottom: 20px;
+  margin: 0 0 10px;
 `;
 
 const ImageUploadSection = styled.div`
   text-align: center;
-  margin-bottom: 20px;
+  margin: 20px;
 `;
 
 const ReviewImageContainer = styled.div`
@@ -260,7 +428,7 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  width: 23.75rem;
+  width: 85%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -268,7 +436,7 @@ const Input = styled.input`
 `;
 
 const Description = styled.textarea`
-  width: 23.75rem;
+  width: 85%;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
@@ -277,7 +445,7 @@ const Description = styled.textarea`
 `;
 
 const RegisterButton = styled.button`
-  width: 25rem;
+  width: 85%;
   padding: 10px 20px;
   background-color: #ff6b6b;
   color: white;

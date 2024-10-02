@@ -138,11 +138,8 @@ const LocationDetail = (props: {data: SingleLocation | undefined }) => {
             const data = res.data.data;
             setSpotData(data);
             
-            if (spotData)
-                console.log(spotData);
         })
         .catch((e) => {
-            alert("스팟을 불러오는데 실패했습니다!");
             console.error(e);
         })
     }, [])

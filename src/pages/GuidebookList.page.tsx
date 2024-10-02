@@ -20,8 +20,8 @@ const GuidebookList = () => {
   const [filteredGuidebooks, setFilteredGuidebooks] = useState<Guidebook[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
   const [noResults, setNoResults] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<FilterOptions>({ regions: [], sorts: [] });
-  const [region, setRegion] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<FilterOptions>({ regions: ['아산'], sorts: ['최신순'] });
+  const [region, setRegion] = useState<string[]>(['아산']);
 
   const fetchGuidebooks = async () => {
     try {
@@ -60,7 +60,10 @@ const GuidebookList = () => {
       fetchGuidebooks();
     }
   }, [searchTerm]);
-  
+
+  useEffect(() => {
+    fetchGuidebooks();
+  }, [region])
   const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -89,6 +92,7 @@ const GuidebookList = () => {
     if (regions.length > 0 || sorts.length > 0) {
       toggleBottomSheet();
     }
+    fetchGuidebooks();
   };
 
   return (
@@ -130,7 +134,7 @@ const GuidebookList = () => {
       ) : (
         (isFiltered ? filteredGuidebooks : filteredGuidebooks).map((guidebook) => (
           <PostContainer key={guidebook.id} onClick={() => handleCardClick(guidebook)}>
-            <PostImage src={guidebook.images[0]} alt={guidebook.title} />
+            <PostImage src={guidebook.image} alt={guidebook.title} />
             <PostUser>{guidebook.userId}</PostUser>
             <PostView>조회 {guidebook.views}</PostView>
             <PostTextContainer>

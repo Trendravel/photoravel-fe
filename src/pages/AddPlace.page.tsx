@@ -178,7 +178,7 @@ const AddPlace = () => {
             formData.append("data", JSON.stringify(data));
             
             if (image) {
-                formData.append('images[0]', image);
+                formData.append('images', image);
                 formDataConnection.post('/private/location/create', formData)
                 .then((res) => { console.log(res); navigate('/'); })
                 .catch((e) => console.log(e) )

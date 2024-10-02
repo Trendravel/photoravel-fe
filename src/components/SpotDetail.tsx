@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { CategoryButton } from "./BottomSheet";
 import { BottomSheetContentContainer } from "./LocationDetail";
 import MediumSpotCard from "./MediumSpotCard";
 import { InfoText, SimplifiedInfoContainer } from "./ReviewDetail";
-import { spotMultiRead } from "../types/Spot";
 import { jsonConnection } from "../api/connectBackend";
 import { ApiResponse } from "../types/Common";
-import { useLocation } from "react-router-dom";
+import { spotMultiRead } from "../types/Spot";
 
 const SpotListContainer = styled.div`
     margin-top: 1em;
@@ -16,6 +16,7 @@ const SpotListContainer = styled.div`
 
 const SpotDetail = (props: {selectedSpotData: spotMultiRead[] | null, setSelectedSpotData: (data: spotMultiRead[] | null) => void}) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const queryParam = new URLSearchParams(location.search);
     const locationId = queryParam.get('spotfor');
     const [spotData, setSpotData] = useState<spotMultiRead[] | null>(null);
@@ -30,13 +31,12 @@ const SpotDetail = (props: {selectedSpotData: spotMultiRead[] | null, setSelecte
         })
         .catch((e) => {
             console.error(e);
-            alert("스팟을 불러오는 데 실패했습니다!")
         })
     }, [])
     
     useEffect(() => {
         props.setSelectedSpotData(spotData);
-    }, [])
+    }, [spotData])
     
     return (
         <BottomSheetContentContainer>
@@ -52,7 +52,10 @@ const SpotDetail = (props: {selectedSpotData: spotMultiRead[] | null, setSelecte
                         {spotData.length}개
                     </InfoText>
                 </div>
-                <CategoryButton color="#FF808A">
+                <CategoryButton
+                color="#FF808A"
+                onClick={() => navigate(`/addspot?spotfor=${locationId}`)}
+                >
                     + 스팟 등록하기
                 </CategoryButton>
                 </SimplifiedInfoContainer>

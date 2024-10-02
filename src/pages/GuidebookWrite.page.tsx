@@ -78,7 +78,7 @@ const GuidebookWrite = () => {
       return;
     }
 
-    const userId = getCookie('userId');
+    const userId = getCookie('memberId');
 
     const formData = new FormData();
 
@@ -93,7 +93,7 @@ const GuidebookWrite = () => {
       updatedAt: new Date().toISOString(),
     };
 
-    formData.append('data', new Blob([JSON.stringify(guidebookData)], { type: 'application/json' }));
+    formData.append('data', JSON.stringify(guidebookData));
 
     images.forEach((image) => {
       formData.append('images', image);

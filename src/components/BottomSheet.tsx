@@ -207,7 +207,6 @@ const BottomSheetUI = (props: { locationData: MultipleLocation[] | null, selecte
                 }
             })
             .catch((e) => {
-                alert("장소가 없습니다!");
                 console.error(e);
             });
         }
