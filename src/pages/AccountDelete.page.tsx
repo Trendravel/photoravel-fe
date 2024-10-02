@@ -13,7 +13,7 @@ const AccountDelete = () => {
 
     const token = getCookie('token');
     const accountId = token ? JSON.parse(atob(token.split('.')[1])).accountId : '';
-    const photographerId = getCookie('photographerId');
+    const photographerId = getCookie('accountId');
 
     const handleAccountDelete = async () => {
         if (!isAgreed) { 

@@ -41,10 +41,9 @@ const GuidebookList = () => {
   };
 
   const handleWriteButtonClick = () => {
-    navigate('/guidebookwrite');
-    const userId = getCookie('userId');
+    const currentUserId = getCookie('memberId');
 
-    if (userId) {
+    if (currentUserId) {
       navigate('/guidebookwrite');
     } else {
       navigate('/login');
@@ -101,7 +100,7 @@ const GuidebookList = () => {
       <SearchContainer style={{ position: 'relative' }}>
         <SearchInput
           type="text"
-          placeholder="검색어를 입력하세요"
+          placeholder="가이드북 제목으로 검색하세요"
           value={searchTerm}
           onChange={handleSearchInputChange}
           style={{ paddingRight: '30px' }}

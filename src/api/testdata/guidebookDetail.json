@@ -1,10 +1,9 @@
 [
     {
-        "id": 1,
         "userId": "여행감자",
         "title": "아산의 매력적인 관광 명소들",
         "content": "아산은 충청남도 중부에 위치한 도농복합형 도시로, 천안과 함께 충남 서북부권의 중심지 역할을 하고 있습니다. 주요 관광지로는 온양온천, 아산 온양민속박물관, 아산 온천랜드 등이 있습니다. 온양온천은 아산의 대표적인 관광명소로, 천연 온천수와 다양한 온천 체험 시설을 갖추고 있으며, 온천 외에도 온천 박물관, 온천 시장 등 볼거리와 즐길거리가 풍부합니다. 아산 온양민속박물관은 아산의 전통문화와 민속을 소개하는 박물관으로, 전통가옥, 민속 전시물 등을 볼 수 있으며, 전통 공예 체험 프로그램도 운영하고 있습니다.",
-        "region": "아산시",
+        "region": "아산",
         "views": 63,
         "images": [
             "https://mblogthumb-phinf.pstatic.net/20160730_233/aaaa123krkr_1469804785178Kn5Dj_JPEG/image_4149187211469804847203.jpg?type=w800"
@@ -13,11 +12,10 @@
         "updatedAt": null
     },
     {
-        "id": 2,
         "userId": "감자돌이",
         "title": "한국관광 충남 관광지 8곳 선정",
         "content": "예산군은 아름다운 자연과 역사적인 유적이 어우러져 있는 지역입니다. 특히, 예산의 덕산온천과 예산향교는 많은 관광객들에게 사랑받고 있습니다. 이곳에서 한국의 전통문화를 체험하고, 편안한 휴식을 즐겨보세요.",
-        "region": "예산군",
+        "region": "예산",
         "views": 23,
         "images": [
             "https://lh3.googleusercontent.com/proxy/BTkYmrxTMn3npcu3DjyjPFVBSzgzr83Xlpu2nejGUMhLYyZc1arC4ixzYT7BeHYR60MFqUUPwF3mnunTbbBRZVq56RmxBIvOQ14-sWXt"
@@ -26,11 +24,10 @@
         "updatedAt": null
     },
     {
-        "id": 3,
         "userId": "트리퍼",
         "title": "충남 태안으로 가을여행 가볼까?",
         "content": "태안은 아름다운 해변과 자연경관이 매력적인 여행지입니다. 특히, 태안 해변에서의 일몰은 잊지 못할 경험을 선사합니다. 해변가에서의 산책과 함께 해산물 요리도 즐겨보세요.",
-        "region": "태안군",
+        "region": "태안",
         "views": 38,
         "images": [
             "https://www.sbnnews.co.kr/data/photos/20210936/art_16311747905271_728b06.jpg"
@@ -43,7 +40,7 @@
         "userId": "트래블러버",
         "title": "핫한 아산 관광지",
         "content": "아산시는 온천과 함께 다양한 문화유산이 가득한 도시입니다. 특히, 아산 외암마을의 전통가옥과 아름다운 경치가 방문객들에게 인기를 끌고 있습니다. 이곳에서 한국 전통 문화를 느껴보세요.",
-        "region": "아산시",
+        "region": "아산",
         "views": 54,
         "images": [
             "https://mblogthumb-phinf.pstatic.net/20160523_123/whddn1469_14639980365491i52w_JPEG/CYMERA_20160523_181207.jpg?type=w800"
@@ -52,11 +49,10 @@
         "updatedAt": null
     },
     {
-        "id": 5,
         "userId": "세계방랑자",
         "title": "국내 여행 고수들이 소개한 충남 명소 BEST 6",
         "content": "천안시는 역사와 문화가 어우러진 도시로, 특히 유관순열사 기념관과 천안 삼거리 공원이 유명합니다. 이곳에서 한국의 역사와 아름다운 경치를 함께 즐겨보세요.",
-        "region": "천안시",
+        "region": "천안",
         "views": 85,
         "images": [
             "https://cdn.ardentnews.co.kr/news/photo/202405/3254_15030_1258.jpg"
@@ -65,11 +61,10 @@
         "updatedAt": null
     },
     {
-        "id": 6,
         "userId": "세계정복",
         "title": "충남 서산 주변의 관광 명소",
         "content": "서산시는 자연경관이 뛰어난 지역으로, 간월도와 서산 해미읍성이 유명합니다. 이곳에서의 산책과 함께 서산의 맛있는 해산물 요리도 놓치지 마세요.",
-        "region": "서산시",
+        "region": "서산",
         "views": 121,
         "images": [
             "https://cdn.imweb.me/thumbnail/20190505/5cce19e7b096e.jpg"

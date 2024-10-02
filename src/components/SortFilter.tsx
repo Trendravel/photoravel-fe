@@ -29,21 +29,20 @@ const SortContainer = styled.div`
   display: flex;
   flex-direction: column; 
   align-items: flex-start;
-  padding: 0.2em 1.5em;
+  padding: 0em 1.0em;
 `;
 
 const Label = styled.p`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  margin-top: 20px;
-  margin-left: -4px;
+  margin-top: 15px;
 `;
 
 const SortButtonContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.2em;
-  padding: 10px 0;
+  padding: 13px 5px;
   justify-items: center;
 `;
 
