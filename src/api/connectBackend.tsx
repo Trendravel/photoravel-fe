@@ -43,7 +43,7 @@ jsonConnection.interceptors.response.use(
     },
     async (error: AxiosError) => {
         const originalRequest = error.config;
-        const errorCode = error.response?.data?.result?.resultCode;
+        const errorCode = error.response?.status;
 
         if (errorCode === 2001) {
             if (isRefreshing) {
@@ -51,8 +51,8 @@ jsonConnection.interceptors.response.use(
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 }).then((token) => {
-                    originalRequest.headers['Authorization'] = `Bearer ${token}`;
-                    return jsonConnection(originalRequest);
+                    originalRequest!.headers['Authorization'] = `Bearer ${token}`;
+                    return jsonConnection(originalRequest!);
                 });
             }
 
@@ -66,9 +66,9 @@ jsonConnection.interceptors.response.use(
                 failedQueue.forEach(({ resolve }) => resolve(newToken));
                 failedQueue.length = 0; // 큐 비우기
 
-                originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+                originalRequest!.headers['Authorization'] = `Bearer ${newToken}`;
                 
-                return jsonConnection(originalRequest); // 원래 요청 재시도
+                return jsonConnection(originalRequest!); // 원래 요청 재시도
             } catch (err) {
                 console.error("Token refresh failed: ", err);
                 // 큐에 있는 요청을 거부

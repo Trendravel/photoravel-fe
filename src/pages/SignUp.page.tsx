@@ -86,10 +86,10 @@ const SignUp = () => {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
 
-    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLLabelElement>) => {
-        const files = event.type === 'change' ? event.target.files : event.dataTransfer.files;
-        if (files && files.length > 0) {
-            const file = files[0];
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let file: File | null;
+        if (event.target.files) {
+            file = event.target.files[0];
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -101,7 +101,8 @@ const SignUp = () => {
                 alert('이미지 파일만 선택할 수 있습니다.');
             }
         }
-    };
+       
+    }
 
     const activateCheck = (i: number) => {
         if (userType === "user") {
@@ -196,7 +197,7 @@ const SignUp = () => {
     const userFormData = () => {
         const userData = new FormData();
         
-        const data: { memberId?: string; password: string; name: string; accountId?: string; region?: string; description?: string; nickname?: string; email?: string; careerYear: number; } = {
+        const data: { memberId?: string; password: string; name: string; accountId?: string; region?: string; description?: string; nickname?: string; email?: string; careerYear?: number; } = {
             password: password,
             name: name,
         };
@@ -228,7 +229,7 @@ const SignUp = () => {
             const userData = userFormData();
 
             try {
-                const response = await formDataConnection.post(BACKEND_ADDRESS+`/public/photographers/join`, userData).then(() => {
+                await formDataConnection.post(BACKEND_ADDRESS+`/public/photographers/join`, userData).then(() => {
                     alert("회원가입이 완료되었습니다!");
                      navigate('/photographer/login');
                 })
@@ -283,7 +284,6 @@ const SignUp = () => {
                         height="6em"
                         htmlFor="imageUpload"
                         onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleFileSelect}
                         >
                             {imageSrc ?
                                 (
@@ -371,7 +371,6 @@ const SignUp = () => {
                         height="6em"
                         htmlFor="imageUpload"
                         onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleFileSelect}
                         >
                             {imageSrc ?
                                 (

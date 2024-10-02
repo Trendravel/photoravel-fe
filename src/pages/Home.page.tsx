@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
 import { jsonConnection } from "../api/connectBackend";
-import LocationInfoData from '../api/testdata/locationMultiRead.json';
 import BottomSheet from "../components/BottomSheet";
 import Map from "../components/Map";
 import PanButton from "../components/PanButton";

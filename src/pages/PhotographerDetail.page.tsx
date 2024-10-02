@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { jsonConnection } from '../api/connectBackend';
@@ -16,7 +16,7 @@ const PhotographerDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [photographer, setPhotographer] = useState<Photographer | null>(location.state.photographer);
-  const [photographerId, setPhotographerId] = useState<string|undefined>(photographer?.accountId);
+  const [photographerId] = useState<string|undefined>(photographer?.accountId);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isMatched, setIsMatched] = useState<boolean>(false);
 

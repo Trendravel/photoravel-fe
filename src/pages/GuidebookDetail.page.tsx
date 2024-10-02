@@ -145,7 +145,7 @@ const GuidebookDetail = () => {
                     </ProfileInfoContainer>
                   </ProfileContainer>
                   <PostContent>
-                    <PostImage src={guidebook.images} alt="Content" />
+                    <PostImage src={guidebook.image} alt="Content" />
                     <ContentText>{guidebook.content}</ContentText>
                     <ReviewCount>조회 {guidebook.views}</ReviewCount>
                   </PostContent>

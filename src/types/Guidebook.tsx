@@ -23,7 +23,7 @@ export interface Guidebook {
     content?: string;
     region: Region;
     views: number;    
-    images: string;
+    image: string;
     createdAt: string;
     updatedAt?: string;
   }

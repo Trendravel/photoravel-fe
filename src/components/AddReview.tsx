@@ -8,7 +8,6 @@ import { Rating } from 'react-simple-star-rating';
 // eslint-disable-next-line import/namespace
 import { BottomSheetContentContainer } from './LocationDetail';
 import { FormContainer, SubmitButton } from '../pages/AddInfo.page';
-import { FileLabel, ImageInput, PreviewImage } from '../pages/AddPlace.page';
 import { getCookie } from '../api/useCookie';
 import { formDataConnection, jsonConnection } from '../api/connectBackend';
 
@@ -33,7 +32,7 @@ const AddReview = () => {
       const newFiles = Array.from(files);
       setSelectedPhotos((prev) => [...prev, ...newFiles]);
 
-      const newPreviews = newFiles.map((file) => {
+      newFiles.map((file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {

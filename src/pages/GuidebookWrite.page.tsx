@@ -88,7 +88,7 @@ const GuidebookWrite = () => {
       content: content,
       region: selectedRegion,
       views: 0,
-      images: JSON.stringify(images),
+      image: JSON.stringify(images),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

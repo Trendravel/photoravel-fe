@@ -3,15 +3,17 @@ export interface MemberResponse {
     refreshToken: RefreshToken;
 }
 
-interface AccessToken {
+export interface AccessToken {
     token: string;
     expiredAt: string;
 }
 
-interface RefreshToken {
+export interface RefreshToken {
     token: string;
     expiredAt: string
 }
+
+export type LoggedInfo = UserLoggedInfo | PhotographerLoggedInfo;
 
 export interface NonMemberResponse {
     provider: string;

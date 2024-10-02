@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { MultiSpot } from "../types/Spot";
+import { spotMultiRead } from "../types/Spot";
 
 const SpotContainer = styled.div`
     flex-shrink: 0;
@@ -42,7 +42,7 @@ const SpotViews = styled.p`
     text-align: right;
 `;
 
-const SmallSpotCard = (props: {data: MultiSpot}) => {
+const SmallSpotCard = (props: {data: spotMultiRead}) => {
     return (
         <SpotContainer>
             <ImageContainer>

@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { LoginButton } from "./PhotographerLogin.page";
 import { jsonConnection } from "../api/connectBackend";
-import { useLocation, useNavigate } from "react-router-dom";
-import { MemberResponse, NonMemberParam } from "../types/Login";
 import { setOAuthLogin } from "../api/Login";
 import { ApiResponse } from "../types/Common";
+import { MemberResponse, NonMemberParam } from "../types/Login";
 
 const PageContainer = styled.div`
     position: fixed;
@@ -96,7 +96,7 @@ const AddInfo = () => {
             })
             .then((res) => {
                 console.log(res);
-                setOAuthLogin(res.data.data!);
+                setOAuthLogin(res.data.data!, navigate);
                 navigate('/');
             })
             .catch((e) => {

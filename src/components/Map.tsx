@@ -12,15 +12,14 @@ import { spotMultiRead } from "../types/Spot";
 const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo, spotData: spotMultiRead[] | null, onMapStateChange: (newState: MapInfo) => void, setIsUpdated: (state: boolean) => void }) => {
     const locationData = props.locationData;
     const [state, setState] = useState(props.pos);
-    const BACKEND_ADDRESS = import.meta.env.VITE_BACKEND_API_ADDRESS;
     const navigate = useNavigate();
     const location = useLocation();
     const queryParam = new URLSearchParams(location.search);
     const id = queryParam.get("id");
     const spotLocationId = queryParam.get("spotfor");
 
-    const debounce = (func: (map:kakao.maps.Map) => void, delay: number) => {
-        let timeout: number;
+    const debounce = (func: (map: kakao.maps.Map) => void, delay: number) => {
+        let timeout: ReturnType<typeof setTimeout>; // setTimeout의 반환 타입을 사용
         return (...args: [map: kakao.maps.Map]) => {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
@@ -28,6 +27,7 @@ const KakaoMap = (props: { locationData: MultipleLocation[] | null, pos: MapInfo
             }, delay);
         };
     };
+    
 
     useEffect(() => {
         if (id === null)

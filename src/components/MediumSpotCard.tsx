@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 
-import { MultiSpot } from "../types/Spot";
+import { spotMultiRead } from "../types/Spot";
 
 
 const SpotCardContainer = styled.div`
@@ -53,7 +53,7 @@ const SpotImage = styled.img`
     margin: auto;
 `;
 
-const MediumSpotCard = (props: {data: MultiSpot}) => {
+const MediumSpotCard = (props: {data: spotMultiRead}) => {
 
     const spotData = props.data;
 
