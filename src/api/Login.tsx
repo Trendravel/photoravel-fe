@@ -8,7 +8,7 @@ import { ApiResponse } from "../types/Common";
 import { AccessToken, MemberResponse, NonMemberResponse, PhotographerLoggedInfo, RefreshToken, UserLoggedInfo } from "../types/Login";
 
 const isUserLoggedInfo = (data: any): data is UserLoggedInfo => {
-    return data.role === "user" &&
+    return data.role === "member" &&
            typeof data.nickname === "string" &&
            typeof data.email === "string" &&
            typeof data.memberId === "string";
@@ -106,15 +106,9 @@ export const doLocalUserLogin = (accessToken: string|undefined, refreshToken: st
         type LoggedInfo = UserLoggedInfo | PhotographerLoggedInfo;
 
         const userData: LoggedInfo = decodeToken(accessToken);
-
-        const isUserLoggedInfo = (data: any): data is UserLoggedInfo => {
-            return data.role === "user" && typeof data.nickname === "string" && typeof data.email === "string" && typeof data.memberId === "string";
-        };
         
-        const isPhotographerLoggedInfo = (data: any): data is PhotographerLoggedInfo => {
-            return data.role === "photographer" && typeof data.accountId === "string";
-        };
-        
+        console.log("User check: ", isUserLoggedInfo(userData));
+        console.log("Photographer check: ", isPhotographerLoggedInfo(userData));
         // 타입 체크
         if (isUserLoggedInfo(userData)) {
             // 일반 유저의 경우

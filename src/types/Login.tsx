@@ -42,6 +42,7 @@ export interface NewMemberInfo {
 export interface UserLoggedInfo {
     role: string;
     name: string;
+    issuer: string;
     nickname: string;
     email: string;
     memberId: string;
