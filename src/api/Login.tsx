@@ -28,11 +28,11 @@ const isNonMemberResponse = (data: any): data is NonMemberResponse => {
 };
 
 const isAccessToken = (data: any): data is AccessToken => {
-    return typeof data.token === "string" && typeof data.expiresIn === "number";
+    return typeof data.token === "string" && typeof data.expiredAt === "string";
 };
 
 const isRefreshToken = (data: any): data is RefreshToken => {
-    return typeof data.token === "string" && typeof data.expiresIn === "number";
+    return typeof data.token === "string" && typeof data.expiredAt === "string";
 };
 
 const isMemberResponse = (data: any): data is MemberResponse => {
@@ -46,7 +46,7 @@ export const doOAuthLogin = async (code: string, navigate: (path: string, option
     await jsonConnection
     .get<ApiResponse<NonMemberResponse|MemberResponse>>(`/login/oauth2/code/kakao?code=${code}`)
     .then((res) => {
-        console.log("success");
+
         if (isNonMemberResponse(res.data.data)) {
             const userInfo:NonMemberResponse = res.data.data;
             navigate('/oauthlogin/addinfo', {
