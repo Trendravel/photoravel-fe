@@ -28,6 +28,7 @@ const BottomSheet = styled.div<{top: number, height:string, isAnimated:boolean}>
   box-shadow: 0 -2px 3.84px rgba(0, 0, 0, 0.25);
   transition: ${(props) => props.isAnimated? "top 0.2s ease-in-out" : ""};
   height: ${(props) => props.height};
+  overflow-y: auto;
 `;
 
 const Handle = styled.div`

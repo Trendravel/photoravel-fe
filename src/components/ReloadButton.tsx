@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 const Button = styled.button<{isOpen: boolean}>`
     position: ${(props) => props.isOpen? "absolute": ""};
     z-index: 10;
-    top: 13vh;
+    top: 6.75em;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 0.5em 0.75em 0.5em 0.75em;
