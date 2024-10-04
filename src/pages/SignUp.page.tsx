@@ -186,7 +186,9 @@ const SignUp = () => {
         }
 
         if (!isValid) {
-            console.log(errors.join(", "));
+            errors.map((err: string) => {
+                alert(err);
+            })
         } else {
             console.log("모든 입력이 유효합니다.");
         }
@@ -211,19 +213,21 @@ const SignUp = () => {
             data.region = chosenRegion;
             data.description = description;
             data.careerYear = careerYear;
+            userData.append('data', JSON.stringify(data));
         } else if (userType === "user") {
             data.memberId = id;
             data.nickname = nickname;
             data.email = email;
+            userData.append('request', JSON.stringify(data));
         }
-
-        userData.append('data', JSON.stringify(data));
 
         return userData;
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        console.log(userType)
 
         if (userType === "photographer") {
             const userData = userFormData();
@@ -244,7 +248,7 @@ const SignUp = () => {
                 const userData = userFormData();
                 
                 try {
-                    await formDataConnection.patch<ApiResponse<MemberRegisterRequestDto>>(BACKEND_ADDRESS+`/public/member/register`, userData, { headers: {
+                    await formDataConnection.post<ApiResponse<MemberRegisterRequestDto>>(BACKEND_ADDRESS+`/public/member/register`, userData, { headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'multipart/form-data'
                     }})

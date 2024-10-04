@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import { FormContainer, TextInput } from "./AddInfo.page";
 import { jsonConnection } from "../api/connectBackend";
+import { doLocalUserLogin } from "../api/Login";
 import Logo from "../assets/images/Photoravel_LoginPage_Logo.png"
 import { ApiResponse } from "../types/Common";
 import { MemberResponse } from "../types/Login";
-import { doLocalUserLogin } from "../api/Login";
 
 const PageContainer = styled.div`
     position: fixed;
@@ -54,6 +54,10 @@ export const LoginButton = styled.button<{width?: string}>`
     font-size: 13pt;
     font-weight: 600;
     box-shadow: 1px 1px 2px 1px #cccccc;
+    
+    &:hover {
+        background-color: #F08080;
+    }
 `;
 
 const PhotographerLogin = () => {
