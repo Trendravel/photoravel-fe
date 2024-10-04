@@ -78,36 +78,63 @@ const AddInfo = () => {
     const userData:NonMemberParam = state;
     const navigate = useNavigate();
 
-    const [id, setId] = useState("kakao_"+userData.id);
+    const [id] = useState(userData.id);
     const [name, setName] = useState(userData.nickname);
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState(userData.email);
 
+    const validateForm = () => {
+        if (id === "") {
+            alert("아이디를 불러오지 못했습니다!");
+            return false;
+        }
+
+        if (name === "") {
+            alert("이름을 입력하세요!");
+            return false;
+        }
+
+        if (nickname === "") {
+            alert("닉네임을 입력하세요!");
+            return false;
+        }
+
+        if (email === "") {
+            alert("이메일을 입력하세요!");
+            return false;
+        }
+
+        return true;
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            await jsonConnection.post<ApiResponse<MemberResponse>>(`/login/addInfo`, {
-                provider: "kakao",
-                id: id,
-                name: name,
-                nickname: nickname,
-                email: email,
-                profileImg: userData.profileImg
-            })
-            .then((res) => {
-                console.log(res);
-                setOAuthLogin(res.data.data!, navigate);
-                navigate('/');
-            })
-            .catch((e) => {
-                alert("가입 중 에러가 발생했습니다. 다시 시도해주세요.");
-                console.error(e);
-            })
-            
-            // 성공적으로 전송된 후 처리할 로직 추가
-        } catch (error) {
-            console.error("Error sending data:", error);
-            // 에러 처리 로직 추가
+        
+        if (validateForm()) {
+            try {
+                await jsonConnection.post<ApiResponse<MemberResponse>>(`/login/addInfo`, {
+                    provider: "kakao",
+                    id: id,
+                    name: name,
+                    nickname: nickname,
+                    email: email,
+                    profileImg: userData.profileImg
+                })
+                .then((res) => {
+                    console.log(res);
+                    setOAuthLogin(res.data.data!, navigate);
+                    navigate('/');
+                })
+                .catch((e) => {
+                    alert("가입 중 에러가 발생했습니다. 다시 시도해주세요.");
+                    console.error(e);
+                })
+                
+                // 성공적으로 전송된 후 처리할 로직 추가
+            } catch (error) {
+                console.error("Error sending data:", error);
+                // 에러 처리 로직 추가
+            }
         }
     };
 
@@ -122,8 +149,7 @@ const AddInfo = () => {
                     <TextInput
                         type="text"
                         placeholder="아이디"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
+                        value={"kakao_"+id}
                         disabled
                     />
                     <TextInput
